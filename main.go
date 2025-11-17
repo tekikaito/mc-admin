@@ -4,21 +4,35 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorcon/rcon"
+	"github.com/joho/godotenv"
 )
-
-
+	
 type ServerPlayerInfo struct {
 	PlayerNames []string `json:"player_names"`
 	OnlineCount int      `json:"online_count"`
 	MaxCount    int      `json:"max_count"`
 }
 
+
+func getEnv(s string) string {
+	return os.Getenv(s)
+}
+
+func loadDotEnvFile() {
+	// Load environment variables from .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+}
+
 func getPlayersOnline() ServerPlayerInfo {
-	conn, err := rcon.Dial("127.0.0.1:25575", "")
+	conn, err := rcon.Dial("127.0.0.1:25575", getEnv("RCON_PASSWORD"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,7 +45,6 @@ func getPlayersOnline() ServerPlayerInfo {
 
 	fmt.Println(response)
 
-	// Example response: "There are 3 of a max 20 players online: Player1, Player2, Player3"
 	var info ServerPlayerInfo
 	var commaSeparatedNames string
 	fmt.Sscanf(response, "There are %d of a max of %d players online: %s", &info.OnlineCount, &info.MaxCount, &commaSeparatedNames)
@@ -60,6 +73,7 @@ func splitAndTrim(commaSeparatedNames string) []string {
 }
 
 func main() {
+  loadDotEnvFile()
   // Create a Gin router with default middleware (logger and recovery)
   r := gin.Default()
 
@@ -75,3 +89,4 @@ func main() {
     log.Fatalf("failed to run server: %v", err)
   }
 }
+
