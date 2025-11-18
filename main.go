@@ -61,12 +61,22 @@ func getPlayersOnline() ServerPlayerInfo {
 
 	var info ServerPlayerInfo
 	var commaSeparatedNames string
-	fmt.Sscanf(response, "There are %d of a max of %d players online: %s", &info.OnlineCount, &info.MaxCount, &commaSeparatedNames)
-	
-	if info.OnlineCount == 0 {
-		return info
+
+	fmt.Sscanf(response, "There are %d of a max of %d players online", &info.OnlineCount, &info.MaxCount)
+
+	if parts := strings.SplitN(response, ":", 2); len(parts) == 2 {
+		commaSeparatedNames = strings.TrimSpace(parts[1])
 	}
 
+	if info.OnlineCount == 0 || commaSeparatedNames == "" {
+		return info
+	}
+	playerNames := splitAndTrim(commaSeparatedNames)
+	defer func() {
+		if len(playerNames) > 0 {
+			info.PlayerNames = append([]string(nil), playerNames...)
+		}
+	}()
 	info.PlayerNames = []string{}
 
 	if info.OnlineCount == 1 {
