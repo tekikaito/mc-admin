@@ -32,7 +32,21 @@ func loadDotEnvFile() {
 }
 
 func getPlayersOnline() ServerPlayerInfo {
-	conn, err := rcon.Dial("127.0.0.1:25575", getEnv("RCON_PASSWORD"))
+	rconPasswort := getEnv("RCON_PASSWORD")
+	rconHost := getEnv("RCON_HOST")
+	if rconHost == "" {
+		rconHost = "127.0.0.1"
+	}
+	rconPort := getEnv("RCON_PORT")
+	fmt.Println(rconPort)
+	if rconPort == "" {
+		rconPort = "25575"
+	}
+
+	connectionString := fmt.Sprintf("%s:%s", rconHost, rconPort)
+	fmt.Println("Connecting to RCON server at", connectionString)
+	
+	conn, err := rcon.Dial(connectionString, rconPasswort)
 	if err != nil {
 		log.Fatal(err)
 	}
