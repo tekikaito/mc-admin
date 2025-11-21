@@ -1,0 +1,12 @@
+<div>
+  <p><strong>Online:</strong> {{.OnlineCount}} / {{.MaxCount}}</p>
+  {{if .Players}}
+  <ul>
+    {{range .Players}}
+    <li>{{.}}</li>
+    {{end}}
+  </ul>
+  {{else}}
+  <p>No players online.</p>
+  {{end}}
+</div>

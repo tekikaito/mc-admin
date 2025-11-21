@@ -101,11 +101,23 @@ func main() {
   // Create a Gin router with default middleware (logger and recovery)
   r := gin.Default()
 
-  // Define a simple GET endpoint
-  r.GET("/list", func(c *gin.Context) {
-    // Return JSON response
-    c.JSON(http.StatusOK, getPlayersOnline())
-  })
+  r.LoadHTMLGlob("templates/*")
+  
+  handleGetIndex := func(c *gin.Context) {
+	c.HTML(200, "index.html", gin.H{})
+  }
+  handleGetPlayerList := func(c *gin.Context) {
+		info := getPlayersOnline()
+		c.HTML(http.StatusOK, "player_list.html", gin.H{
+			"Players":     info.PlayerNames,
+			"OnlineCount": info.OnlineCount,
+			"MaxCount":    info.MaxCount,
+		})
+  }
+
+
+  r.GET("/", handleGetIndex)
+  r.GET("/player", handleGetPlayerList)
 
   // Start server on port 8080 (default)
   // Server will listen on 0.0.0.0:8080 (localhost:8080 on Windows)
