@@ -1,12 +1,30 @@
-<div>
-  <p><strong>Online:</strong> {{.OnlineCount}} / {{.MaxCount}}</p>
+<div class="space-y-4">
+  <div
+    class="flex items-center justify-between text-sm uppercase tracking-wide text-slate-400"
+  >
+    <span>Players Online</span>
+    <span class="text-lg font-semibold text-emerald-400"
+      >{{.OnlineCount}} / {{.MaxCount}}</span
+    >
+  </div>
   {{if .Players}}
-  <ul>
+  <ul
+    class="divide-y divide-slate-700 rounded-lg border border-slate-700/70 bg-slate-900/40"
+  >
     {{range .Players}}
-    <li>{{.}}</li>
+    <li class="px-4 py-3 text-slate-100 flex items-center justify-between">
+      <span class="font-medium">{{.}}</span>
+    </li>
     {{end}}
   </ul>
   {{else}}
-  <p>No players online.</p>
+  <div
+    class="rounded-lg border border-dashed border-slate-700/80 bg-slate-900/30 px-4 py-6 text-center"
+  >
+    <p class="text-slate-400">No players online.</p>
+    <p class="text-xs text-slate-500 mt-1">
+      Invite your friends to join the server!
+    </p>
+  </div>
   {{end}}
 </div>
