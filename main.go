@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"rcon-web/internal/api"
 	"rcon-web/internal/rcon"
 
 	"github.com/joho/godotenv"
@@ -46,6 +47,8 @@ func initRconClient() *rcon.MinecraftRconClient {
 func main() {
 	loadDotEnvFile()
 	mcRcon := initRconClient()
+
+	r := api.InitializeWebServer(mcRcon)
 
 	// Start server on port 8080 (default)
 	if err := r.Run(); err != nil {

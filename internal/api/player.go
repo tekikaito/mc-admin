@@ -2,14 +2,14 @@ package api
 
 import (
 	"net/http"
-	"rcon-web/internal/rcon"
+	"rcon-web/internal/services"
 
 	"github.com/gin-gonic/gin"
 )
 
-func handleGetPlayerList(mcRcon *rcon.MinecraftRconClient) gin.HandlerFunc {
+func handleGetServerInfo(serverService *services.ServerService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		info, err := mcRcon.GetServerPlayerInfo()
+		info, err := serverService.GetServerPlayerInfo()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get player info"})
 			return
