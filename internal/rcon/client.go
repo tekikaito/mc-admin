@@ -2,7 +2,6 @@ package rcon
 
 import (
 	"fmt"
-	"log"
 	"rcon-web/internal/utils"
 	"strings"
 
@@ -29,22 +28,19 @@ func NewMinecraftRconClient(host, port, password string) *MinecraftRconClient {
 	}
 }
 
-func (c *MinecraftRconClient) GetServerPlayerInfo() ServerPlayerInfo {
+func (c *MinecraftRconClient) GetServerPlayerInfo() (ServerPlayerInfo, error) {
 	connectionString := fmt.Sprintf("%s:%s", c.Host, c.Port)
-	fmt.Println("Connecting to RCON server at", connectionString)
-	
+
 	conn, err := rcon.Dial(connectionString, c.Password)
 	if err != nil {
-		log.Fatal(err)
+		return ServerPlayerInfo{}, err
 	}
 	defer conn.Close()
 
 	response, err := conn.Execute("list")
 	if err != nil {
-		log.Fatal(err)
+		return ServerPlayerInfo{}, err
 	}
-
-	fmt.Println(response)
 
 	var info ServerPlayerInfo
 	var commaSeparatedNames string
@@ -56,7 +52,7 @@ func (c *MinecraftRconClient) GetServerPlayerInfo() ServerPlayerInfo {
 	}
 
 	if info.OnlineCount == 0 || commaSeparatedNames == "" {
-		return info
+		return info, nil
 	}
 	playerNames := utils.SplitAndTrim(commaSeparatedNames, ",")
 	defer func() {
@@ -72,5 +68,5 @@ func (c *MinecraftRconClient) GetServerPlayerInfo() ServerPlayerInfo {
 		info.PlayerNames = append(info.PlayerNames, utils.SplitAndTrim(commaSeparatedNames, ",")...)
 	}
 
-	return info
+	return info, nil
 }
