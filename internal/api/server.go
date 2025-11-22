@@ -19,7 +19,7 @@ func getIndexPageHandler() gin.HandlerFunc {
 	if serverName == "" {
 		serverName = "Minecraft Server"
 	}
-	serverHost := os.Getenv("RCON_HOST")
+	serverHost := os.Getenv("SERVER_HOST")
 	if serverHost == "" {
 		serverHost = "localhost"
 	}
