@@ -1,0 +1,31 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Whitelist</p>
+      <h2 class="text-xl font-semibold mt-1">Authorized Players</h2>
+    </div>
+    <span class="text-sm text-slate-400">{{.Count}} total</span>
+  </div>
+  {{if .Players}}
+  <ul
+    class="divide-y divide-slate-800 rounded-lg border border-slate-800/80 bg-slate-950/30"
+  >
+    {{range .Players}}
+    <li class="px-4 py-3 flex items-center justify-between text-slate-100">
+      <span class="font-medium">{{.}}</span>
+      <span class="text-xs text-slate-500">whitelisted</span>
+    </li>
+    {{end}}
+  </ul>
+  {{else}}
+  <div
+    class="rounded-lg border border-dashed border-slate-800/70 bg-slate-950/20 px-4 py-6 text-center"
+  >
+    <p class="text-slate-400">No players are currently whitelisted.</p>
+    <p class="text-xs text-slate-500 mt-1">
+      Use the console to add players with
+      <code>whitelist add &lt;player&gt;</code>.
+    </p>
+  </div>
+  {{end}}
+</div>

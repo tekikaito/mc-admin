@@ -5,32 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>RCON Admin Tool</title>
+    <title>Minecraft Admin Tool</title>
   </head>
-  <body>
+  <body class="min-h-screen bg-slate-950 text-slate-100">
     <div
-      class="min-h-screen bg-slate-900 text-slate-100 flex items-center justify-center p-6"
+      class="max-w-6xl mx-auto px-6 py-10 grid gap-6 lg:grid-cols-[220px_1fr]"
     >
-      <div class="w-full max-w-xl space-y-6">
-        <header class="text-center">
-          <p class="text-sm uppercase tracking-[0.3em] text-slate-400">
-            RCON Admin Tool
+      <aside
+        class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 flex flex-col gap-6"
+      >
+        <div>
+          <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
+            Control
           </p>
-          <h1 class="text-3xl font-semibold mt-2">Live Player Overview</h1>
-          <p class="text-slate-400 text-sm mt-1">
-            Auto-refreshing snapshot of your active server population.
-          </p>
-        </header>
-        <div
-          id="player-list"
-          hx-get="/player"
-          hx-trigger="load, every 10s"
-          hx-swap="innerHTML"
-          class="bg-slate-800/70 border border-slate-700 rounded-xl shadow-lg shadow-slate-950/50 p-6"
-        >
-          <p class="text-slate-400 text-sm">Loading player list...</p>
+          <h1 class="text-2xl font-semibold mt-2">{{.ServerName}}</h1>
+          <p class="text-sm text-slate-400 mt-1">{{.ServerDescription}}</p>
         </div>
-      </div>
+        <nav class="space-y-2">
+          <button
+            type="button"
+            data-nav="overview"
+            class="w-full text-left px-4 py-2 rounded-xl bg-slate-800 text-white font-medium"
+          >
+            Overview
+          </button>
+          <button
+            type="button"
+            data-nav="whitelist"
+            class="w-full text-left px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800/60"
+            hx-get="/whitelist"
+            hx-target="#subpage-panel"
+            hx-swap="innerHTML"
+          >
+            Whitelist
+          </button>
+        </nav>
+      </aside>
+      <main class="space-y-6">
+        <section
+          class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 bg-slate-900/40 border border-slate-800 rounded-2xl p-6"
+        >
+          <div>
+            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
+              Address
+            </p>
+            <p class="text-xl font-semibold mt-2">{{.ServerHost}}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
+              Game Port
+            </p>
+            <p class="text-xl font-semibold mt-2">{{.ServerPort}}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
+              Version
+            </p>
+            <p class="text-xl font-semibold mt-2">{{.ServerVersion}}</p>
+          </div>
+        </section>
+
+        <section class="grid gap-6 lg:grid-cols-2">
+          <div
+            id="player-list"
+            hx-get="/server-info"
+            hx-trigger="load, every 10s"
+            hx-swap="innerHTML"
+            class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6"
+          >
+            <header class="mb-4">
+              <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
+                Live Players
+              </p>
+              <h2 class="text-xl font-semibold mt-1">Online Right Now</h2>
+            </header>
+            <p class="text-slate-400 text-sm">Loading player list...</p>
+          </div>
+          <div
+            id="subpage-panel"
+            class="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 flex flex-col gap-3"
+          >
+            <header>
+              <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
+                Tools
+              </p>
+              <h2 class="text-xl font-semibold mt-1">Choose a module</h2>
+            </header>
+            <p class="text-sm text-slate-400">
+              Use the navigation to open management panels like the whitelist.
+              More modules can be added here over time.
+            </p>
+          </div>
+        </section>
+      </main>
     </div>
+
+    <script>
+      const navButtons = document.querySelectorAll("[data-nav]");
+      const subpagePanel = document.getElementById("subpage-panel");
+      const defaultPanelContent = subpagePanel ? subpagePanel.innerHTML : "";
+
+      navButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          navButtons.forEach((btn) => {
+            btn.classList.remove("bg-slate-800", "text-white");
+            btn.classList.add("text-slate-300");
+          });
+          button.classList.remove("text-slate-300");
+          button.classList.add("bg-slate-800", "text-white");
+
+          if (subpagePanel && button.dataset.nav === "overview") {
+            subpagePanel.innerHTML = defaultPanelContent;
+          }
+        });
+      });
+    </script>
   </body>
 </html>
