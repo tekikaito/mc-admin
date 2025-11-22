@@ -1,0 +1,39 @@
+<div class="space-y-4" id="command-console">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Console</p>
+      <h2 class="text-xl font-semibold mt-1">Raw RCON Command</h2>
+      <p class="text-sm text-slate-400 mt-1">
+        Execute any console command directly on the server. Use with caution.
+      </p>
+    </div>
+  </div>
+  <form
+    class="space-y-3"
+    hx-post="/commands/execute"
+    hx-target="#command-result"
+    hx-swap="innerHTML"
+  >
+    <label class="block text-xs uppercase tracking-[0.3em] text-slate-500"
+      >Command</label
+    >
+    <div class="flex flex-col gap-3 md:flex-row">
+      <input
+        type="text"
+        name="command"
+        class="flex-1 rounded-xl border border-slate-800 bg-slate-950/40 px-4 py-3 text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        placeholder="say Welcome to the server!"
+        required
+      />
+      <button
+        type="submit"
+        class="rounded-xl bg-emerald-500/90 px-5 py-3 font-semibold text-slate-950 hover:bg-emerald-400"
+      >
+        Run command
+      </button>
+    </div>
+  </form>
+  <div id="command-result" class="text-sm text-slate-400">
+    <p>No command executed yet.</p>
+  </div>
+</div>

@@ -47,16 +47,19 @@ func getIndexPageHandler() gin.HandlerFunc {
 	}
 }
 
-func initializeWebServerRoutes(r *gin.Engine, serverService *services.ServerService, whitelistService *services.WhitelistService) {
+func initializeWebServerRoutes(r *gin.Engine, serverService *services.ServerService, whitelistService *services.WhitelistService, commandService *services.CommandService) {
 	r.GET("/", getIndexPageHandler())
 	r.GET("/server-info", handleGetServerInfo(serverService))
 	r.GET("/whitelist", handleGetWhitelist(whitelistService))
+	r.GET("/commands/console", handleGetCommandConsole(commandService))
+	r.POST("/commands/execute", handleExecuteRawCommand(commandService))
 }
 
 func InitializeWebServer(mcRcon *rcon.MinecraftRconClient) *gin.Engine {
 	r := initializeWebServer()
 	serverService := services.NewServerServiceFromRconClient(mcRcon)
 	whitelistService := services.NewWhitelistServiceFromRconClient(mcRcon)
-	initializeWebServerRoutes(r, serverService, whitelistService)
+	commandService := services.NewCommandServiceFromRconClient(mcRcon)
+	initializeWebServerRoutes(r, serverService, whitelistService, commandService)
 	return r
 }
