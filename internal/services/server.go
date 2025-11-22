@@ -26,33 +26,26 @@ func NewServerServiceFromRconClient(rconClient *rcon.MinecraftRconClient) *Serve
 func (s *ServerService) GetServerPlayerInfo() (ServerPlayerInfo, error) {
 	response, err := s.rconClient.ExecuteCommand("list")
 	if err != nil {
-		return ServerPlayerInfo{}, err
+		return ServerPlayerInfo{}, fmt.Errorf("failed to execute list command: %w", err)
 	}
 
 	var info ServerPlayerInfo
-	var commaSeparatedNames string
-
-	fmt.Sscanf(response, "There are %d of a max of %d players online", &info.OnlineCount, &info.MaxCount)
-
-	if parts := strings.SplitN(response, ":", 2); len(parts) == 2 {
-		commaSeparatedNames = strings.TrimSpace(parts[1])
-	}
-
-	if info.OnlineCount == 0 || commaSeparatedNames == "" {
-		return info, nil
-	}
-	playerNames := utils.SplitAndTrim(commaSeparatedNames, ",")
-	defer func() {
-		if len(playerNames) > 0 {
-			info.PlayerNames = append([]string(nil), playerNames...)
-		}
-	}()
 	info.PlayerNames = []string{}
 
-	if info.OnlineCount == 1 {
-		info.PlayerNames = append(info.PlayerNames, commaSeparatedNames)
-	} else if info.OnlineCount > 1 {
-		info.PlayerNames = append(info.PlayerNames, utils.SplitAndTrim(commaSeparatedNames, ",")...)
+	// Parse player counts from response
+	n, err := fmt.Sscanf(response, "There are %d of a max of %d players online", &info.OnlineCount, &info.MaxCount)
+	if err != nil || n != 2 {
+		return ServerPlayerInfo{}, fmt.Errorf("failed to parse player count from response '%s': %w", response, err)
+	}
+
+	// Extract player names if any
+	if info.OnlineCount > 0 {
+		if parts := strings.SplitN(response, ":", 2); len(parts) == 2 {
+			commaSeparatedNames := strings.TrimSpace(parts[1])
+			if commaSeparatedNames != "" {
+				info.PlayerNames = utils.SplitAndTrim(commaSeparatedNames, ",")
+			}
+		}
 	}
 
 	return info, nil

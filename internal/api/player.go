@@ -11,7 +11,8 @@ func handleGetServerInfo(serverService *services.ServerService) gin.HandlerFunc 
 	return func(c *gin.Context) {
 		info, err := serverService.GetServerPlayerInfo()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get player info"})
+			// Return HTML error for HTMX compatibility
+			c.HTML(http.StatusOK, "error.html", nil)
 			return
 		}
 		c.HTML(http.StatusOK, "player_list.html", gin.H{
