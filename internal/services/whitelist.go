@@ -37,3 +37,18 @@ func (s *WhitelistService) GetWhitelist() ([]string, error) {
 	playerNames := utils.SplitAndTrim(commaSeparatedNames, ",")
 	return playerNames, nil
 }
+
+func (s *WhitelistService) RemoveNameFromWhitelist(name string) error {
+	trimmedName := strings.TrimSpace(name)
+	if trimmedName == "" {
+		return fmt.Errorf("name cannot be empty")
+	}
+
+	command := fmt.Sprintf("whitelist remove %s", trimmedName)
+	_, err := s.rconClient.ExecuteCommand(command)
+	if err != nil {
+		return fmt.Errorf("failed to remove name from whitelist: %w", err)
+	}
+
+	return nil
+}

@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between">
     <div>
       <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Whitelist</p>
-      <h2 class="text-xl font-semibold mt-1">Authorized Players</h2>
+      <h2 class="text-xl font-semibold mt-1">Whitelisted Players</h2>
     </div>
     <span class="text-sm text-slate-400">{{.Count}} total</span>
   </div>
@@ -13,7 +13,15 @@
     {{range .Players}}
     <li class="px-4 py-3 flex items-center justify-between text-slate-100">
       <span class="font-medium">{{.}}</span>
-      <span class="text-xs text-slate-500">whitelisted</span>
+      <button
+        type="button"
+        class="ml-4 rounded-lg bg-red-600/80 px-3 py-1 text-xs font-medium text-slate-950 hover:bg-red-500"
+        hx-delete="/whitelist/remove/{{.}}"
+        hx-target="#subpage-panel"
+        hx-swap="innerHTML"
+      >
+        Remove
+      </button>
     </li>
     {{end}}
   </ul>
