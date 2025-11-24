@@ -52,3 +52,38 @@ func (s *WhitelistService) RemoveNameFromWhitelist(name string) error {
 
 	return nil
 }
+
+func (s *WhitelistService) AddNameToWhitelist(name string) error {
+	trimmedName := strings.TrimSpace(name)
+	if trimmedName == "" {
+		return fmt.Errorf("name cannot be empty")
+	}
+
+	// Check if the name is already whitelisted
+	currentWhitelist, err := s.GetWhitelist()
+	if err != nil {
+		return fmt.Errorf("failed to get current whitelist: %w", err)
+	}
+	for _, existingName := range currentWhitelist {
+		if strings.EqualFold(existingName, trimmedName) {
+			return fmt.Errorf("name '%s' is already whitelisted", trimmedName)
+		}
+	}
+
+	exists, err := utils.CheckMojangUsernameExists(trimmedName)
+	fmt.Printf("exists: %v, err: %v\n", exists, err)
+	if err != nil {
+		return fmt.Errorf("failed to verify if name exists: %w", err)
+	}
+	if !exists {
+		return fmt.Errorf("name '%s' does not exist", trimmedName)
+	}
+
+	command := fmt.Sprintf("whitelist add %s", trimmedName)
+	_, err = s.rconClient.ExecuteCommand(command)
+	if err != nil {
+		return fmt.Errorf("failed to add name to whitelist: %w", err)
+	}
+
+	return nil
+}

@@ -33,3 +33,15 @@ func handleRemoveNameFromWhitelist(whitelistService *services.WhitelistService) 
 		c.Redirect(http.StatusSeeOther, "/whitelist")
 	}
 }
+
+func handleAddNameToWhitelist(whitelistService *services.WhitelistService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		name := c.PostForm("playerName")
+		err := whitelistService.AddNameToWhitelist(name)
+		if err != nil {
+			c.HTML(http.StatusOK, "error.html", nil)
+			return
+		}
+		c.Redirect(http.StatusSeeOther, "/whitelist")
+	}
+}
