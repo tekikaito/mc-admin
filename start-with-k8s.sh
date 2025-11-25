@@ -50,7 +50,18 @@ fi
 
 echo "✅ Port-forward established"
 
-# Start the Go server
-echo "🚀 Starting Go server..."
+# Start the Go server with hot reload
+echo "🚀 Starting Go server with hot reload..."
 echo ""
-go run main.go
+
+run_hot_reload() {
+    local WATCH_PATTERN='(\.go$|\.html$|\.tmpl$)'
+    if command -v reflex >/dev/null 2>&1; then
+        reflex -r "$WATCH_PATTERN" -s -- sh -c 'go run main.go'
+    else
+        echo "ℹ️ reflex not installed; running via \`go run github.com/cespare/reflex@latest\` (first run may download dependencies)"
+        go run github.com/cespare/reflex@latest -r "$WATCH_PATTERN" -s -- sh -c 'go run main.go'
+    fi
+}
+
+run_hot_reload
