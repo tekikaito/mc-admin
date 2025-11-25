@@ -1,0 +1,29 @@
+<div
+  id="kick-modal"
+  class="fixed inset-0 z-50 flex items-center justify-center"
+>
+  <div class="absolute inset-0 bg-slate-950/80" data-close-modal="kick"></div>
+  <div
+    class="relative z-10 w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/90 p-6 text-center shadow-2xl shadow-slate-950/70"
+  >
+    <p class="text-sm uppercase tracking-[0.4em] text-slate-500">
+      Player removed
+    </p>
+    <h3 class="text-2xl font-semibold mt-3">{{.PlayerName}}</h3>
+    <p class="text-sm text-slate-400 mt-2">was kicked from the server.</p>
+    <button
+      type="button"
+      class="mt-6 rounded-xl bg-slate-100/90 px-5 py-2 text-sm font-semibold text-slate-900 hover:bg-white"
+      data-close-modal="kick"
+    >
+      Close
+    </button>
+  </div>
+</div>
+<div
+  class="hidden"
+  hx-trigger="load"
+  hx-get="/server-info"
+  hx-target="#player-list"
+  hx-swap="innerHTML"
+></div>

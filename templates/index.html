@@ -112,10 +112,18 @@
       </main>
     </div>
 
+    <div id="modal-root"></div>
+
     <script>
       const navButtons = document.querySelectorAll("[data-nav]");
       const subpagePanel = document.getElementById("subpage-panel");
       const defaultPanelContent = subpagePanel ? subpagePanel.innerHTML : "";
+      const removeModal = () => {
+        const modal = document.getElementById("kick-modal");
+        if (modal) {
+          modal.remove();
+        }
+      };
 
       navButtons.forEach((button) => {
         button.addEventListener("click", () => {
@@ -130,6 +138,17 @@
             subpagePanel.innerHTML = defaultPanelContent;
           }
         });
+      });
+
+      document.body.addEventListener("click", (event) => {
+        if (event.target?.dataset?.closeModal === "kick") {
+          removeModal();
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          removeModal();
+        }
       });
     </script>
   </body>

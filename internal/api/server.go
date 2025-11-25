@@ -53,6 +53,8 @@ func initializeWebServerRoutes(r *gin.Engine, serverService *services.ServerServ
 	r.GET("/whitelist", handleGetWhitelist(whitelistService))
 	r.POST("/whitelist/player", handleAddNameToWhitelist(whitelistService))
 	r.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(whitelistService))
+	r.GET("/players/:name/kick", handleGetKickPlayerDialog())
+	r.POST("/players/:name/kick", handleKickPlayer(serverService))
 	r.GET("/commands/console", handleGetCommandConsole(commandService))
 	r.POST("/commands/execute", handleExecuteRawCommand(commandService))
 }

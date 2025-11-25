@@ -50,3 +50,22 @@ func (s *ServerService) GetServerPlayerInfo() (ServerPlayerInfo, error) {
 
 	return info, nil
 }
+
+func (s *ServerService) KickPlayerByName(name string, reason string) error {
+	trimmed := strings.TrimSpace(name)
+	if trimmed == "" {
+		return fmt.Errorf("player name cannot be empty")
+	}
+
+	command := fmt.Sprintf("kick %s", trimmed)
+	if r := strings.TrimSpace(reason); r != "" {
+		command = fmt.Sprintf("%s %s", command, r)
+	}
+
+	_, err := s.rconClient.ExecuteCommand(command)
+	if err != nil {
+		return fmt.Errorf("failed to kick player '%s': %w", trimmed, err)
+	}
+
+	return nil
+}
