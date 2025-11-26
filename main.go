@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"rcon-web/internal/api"
+	ashcon_client "rcon-web/internal/clients"
 	"rcon-web/internal/rcon"
 	"syscall"
 	"time"
@@ -30,7 +31,7 @@ func loadDotEnvFile() {
 	}
 }
 
-func initRconClient() *rcon.MinecraftRconClient {
+func setupMinecraftRcon() *rcon.MinecraftRconClient {
 	rconPassword := getEnv("RCON_PASSWORD")
 	if rconPassword == nil {
 		log.Fatal("RCON_PASSWORD environment variable is not set")
@@ -51,10 +52,14 @@ func initRconClient() *rcon.MinecraftRconClient {
 
 func main() {
 	loadDotEnvFile()
-	mcRcon := initRconClient()
-	defer mcRcon.Close() // Ensure RCON connection is closed on exit
+	ashconClient := ashcon_client.NewMojangUserNameChecker()
+	rconClient := setupMinecraftRcon()
+	defer rconClient.Close() // Ensure RCON connection is closed on exit
 
-	r := api.InitializeWebServer(mcRcon)
+	r := api.InitializeWebServer(api.WebServerOptions{
+		MinecraftRconClient: rconClient,
+		AshconClient:        ashconClient,
+	})
 
 	// Create HTTP server with custom settings for graceful shutdown
 	srv := &http.Server{

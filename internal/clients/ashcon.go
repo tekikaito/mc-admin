@@ -11,6 +11,10 @@ type MojangUserNameChecker interface {
 
 type AshconClient struct{}
 
+func NewMojangUserNameChecker() *AshconClient {
+	return &AshconClient{}
+}
+
 func (a *AshconClient) CheckMojangUsernameExists(username string) (bool, error) {
 	resp, err := http.Get("https://api.ashcon.app/mojang/v2/user/" + username)
 	if err != nil {
