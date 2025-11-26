@@ -7,10 +7,10 @@ import (
 )
 
 type CommandService struct {
-	rconClient *rcon.MinecraftRconClient
+	rconClient rcon.CommandExecutor
 }
 
-func NewCommandServiceFromRconClient(rconClient *rcon.MinecraftRconClient) *CommandService {
+func NewCommandServiceFromRconClient(rconClient rcon.CommandExecutor) *CommandService {
 	return &CommandService{
 		rconClient: rconClient,
 	}

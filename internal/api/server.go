@@ -2,6 +2,7 @@ package api
 
 import (
 	"os"
+	ashcon_client "rcon-web/internal/clients"
 	"rcon-web/internal/rcon"
 	"rcon-web/internal/services"
 
@@ -59,11 +60,16 @@ func initializeWebServerRoutes(r *gin.Engine, serverService *services.ServerServ
 	r.POST("/commands/execute", handleExecuteRawCommand(commandService))
 }
 
-func InitializeWebServer(mcRcon *rcon.MinecraftRconClient) *gin.Engine {
+type WebServerOptions struct {
+	MinecraftRconClient rcon.CommandExecutor
+	AshconClient        ashcon_client.MojangUserNameChecker
+}
+
+func InitializeWebServer(options WebServerOptions) *gin.Engine {
 	r := initializeWebServer()
-	serverService := services.NewServerServiceFromRconClient(mcRcon)
-	whitelistService := services.NewWhitelistServiceFromRconClient(mcRcon)
-	commandService := services.NewCommandServiceFromRconClient(mcRcon)
+	serverService := services.NewServerServiceFromRconClient(options.MinecraftRconClient)
+	whitelistService := services.NewWhitelistService(options.MinecraftRconClient, options.AshconClient)
+	commandService := services.NewCommandServiceFromRconClient(options.MinecraftRconClient)
 	initializeWebServerRoutes(r, serverService, whitelistService, commandService)
 	return r
 }

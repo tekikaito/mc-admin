@@ -2,18 +2,21 @@ package services
 
 import (
 	"fmt"
+	ashcon_client "rcon-web/internal/clients"
 	"rcon-web/internal/rcon"
 	"rcon-web/internal/utils"
 	"strings"
 )
 
 type WhitelistService struct {
-	rconClient *rcon.MinecraftRconClient
+	rconClient    rcon.CommandExecutor
+	mojangChecker ashcon_client.MojangUserNameChecker
 }
 
-func NewWhitelistServiceFromRconClient(rconClient *rcon.MinecraftRconClient) *WhitelistService {
+func NewWhitelistService(rconClient rcon.CommandExecutor, mojangChecker ashcon_client.MojangUserNameChecker) *WhitelistService {
 	return &WhitelistService{
-		rconClient: rconClient,
+		rconClient:    rconClient,
+		mojangChecker: mojangChecker,
 	}
 }
 
@@ -70,7 +73,7 @@ func (s *WhitelistService) AddNameToWhitelist(name string) error {
 		}
 	}
 
-	exists, err := utils.CheckMojangUsernameExists(trimmedName)
+	exists, err := s.mojangChecker.CheckMojangUsernameExists(trimmedName)
 	fmt.Printf("exists: %v, err: %v\n", exists, err)
 	if err != nil {
 		return fmt.Errorf("failed to verify if name exists: %w", err)

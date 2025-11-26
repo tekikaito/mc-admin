@@ -8,7 +8,7 @@ import (
 )
 
 type ServerService struct {
-	rconClient *rcon.MinecraftRconClient
+	rconClient rcon.CommandExecutor
 }
 
 type ServerPlayerInfo struct {
@@ -17,10 +17,8 @@ type ServerPlayerInfo struct {
 	MaxCount    int      `json:"max_count"`
 }
 
-func NewServerServiceFromRconClient(rconClient *rcon.MinecraftRconClient) *ServerService {
-	return &ServerService{
-		rconClient: rconClient,
-	}
+func NewServerServiceFromRconClient(rconClient rcon.CommandExecutor) *ServerService {
+	return &ServerService{rconClient}
 }
 
 func (s *ServerService) GetServerPlayerInfo() (ServerPlayerInfo, error) {

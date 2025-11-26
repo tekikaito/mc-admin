@@ -8,6 +8,10 @@ import (
 	"github.com/gorcon/rcon"
 )
 
+type CommandExecutor interface {
+	ExecuteCommand(cmd string) (string, error)
+}
+
 type MinecraftRconClient struct {
 	Host     string
 	Port     string
