@@ -62,3 +62,60 @@ func TestWhitelistService_GetServerPlayerInfo(t *testing.T) {
 		})
 	}
 }
+
+func TestWhitelistService_RemoveNameFromWhitelist(t *testing.T) {
+	tests := []struct {
+		name          string
+		inputName     string
+		expectedCmd   string
+		executeOutput string
+		executeErr    error
+		wantErr       bool
+	}{
+		{
+			name:        "valid name",
+			inputName:   "Steve",
+			expectedCmd: "whitelist remove Steve",
+		},
+		{
+			name:      "empty name",
+			inputName: "   ",
+			wantErr:   true,
+		},
+		{
+			name:        "rcon error",
+			inputName:   "Alex",
+			expectedCmd: "whitelist remove Alex",
+			executeErr:  errors.New("boom"),
+			wantErr:     true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fakeRconClient := &fakeRconClient{
+				responses: map[string]struct {
+					out string
+					err error
+				}{
+					tt.expectedCmd: {out: tt.executeOutput, err: tt.executeErr},
+				},
+			}
+			fakeMojangChecker := &fakeMojangChecker{
+				existsMap: map[string]bool{},
+				errMap:    map[string]error{},
+			}
+			svc := NewWhitelistService(fakeRconClient, fakeMojangChecker)
+			err := svc.RemoveNameFromWhitelist(tt.inputName)
+			if tt.wantErr {
+				if err == nil {
+					t.Fatalf("expected error, got nil")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+		})
+	}
+}
