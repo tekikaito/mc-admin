@@ -24,6 +24,11 @@ func getEnv(s string) *string {
 }
 
 func loadDotEnvFile() {
+	if stat, err := os.Stat(".env"); err != nil || stat.IsDir() {
+		log.Println(".env file not found, skipping load")
+		return
+	}
+
 	// Load environment variables from .env file
 	err := godotenv.Load()
 	if err != nil {
