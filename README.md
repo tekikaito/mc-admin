@@ -1,1 +1,1 @@
-# rcon-web
+# mc-admin
