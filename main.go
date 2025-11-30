@@ -9,6 +9,7 @@ import (
 	"rcon-web/internal/api"
 	ashcon_client "rcon-web/internal/clients"
 	"rcon-web/internal/rcon"
+	"strings"
 	"syscall"
 	"time"
 
@@ -55,16 +56,42 @@ func setupMinecraftRcon() *rcon.MinecraftRconClient {
 	return mcRcon
 }
 
+func buildAuthConfig() api.AuthConfig {
+	allowedUsersEnv := os.Getenv("DISCORD_ALLOWED_USER_IDS")
+	var allowedUsers []string
+	if allowedUsersEnv != "" {
+		candidates := strings.Split(allowedUsersEnv, ",")
+		for _, candidate := range candidates {
+			trimmed := strings.TrimSpace(candidate)
+			if trimmed != "" {
+				allowedUsers = append(allowedUsers, trimmed)
+			}
+		}
+	}
+
+	return api.AuthConfig{
+		ClientID:       os.Getenv("DISCORD_CLIENT_ID"),
+		ClientSecret:   os.Getenv("DISCORD_CLIENT_SECRET"),
+		RedirectURI:    os.Getenv("DISCORD_REDIRECT_URI"),
+		SessionSecret:  os.Getenv("SESSION_SECRET"),
+		AllowedUserIDs: allowedUsers,
+	}
+}
+
 func main() {
 	loadDotEnvFile()
 	ashconClient := ashcon_client.NewMojangUserNameChecker()
 	rconClient := setupMinecraftRcon()
 	defer rconClient.Close() // Ensure RCON connection is closed on exit
 
-	r := api.InitializeWebServer(api.WebServerOptions{
+	r, err := api.InitializeWebServer(api.WebServerOptions{
 		MinecraftRconClient: rconClient,
 		AshconClient:        ashconClient,
+		AuthConfig:          buildAuthConfig(),
 	})
+	if err != nil {
+		log.Fatalf("failed to initialize web server: %v", err)
+	}
 
 	// Create HTTP server with custom settings for graceful shutdown
 	srv := &http.Server{

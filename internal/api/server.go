@@ -38,38 +38,47 @@ func getIndexPageHandler() gin.HandlerFunc {
 	}
 
 	return func(c *gin.Context) {
+		user := CurrentUser(c)
 		c.HTML(200, "index.html", gin.H{
 			"ServerName":        serverName,
 			"ServerHost":        serverHost,
 			"ServerPort":        serverPort,
 			"ServerVersion":     serverVersion,
 			"ServerDescription": serverDescription,
+			"User":              user,
 		})
 	}
 }
 
-func initializeWebServerRoutes(r *gin.Engine, serverService *services.ServerService, whitelistService *services.WhitelistService, commandService *services.CommandService) {
-	r.GET("/", getIndexPageHandler())
-	r.GET("/server-info", handleGetServerInfo(serverService))
-	r.GET("/whitelist", handleGetWhitelist(whitelistService))
-	r.POST("/whitelist/player", handleAddNameToWhitelist(whitelistService))
-	r.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(whitelistService))
-	r.GET("/players/:name/kick", handleGetKickPlayerDialog())
-	r.POST("/players/:name/kick", handleKickPlayer(serverService))
-	r.GET("/commands/console", handleGetCommandConsole(commandService))
-	r.POST("/commands/execute", handleExecuteRawCommand(commandService))
+func initializeWebServerRoutes(r *gin.Engine, authController *discordAuthController, serverService *services.ServerService, whitelistService *services.WhitelistService, commandService *services.CommandService) {
+	protected := r.Group("/")
+	protected.Use(authController.RequireAuth())
+	protected.GET("/", getIndexPageHandler())
+	protected.GET("/server-info", handleGetServerInfo(serverService))
+	protected.GET("/whitelist", handleGetWhitelist(whitelistService))
+	protected.POST("/whitelist/player", handleAddNameToWhitelist(whitelistService))
+	protected.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(whitelistService))
+	protected.GET("/players/:name/kick", handleGetKickPlayerDialog())
+	protected.POST("/players/:name/kick", handleKickPlayer(serverService))
+	protected.GET("/commands/console", handleGetCommandConsole(commandService))
+	protected.POST("/commands/execute", handleExecuteRawCommand(commandService))
 }
 
 type WebServerOptions struct {
 	MinecraftRconClient rcon.CommandExecutor
 	AshconClient        ashcon_client.MojangUserNameChecker
+	AuthConfig          AuthConfig
 }
 
-func InitializeWebServer(options WebServerOptions) *gin.Engine {
+func InitializeWebServer(options WebServerOptions) (*gin.Engine, error) {
 	r := initializeWebServer()
+	authController, err := ConfigureDiscordAuth(r, options.AuthConfig)
+	if err != nil {
+		return nil, err
+	}
 	serverService := services.NewServerServiceFromRconClient(options.MinecraftRconClient)
 	whitelistService := services.NewWhitelistService(options.MinecraftRconClient, options.AshconClient)
 	commandService := services.NewCommandServiceFromRconClient(options.MinecraftRconClient)
-	initializeWebServerRoutes(r, serverService, whitelistService, commandService)
-	return r
+	initializeWebServerRoutes(r, authController, serverService, whitelistService, commandService)
+	return r, nil
 }

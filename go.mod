@@ -2,7 +2,17 @@ module rcon-web
 
 go 1.25.4
 
-require github.com/gin-gonic/gin v1.11.0
+require (
+	github.com/gin-contrib/sessions v0.0.5
+	github.com/gin-gonic/gin v1.11.0
+	golang.org/x/oauth2 v0.23.0
+)
+
+require (
+	github.com/gorilla/context v1.1.1 // indirect
+	github.com/gorilla/securecookie v1.1.1 // indirect
+	github.com/gorilla/sessions v1.2.1 // indirect
+)
 
 require (
 	github.com/bytedance/sonic v1.14.0 // indirect

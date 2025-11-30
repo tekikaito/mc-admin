@@ -8,6 +8,33 @@
     <title>Minecraft Admin Tool</title>
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100">
+    <header
+      class="bg-slate-900/60 border-b border-slate-800/60 px-6 py-4 flex items-center justify-end gap-4"
+    >
+      {{if .User}}
+      <div class="flex items-center gap-3 text-sm text-slate-300">
+        <img
+          src="{{.User.AvatarURL}}"
+          alt="{{.User.Username}}"
+          class="h-10 w-10 rounded-full border border-slate-800"
+        />
+        <div class="text-right">
+          <p class="text-xs uppercase tracking-[0.3em] text-slate-500">
+            Signed in as
+          </p>
+          <p class="font-semibold text-white">{{.User.Username}}</p>
+        </div>
+      </div>
+      <form method="post" action="/auth/logout">
+        <button
+          type="submit"
+          class="px-4 py-2 text-sm font-medium rounded-xl bg-slate-800 text-white hover:bg-slate-700"
+        >
+          Log out
+        </button>
+      </form>
+      {{end}}
+    </header>
     <div
       class="max-w-6xl mx-auto px-6 py-10 grid gap-6 lg:grid-cols-[220px_1fr]"
     >

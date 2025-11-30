@@ -71,7 +71,7 @@ func (c *MinecraftRconClient) ensureConnected() error {
 
 	// Retry connection with exponential backoff
 	maxRetries := 3
-	for i := 0; i < maxRetries; i++ {
+	for i := range maxRetries {
 		err := c.connect()
 		if err == nil {
 			return nil
