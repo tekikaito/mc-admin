@@ -2,8 +2,8 @@ package services
 
 import (
 	"fmt"
-	"rcon-web/internal/rcon"
-	"rcon-web/internal/utils"
+	"mc-admin/internal/rcon"
+	"mc-admin/internal/utils"
 	"strings"
 )
 

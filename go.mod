@@ -1,4 +1,4 @@
-module rcon-web
+module mc-admin
 
 go 1.25.4
 

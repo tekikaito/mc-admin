@@ -2,9 +2,9 @@ package services
 
 import (
 	"fmt"
-	ashcon_client "rcon-web/internal/clients"
-	"rcon-web/internal/rcon"
-	"rcon-web/internal/utils"
+	ashcon_client "mc-admin/internal/clients"
+	"mc-admin/internal/rcon"
+	"mc-admin/internal/utils"
 	"strings"
 )
 

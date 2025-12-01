@@ -57,7 +57,7 @@ echo ""
 run_hot_reload() {
     local WATCH_PATTERN='(\.go$|\.html$|\.tmpl$)'
     if command -v reflex >/dev/null 2>&1; then
-        reflex -r "$WATCH_PATTERN" -s -- sh -c 'go run main.go'
+        go run reflex -r "$WATCH_PATTERN" -s -- sh -c 'go run main.go'
     else
         echo "ℹ️ reflex not installed; running via \`go run github.com/cespare/reflex@latest\` (first run may download dependencies)"
         go run github.com/cespare/reflex@latest -r "$WATCH_PATTERN" -s -- sh -c 'go run main.go'
