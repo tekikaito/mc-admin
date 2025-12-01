@@ -1,10 +1,10 @@
 package api
 
 import (
+	ashcon_client "mc-admin/internal/clients"
+	"mc-admin/internal/rcon"
+	"mc-admin/internal/services"
 	"os"
-	ashcon_client "rcon-web/internal/clients"
-	"rcon-web/internal/rcon"
-	"rcon-web/internal/services"
 
 	"github.com/gin-gonic/gin"
 )

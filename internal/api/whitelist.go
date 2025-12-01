@@ -1,8 +1,8 @@
 package api
 
 import (
+	"mc-admin/internal/services"
 	"net/http"
-	"rcon-web/internal/services"
 
 	"github.com/gin-gonic/gin"
 )
