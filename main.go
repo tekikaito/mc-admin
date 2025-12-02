@@ -21,7 +21,7 @@ func getEnv(s string) *string {
 	if value == "" {
 		return nil
 	}
-	return &value111111
+	return &value
 }
 
 func loadDotEnvFile() {
