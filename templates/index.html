@@ -52,27 +52,30 @@
           <button
             type="button"
             data-nav="overview"
-            class="w-full text-left px-4 py-2 rounded-xl bg-slate-800 text-white font-medium"
+            class="w-full text-left px-4 py-2 rounded-xl {{if not .ActiveModule}}bg-slate-800 text-white{{else}}text-slate-300 hover:bg-slate-800/60{{end}}"
+            onclick="window.location.href='/'"
           >
             Overview
           </button>
           <button
             type="button"
             data-nav="whitelist"
-            class="w-full text-left px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800/60"
+            class="w-full text-left px-4 py-2 rounded-xl {{if eq .ActiveModule "whitelist"}}bg-slate-800 text-white{{else}}text-slate-300 hover:bg-slate-800/60{{end}}"
             hx-get="/whitelist"
             hx-target="#subpage-panel"
             hx-swap="innerHTML"
+            hx-push-url="true"
           >
             Whitelist
           </button>
           <button
             type="button"
             data-nav="console"
-            class="w-full text-left px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800/60"
-            hx-get="/commands/console"
+            class="w-full text-left px-4 py-2 rounded-xl {{if eq .ActiveModule "rcon"}}bg-slate-800 text-white{{else}}text-slate-300 hover:bg-slate-800/60{{end}}"
+            hx-get="/rcon"
             hx-target="#subpage-panel"
             hx-swap="innerHTML"
+            hx-push-url="true"
           >
             Raw Console
           </button>
@@ -124,6 +127,11 @@
             id="subpage-panel"
             class="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 flex flex-col gap-3"
           >
+            {{if eq .ActiveModule "whitelist"}}
+              {{template "whitelist.html" .}}
+            {{else if eq .ActiveModule "rcon"}}
+              {{template "command_console.html" .}}
+            {{else}}
             <header>
               <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
                 Tools
@@ -134,6 +142,7 @@
               Use the navigation to open management panels like the whitelist.
               More modules can be added here over time.
             </p>
+            {{end}}
           </div>
         </section>
       </main>

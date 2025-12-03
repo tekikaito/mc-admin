@@ -14,10 +14,20 @@ func handleGetWhitelist(whitelistService *services.WhitelistService) gin.Handler
 			c.HTML(http.StatusOK, "error.html", nil)
 			return
 		}
-		c.HTML(http.StatusOK, "whitelist.html", gin.H{
-			"Players": whitelist,
-			"Count":   len(whitelist),
-		})
+
+		if c.GetHeader("HX-Request") == "true" {
+			c.HTML(http.StatusOK, "whitelist.html", gin.H{
+				"Players": whitelist,
+				"Count":   len(whitelist),
+			})
+			return
+		}
+
+		data := getCommonPageData(c)
+		data["ActiveModule"] = "whitelist"
+		data["Players"] = whitelist
+		data["Count"] = len(whitelist)
+		c.HTML(http.StatusOK, "index.html", data)
 	}
 }
 

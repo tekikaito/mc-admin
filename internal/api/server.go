@@ -15,7 +15,7 @@ func initializeWebServer() *gin.Engine {
 	return r
 }
 
-func getIndexPageHandler() gin.HandlerFunc {
+func getCommonPageData(c *gin.Context) gin.H {
 	serverName := os.Getenv("SERVER_NAME")
 	if serverName == "" {
 		serverName = "Minecraft Server"
@@ -37,16 +37,20 @@ func getIndexPageHandler() gin.HandlerFunc {
 		serverDescription = "Live status for your community"
 	}
 
+	user := CurrentUser(c)
+	return gin.H{
+		"ServerName":        serverName,
+		"ServerHost":        serverHost,
+		"ServerPort":        serverPort,
+		"ServerVersion":     serverVersion,
+		"ServerDescription": serverDescription,
+		"User":              user,
+	}
+}
+
+func getIndexPageHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		user := CurrentUser(c)
-		c.HTML(200, "index.html", gin.H{
-			"ServerName":        serverName,
-			"ServerHost":        serverHost,
-			"ServerPort":        serverPort,
-			"ServerVersion":     serverVersion,
-			"ServerDescription": serverDescription,
-			"User":              user,
-		})
+		c.HTML(200, "index.html", getCommonPageData(c))
 	}
 }
 
@@ -60,7 +64,7 @@ func initializeWebServerRoutes(r *gin.Engine, authController *discordAuthControl
 	protected.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(whitelistService))
 	protected.GET("/players/:name/kick", handleGetKickPlayerDialog())
 	protected.POST("/players/:name/kick", handleKickPlayer(serverService))
-	protected.GET("/commands/console", handleGetCommandConsole(commandService))
+	protected.GET("/rcon", handleGetCommandConsole(commandService))
 	protected.POST("/commands/execute", handleExecuteRawCommand(commandService))
 }
 

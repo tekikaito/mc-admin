@@ -10,7 +10,14 @@ import (
 
 func handleGetCommandConsole(commandService *services.CommandService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.HTML(http.StatusOK, "command_console.html", gin.H{})
+		if c.GetHeader("HX-Request") == "true" {
+			c.HTML(http.StatusOK, "command_console.html", gin.H{})
+			return
+		}
+
+		data := getCommonPageData(c)
+		data["ActiveModule"] = "rcon"
+		c.HTML(http.StatusOK, "index.html", data)
 	}
 }
 
