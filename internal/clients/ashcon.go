@@ -3,20 +3,27 @@ package ashcon_client
 import (
 	"fmt"
 	"net/http"
+	"os"
 )
 
 type MojangUserNameChecker interface {
 	CheckMojangUsernameExists(username string) (bool, error)
 }
 
-type AshconClient struct{}
+type AshconClient struct {
+	apiURL string
+}
 
 func NewMojangUserNameChecker() *AshconClient {
-	return &AshconClient{}
+	apiURL := os.Getenv("ASHCON_API_URL")
+	if apiURL == "" {
+		apiURL = "https://api.ashcon.app/mojang/v2/user/"
+	}
+	return &AshconClient{apiURL: apiURL}
 }
 
 func (a *AshconClient) CheckMojangUsernameExists(username string) (bool, error) {
-	resp, err := http.Get("https://api.ashcon.app/mojang/v2/user/" + username)
+	resp, err := http.Get(a.apiURL + username)
 	if err != nil {
 		return false, err
 	}
