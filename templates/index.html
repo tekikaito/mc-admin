@@ -4,55 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/style.css" />
     <title>Minecraft Admin Tool</title>
   </head>
-  <body class="min-h-screen bg-slate-950 text-slate-100">
-    <header
-      class="bg-slate-900/60 border-b border-slate-800/60 px-6 py-4 flex items-center justify-end gap-4"
-    >
+  <body>
+    <header class="flex items-center justify-end gap-4">
       {{if .User}}
-      <div class="flex items-center gap-3 text-sm text-slate-300">
+      <div class="flex items-center gap-3 text-sm">
         <img
           src="{{.User.AvatarURL}}"
           alt="{{.User.Username}}"
-          class="h-10 w-10 rounded-full border border-slate-800"
+          class="player-avatar"
         />
         <div class="text-right">
-          <p class="text-xs uppercase tracking-[0.3em] text-slate-500">
-            Signed in as
-          </p>
-          <p class="font-semibold text-white">{{.User.Username}}</p>
+          <p class="font-semibold">{{.User.Username}}</p>
         </div>
       </div>
       <form method="post" action="/auth/logout">
-        <button
-          type="submit"
-          class="px-4 py-2 text-sm font-medium rounded-xl bg-slate-800 text-white hover:bg-slate-700"
-        >
-          Log out
-        </button>
+        <button type="submit" class="mc-btn">Log out</button>
       </form>
       {{end}}
     </header>
-    <div
-      class="max-w-6xl mx-auto px-6 py-10 grid gap-6 lg:grid-cols-[220px_1fr]"
-    >
-      <aside
-        class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 flex flex-col gap-6"
-      >
+    <div class="container grid-layout">
+      <aside class="mc-box flex flex-col gap-4">
         <div>
-          <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
-            Control
-          </p>
-          <h1 class="text-2xl font-semibold mt-2">{{.ServerName}}</h1>
-          <p class="text-sm text-slate-400 mt-1">{{.ServerDescription}}</p>
+          <p class="text-xs uppercase tracking-wide text-muted">Control</p>
+          <h1 class="mt-2">{{.ServerName}}</h1>
+          <p class="text-sm mt-2 text-muted">{{.ServerDescription}}</p>
         </div>
-        <nav class="space-y-2">
+        <nav class="flex flex-col gap-2">
           <button
             type="button"
             data-nav="overview"
-            class="w-full text-left px-4 py-2 rounded-xl {{if not .ActiveModule}}bg-slate-800 text-white{{else}}text-slate-300 hover:bg-slate-800/60{{end}}"
+            class="mc-btn w-full"
             onclick="window.location.href='/'"
           >
             Overview
@@ -60,7 +44,7 @@
           <button
             type="button"
             data-nav="whitelist"
-            class="w-full text-left px-4 py-2 rounded-xl {{if eq .ActiveModule "whitelist"}}bg-slate-800 text-white{{else}}text-slate-300 hover:bg-slate-800/60{{end}}"
+            class="mc-btn w-full"
             hx-get="/whitelist"
             hx-target="#subpage-panel"
             hx-swap="innerHTML"
@@ -71,78 +55,60 @@
           <button
             type="button"
             data-nav="console"
-            class="w-full text-left px-4 py-2 rounded-xl {{if eq .ActiveModule "rcon"}}bg-slate-800 text-white{{else}}text-slate-300 hover:bg-slate-800/60{{end}}"
+            class="mc-btn w-full"
             hx-get="/rcon"
             hx-target="#subpage-panel"
             hx-swap="innerHTML"
             hx-push-url="true"
           >
-            Raw Console
+            Server Console
           </button>
         </nav>
       </aside>
-      <main class="space-y-6">
+      <main class="flex flex-col gap-4">
         <section
-          class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 bg-slate-900/40 border border-slate-800 rounded-2xl p-6"
+          class="mc-box grid-layout"
+          style="grid-template-columns: repeat(3, 1fr); gap: 1rem"
         >
           <div>
-            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
-              Address
-            </p>
-            <p class="text-xl font-semibold mt-2">{{.ServerHost}}</p>
+            <p class="text-xs uppercase tracking-wide text-muted">Address</p>
+            <p class="mt-2">{{.ServerHost}}</p>
           </div>
           <div>
-            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
-              Game Port
-            </p>
-            <p class="text-xl font-semibold mt-2">{{.ServerPort}}</p>
+            <p class="text-xs uppercase tracking-wide text-muted">Game Port</p>
+            <p class="mt-2">{{.ServerPort}}</p>
           </div>
           <div>
-            <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
-              Version
-            </p>
-            <p class="text-xl font-semibold mt-2">{{.ServerVersion}}</p>
+            <p class="text-xs uppercase tracking-wide text-muted">Version</p>
+            <p class="mt-2">{{.ServerVersion}}</p>
           </div>
         </section>
 
-        <section class="grid gap-6">
+        <section>
           <div
             id="player-list"
             hx-get="/server-info"
             hx-trigger="load, every 10s"
             hx-swap="innerHTML"
-            class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6"
+            class="mc-box"
           >
-            <header class="mb-4">
-              <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
+            <header
+              class="mb-4"
+              style="background: none; border: none; padding: 0"
+            >
+              <p class="text-xs uppercase tracking-wide text-muted">
                 Live Players
               </p>
-              <h2 class="text-xl font-semibold mt-1">Online Right Now</h2>
+              <h2 class="mt-2">Online Right Now</h2>
             </header>
-            <p class="text-slate-400 text-sm">Loading player list...</p>
+            <p class="text-sm">Loading player list...</p>
           </div>
         </section>
         <section>
-          <div
-            id="subpage-panel"
-            class="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 flex flex-col gap-3"
-          >
-            {{if eq .ActiveModule "whitelist"}}
-              {{template "whitelist.html" .}}
-            {{else if eq .ActiveModule "rcon"}}
-              {{template "command_console.html" .}}
-            {{else}}
-            <header>
-              <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
-                Tools
-              </p>
-              <h2 class="text-xl font-semibold mt-1">Choose a module</h2>
-            </header>
-            <p class="text-sm text-slate-400">
-              Use the navigation to open management panels like the whitelist.
-              More modules can be added here over time.
-            </p>
-            {{end}}
+          <div id="subpage-panel" class="flex flex-col">
+            {{if eq .ActiveModule "whitelist"}} {{template "whitelist.html" .}}
+            {{else if eq .ActiveModule "rcon"}} {{template
+            "command_console.html" .}} {{else}} {{end}}
           </div>
         </section>
       </main>
@@ -163,13 +129,7 @@
 
       navButtons.forEach((button) => {
         button.addEventListener("click", () => {
-          navButtons.forEach((btn) => {
-            btn.classList.remove("bg-slate-800", "text-white");
-            btn.classList.add("text-slate-300");
-          });
-          button.classList.remove("text-slate-300");
-          button.classList.add("bg-slate-800", "text-white");
-
+          // Reset all buttons (optional visual feedback logic can go here)
           if (subpagePanel && button.dataset.nav === "overview") {
             subpagePanel.innerHTML = defaultPanelContent;
           }

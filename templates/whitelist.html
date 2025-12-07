@@ -1,14 +1,14 @@
-<div class="space-y-4">
+<div class="flex flex-col gap-4">
   <div class="flex items-center justify-between">
     <div>
-      <p class="text-xs uppercase tracking-[0.4em] text-slate-500">Whitelist</p>
-      <h2 class="text-xl font-semibold mt-1">Whitelisted Players</h2>
+      <p class="text-xs uppercase tracking-wide text-muted">Whitelist</p>
+      <h2 class="mt-2">Whitelisted Players</h2>
     </div>
-    <span class="text-sm text-slate-400">{{.Count}} total</span>
+    <span class="text-sm text-muted">{{.Count}} total</span>
   </div>
 
   <form
-    class="space-y-2"
+    class="flex flex-col gap-2"
     hx-post="/whitelist/player"
     hx-target="#subpage-panel"
     hx-swap="innerHTML"
@@ -16,7 +16,7 @@
   >
     <label
       for="whitelist-player"
-      class="text-xs uppercase tracking-[0.3em] text-slate-500"
+      class="text-xs uppercase tracking-wide text-muted"
       >Add player</label
     >
     <div class="flex flex-col gap-3 sm:flex-row">
@@ -25,27 +25,21 @@
         name="playerName"
         type="text"
         required
-        class="flex-1 rounded-lg border border-slate-800 bg-slate-950/40 px-4 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        class="mc-input"
         placeholder="Player name"
       />
-      <button
-        type="submit"
-        class="rounded-lg bg-emerald-500/90 px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-emerald-400"
-      >
-        Add
-      </button>
+      <button type="submit" class="mc-btn">Add</button>
     </div>
   </form>
   {{if .Players}}
-  <ul
-    class="divide-y divide-slate-800 rounded-lg border border-slate-800/80 bg-slate-950/30"
-  >
+  <ul class="mc-box" style="padding: 0; border-width: 2px">
     {{range .Players}}
-    <li class="px-4 py-3 flex items-center justify-between text-slate-100">
+    <li class="player-list-item flex items-center justify-between">
       <span class="font-medium">{{.}}</span>
       <button
         type="button"
-        class="ml-4 rounded-lg bg-red-600/80 px-3 py-1 text-xs font-medium text-slate-950 hover:bg-red-500"
+        class="mc-btn mc-btn-danger"
+        style="font-size: 0.8rem; padding: 4px 8px"
         hx-delete="/whitelist/player/{{urlquery .}}"
         hx-target="#subpage-panel"
         hx-swap="innerHTML"
@@ -56,14 +50,6 @@
     {{end}}
   </ul>
   {{else}}
-  <div
-    class="rounded-lg border border-dashed border-slate-800/70 bg-slate-950/20 px-4 py-6 text-center"
-  >
-    <p class="text-slate-400">No players are currently whitelisted.</p>
-    <p class="text-xs text-slate-500 mt-1">
-      Use the console to add players with
-      <code>whitelist add &lt;player&gt;</code>.
-    </p>
-  </div>
+  <p class="text-sm text-muted">No players whitelisted.</p>
   {{end}}
 </div>

@@ -11,6 +11,7 @@ import (
 
 func initializeWebServer() *gin.Engine {
 	r := gin.Default()
+	r.Static("/static", "./static")
 	r.LoadHTMLGlob("templates/*")
 	return r
 }

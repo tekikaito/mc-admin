@@ -1,24 +1,27 @@
 <div
   id="kick-modal"
   class="fixed inset-0 z-50 flex items-center justify-center"
+  style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; z-index: 50;"
 >
-  <div class="absolute inset-0 bg-slate-950/80" data-close-modal="kick"></div>
+  <div class="absolute inset-0" style="background-color: rgba(0,0,0,0.8); position: absolute; top: 0; left: 0; right: 0; bottom: 0;" data-close-modal="kick"></div>
   <div
-    class="relative z-10 w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-2xl shadow-slate-950/70"
+    class="mc-box relative z-10 w-full max-w-md"
+    style="position: relative; z-index: 10; width: 100%; max-width: 400px;"
   >
     <div class="flex items-start justify-between gap-4">
       <div>
-        <p class="text-xs uppercase tracking-[0.4em] text-slate-500">
+        <p class="text-xs uppercase tracking-wide text-muted">
           Kick Player
         </p>
-        <h3 class="text-xl font-semibold mt-2">{{.PlayerName}}</h3>
-        <p class="text-sm text-slate-400 mt-1">
+        <h3 class="mt-2">{{.PlayerName}}</h3>
+        <p class="text-sm mt-1 text-muted">
           Provide a short reason that will be shown in-game.
         </p>
       </div>
       <button
         type="button"
-        class="text-slate-500 hover:text-white"
+        class="mc-btn"
+        style="padding: 4px 8px; font-size: 1rem;"
         data-close-modal="kick"
       >
         ✕
@@ -26,19 +29,19 @@
     </div>
     {{if .Error}}
     <div
-      class="mt-4 rounded-lg border border-red-700/70 bg-red-900/30 px-4 py-2 text-sm text-red-200"
+      class="mt-4 text-sm text-error" style="border: 2px solid #aa0000; background: rgba(170,0,0,0.2); padding: 8px;"
     >
       {{.Error}}
     </div>
     {{end}}
     <form
-      class="mt-4 space-y-4"
+      class="mt-4 flex flex-col gap-4"
       hx-post="/players/{{urlquery .PlayerName}}/kick"
       hx-target="#modal-root"
       hx-swap="innerHTML"
     >
       <label
-        class="text-xs uppercase tracking-[0.3em] text-slate-500"
+        class="text-xs uppercase tracking-wide text-muted"
         for="kick-reason"
         >Reason</label
       >
@@ -46,8 +49,27 @@
         id="kick-reason"
         name="reason"
         rows="3"
-        class="w-full rounded-xl border border-slate-800 bg-slate-950/40 px-4 py-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-red-400"
+        class="mc-input"
         placeholder="Griefing, AFK farming, inappropriate chat..."
+      ></textarea>
+      <div class="flex justify-end gap-3">
+        <button
+          type="button"
+          class="mc-btn"
+          data-close-modal="kick"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="mc-btn mc-btn-danger"
+        >
+          Kick Player
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
       >
 {{.Reason}}</textarea
       >

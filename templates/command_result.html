@@ -1,19 +1,18 @@
-<div
-  class="rounded-xl border border-slate-800 bg-slate-950/40 px-4 py-4 space-y-2"
->
+<div class="mc-box" style="padding: 1rem; border-width: 2px">
   {{if .HasError}}
-  <p class="text-sm font-semibold text-red-400">Command failed</p>
+  <p class="text-sm font-semibold text-error">Command failed</p>
   {{else}}
-  <p class="text-sm font-semibold text-emerald-400">Command executed</p>
+  <p class="text-sm font-semibold text-success">Command executed</p>
   {{end}}
-  <p class="text-xs text-slate-500">{{.Command}}</p>
+  <p class="text-xs text-muted">{{.Command}}</p>
   {{if .Message}}
   <pre
-    class="whitespace-pre-wrap break-words rounded-lg border border-slate-800/60 bg-slate-900/40 px-3 py-3 text-xs text-slate-200"
+    class="console-output"
+    style="height: auto; max-height: 300px; margin-top: 0.5rem"
   >
 {{.Message}}
   </pre>
   {{else if .HasError}}
-  <p class="text-xs text-slate-400">No details returned.</p>
+  <p class="text-xs text-muted">No details returned.</p>
   {{end}}
 </div>
