@@ -2,6 +2,7 @@ package rcon
 
 import (
 	"fmt"
+	"mc-admin/internal/config"
 	"sync"
 	"time"
 
@@ -26,6 +27,22 @@ func NewMinecraftRconClient(host, port, password string) *MinecraftRconClient {
 		Port:     port,
 		Password: password,
 	}
+}
+
+func BuildMinecraftRconClientFromEnv() *MinecraftRconClient {
+	rconPassword := config.GetEnv("RCON_PASSWORD")
+	rconHost := config.GetEnv("RCON_HOST")
+	if rconHost == nil {
+		rconHost = new(string)
+		*rconHost = "localhost"
+	}
+	rconPort := config.GetEnv("RCON_PORT")
+	if rconPort == nil {
+		rconPort = new(string)
+		*rconPort = "25575"
+	}
+	mcRcon := NewMinecraftRconClient(*rconHost, *rconPort, *rconPassword)
+	return mcRcon
 }
 
 func (c *MinecraftRconClient) getConnectionString() string {

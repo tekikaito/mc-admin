@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -52,6 +53,42 @@ type discordAuthController struct {
 var discordOAuthEndpoint = oauth2.Endpoint{
 	AuthURL:  "https://discord.com/api/oauth2/authorize",
 	TokenURL: "https://discord.com/api/oauth2/token",
+}
+
+func BuildAuthConfigFromEnv() AuthConfig {
+	enabled := strings.ToLower(os.Getenv("ENABLE_DISCORD_OAUTH")) == "true"
+	clientID := os.Getenv("DISCORD_CLIENT_ID")
+	clientSecret := os.Getenv("DISCORD_CLIENT_SECRET")
+	redirectURI := os.Getenv("DISCORD_REDIRECT_URI")
+	sessionSecret := os.Getenv("SESSION_SECRET")
+	allowedUsersEnv := os.Getenv("DISCORD_ALLOWED_USER_IDS")
+	var allowedUsers []string
+	if allowedUsersEnv != "" {
+		candidates := strings.Split(allowedUsersEnv, ",")
+		for _, candidate := range candidates {
+			trimmed := strings.TrimSpace(candidate)
+			if trimmed != "" {
+				allowedUsers = append(allowedUsers, trimmed)
+			}
+		}
+
+		return AuthConfig{
+			Enabled:        enabled,
+			ClientID:       clientID,
+			ClientSecret:   clientSecret,
+			RedirectURI:    redirectURI,
+			SessionSecret:  sessionSecret,
+			AllowedUserIDs: allowedUsers,
+		}
+	}
+
+	return AuthConfig{
+		Enabled:       enabled,
+		ClientID:      clientID,
+		ClientSecret:  clientSecret,
+		RedirectURI:   redirectURI,
+		SessionSecret: sessionSecret,
+	}
 }
 
 // ConfigureDiscordAuth wires the session middleware, registers auth routes, and returns a helper for downstream middleware.
