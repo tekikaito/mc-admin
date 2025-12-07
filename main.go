@@ -86,10 +86,10 @@ func main() {
 	// Validate environment variables
 	validator := config.NewValidator([]config.EnvVarDefinition{
 		{Name: "RCON_PASSWORD", Required: true},
-		{Name: "DISCORD_CLIENT_ID", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH"},
-		{Name: "DISCORD_CLIENT_SECRET", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH"},
-		{Name: "DISCORD_REDIRECT_URI", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH"},
-		{Name: "SESSION_SECRET", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH"},
+		{Name: "DISCORD_CLIENT_ID", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH", ValidationFunc: config.IsInteger},
+		{Name: "DISCORD_CLIENT_SECRET", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH", ValidationFunc: config.IsNotEmpty},
+		{Name: "DISCORD_REDIRECT_URI", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH", ValidationFunc: config.IsNotEmpty},
+		{Name: "SESSION_SECRET", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH", ValidationFunc: config.IsNotEmpty},
 	})
 	if err := validator.Validate(); err != nil {
 		log.Fatalf("Environment validation failed: %v", err)

@@ -69,6 +69,96 @@ func TestValidator_Validate(t *testing.T) {
 			envVars: map[string]string{},
 			wantErr: false,
 		},
+		{
+			name: "Validation function passes",
+			definitions: []EnvVarDefinition{
+				{Name: "INT_VAR", Required: true, ValidationFunc: IsInteger},
+			},
+			envVars: map[string]string{
+				"INT_VAR": "123",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Validation function fails",
+			definitions: []EnvVarDefinition{
+				{Name: "INT_VAR", Required: true, ValidationFunc: IsInteger},
+			},
+			envVars: map[string]string{
+				"INT_VAR": "abc",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Optional variable with validation (present and valid)",
+			definitions: []EnvVarDefinition{
+				{Name: "OPTIONAL_INT", Required: false, ValidationFunc: IsInteger},
+			},
+			envVars: map[string]string{
+				"OPTIONAL_INT": "456",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Optional variable with validation (present and invalid)",
+			definitions: []EnvVarDefinition{
+				{Name: "OPTIONAL_INT", Required: false, ValidationFunc: IsInteger},
+			},
+			envVars: map[string]string{
+				"OPTIONAL_INT": "not-an-int",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Max length validation passes",
+			definitions: []EnvVarDefinition{
+				{Name: "SHORT_VAR", Required: true, ValidationFunc: MaxLength(5)},
+			},
+			envVars: map[string]string{
+				"SHORT_VAR": "12345",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Max length validation fails",
+			definitions: []EnvVarDefinition{
+				{Name: "SHORT_VAR", Required: true, ValidationFunc: MaxLength(5)},
+			},
+			envVars: map[string]string{
+				"SHORT_VAR": "123456",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Chained validation passes",
+			definitions: []EnvVarDefinition{
+				{Name: "CHAINED_VAR", Required: true, ValidationFunc: Chain(IsNotEmpty, MaxLength(5))},
+			},
+			envVars: map[string]string{
+				"CHAINED_VAR": "123",
+			},
+			wantErr: false,
+		},
+		{
+			name: "Chained validation fails first check",
+			definitions: []EnvVarDefinition{
+				{Name: "CHAINED_VAR", Required: true, ValidationFunc: Chain(IsNotEmpty, MaxLength(5))},
+			},
+			envVars: map[string]string{
+				"CHAINED_VAR": "   ",
+			},
+			wantErr: true,
+		},
+		{
+			name: "Chained validation fails second check",
+			definitions: []EnvVarDefinition{
+				{Name: "CHAINED_VAR", Required: true, ValidationFunc: Chain(IsNotEmpty, MaxLength(5))},
+			},
+			envVars: map[string]string{
+				"CHAINED_VAR": "123456",
+			},
+			wantErr: true,
+		},
 	}
 
 	for _, tt := range tests {

@@ -104,13 +104,13 @@ func validateAuthConfig(cfg AuthConfig) error {
 	}
 	switch {
 	case strings.TrimSpace(cfg.ClientID) == "":
-		return errors.New("missing DISCORD_CLIENT_ID")
+		return errors.New("missing ClientID")
 	case strings.TrimSpace(cfg.ClientSecret) == "":
-		return errors.New("missing DISCORD_CLIENT_SECRET")
+		return errors.New("missing ClientSecret")
 	case strings.TrimSpace(cfg.RedirectURI) == "":
-		return errors.New("missing DISCORD_REDIRECT_URI")
+		return errors.New("missing RedirectURI")
 	case strings.TrimSpace(cfg.SessionSecret) == "":
-		return errors.New("missing SESSION_SECRET")
+		return errors.New("missing SessionSecret")
 	}
 	return nil
 }
