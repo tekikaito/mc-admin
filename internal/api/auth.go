@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -28,6 +29,7 @@ const (
 
 // AuthConfig describes the Discord OAuth configuration required by the server.
 type AuthConfig struct {
+	Enabled        bool
 	ClientID       string
 	ClientSecret   string
 	RedirectURI    string
@@ -43,6 +45,7 @@ type AuthenticatedUser struct {
 }
 
 type discordAuthController struct {
+	enabled        bool
 	oauthConfig    *oauth2.Config
 	allowedUserIDs map[string]struct{}
 }
@@ -52,10 +55,50 @@ var discordOAuthEndpoint = oauth2.Endpoint{
 	TokenURL: "https://discord.com/api/oauth2/token",
 }
 
+func BuildAuthConfigFromEnv() AuthConfig {
+	enabled := strings.ToLower(os.Getenv("ENABLE_DISCORD_OAUTH")) == "true"
+	clientID := os.Getenv("DISCORD_CLIENT_ID")
+	clientSecret := os.Getenv("DISCORD_CLIENT_SECRET")
+	redirectURI := os.Getenv("DISCORD_REDIRECT_URI")
+	sessionSecret := os.Getenv("SESSION_SECRET")
+	allowedUsersEnv := os.Getenv("DISCORD_ALLOWED_USER_IDS")
+	var allowedUsers []string
+	if allowedUsersEnv != "" {
+		candidates := strings.Split(allowedUsersEnv, ",")
+		for _, candidate := range candidates {
+			trimmed := strings.TrimSpace(candidate)
+			if trimmed != "" {
+				allowedUsers = append(allowedUsers, trimmed)
+			}
+		}
+
+		return AuthConfig{
+			Enabled:        enabled,
+			ClientID:       clientID,
+			ClientSecret:   clientSecret,
+			RedirectURI:    redirectURI,
+			SessionSecret:  sessionSecret,
+			AllowedUserIDs: allowedUsers,
+		}
+	}
+
+	return AuthConfig{
+		Enabled:       enabled,
+		ClientID:      clientID,
+		ClientSecret:  clientSecret,
+		RedirectURI:   redirectURI,
+		SessionSecret: sessionSecret,
+	}
+}
+
 // ConfigureDiscordAuth wires the session middleware, registers auth routes, and returns a helper for downstream middleware.
 func ConfigureDiscordAuth(r *gin.Engine, cfg AuthConfig) (*discordAuthController, error) {
 	if err := validateAuthConfig(cfg); err != nil {
 		return nil, err
+	}
+
+	if !cfg.Enabled {
+		return &discordAuthController{enabled: false}, nil
 	}
 
 	store := cookie.NewStore([]byte(cfg.SessionSecret))
@@ -77,6 +120,7 @@ func ConfigureDiscordAuth(r *gin.Engine, cfg AuthConfig) (*discordAuthController
 	}
 
 	controller := &discordAuthController{
+		enabled: true,
 		oauthConfig: &oauth2.Config{
 			ClientID:     cfg.ClientID,
 			ClientSecret: cfg.ClientSecret,
@@ -92,20 +136,26 @@ func ConfigureDiscordAuth(r *gin.Engine, cfg AuthConfig) (*discordAuthController
 }
 
 func validateAuthConfig(cfg AuthConfig) error {
+	if !cfg.Enabled {
+		return nil
+	}
 	switch {
 	case strings.TrimSpace(cfg.ClientID) == "":
-		return errors.New("missing DISCORD_CLIENT_ID")
+		return errors.New("missing ClientID")
 	case strings.TrimSpace(cfg.ClientSecret) == "":
-		return errors.New("missing DISCORD_CLIENT_SECRET")
+		return errors.New("missing ClientSecret")
 	case strings.TrimSpace(cfg.RedirectURI) == "":
-		return errors.New("missing DISCORD_REDIRECT_URI")
+		return errors.New("missing RedirectURI")
 	case strings.TrimSpace(cfg.SessionSecret) == "":
-		return errors.New("missing SESSION_SECRET")
+		return errors.New("missing SessionSecret")
 	}
 	return nil
 }
 
 func (a *discordAuthController) registerRoutes(r *gin.Engine) {
+	if !a.enabled {
+		return
+	}
 	authGroup := r.Group("/auth")
 	authGroup.GET("/login", a.renderLoginPage())
 	authGroup.GET("/discord/start", a.startDiscordFlow())
@@ -205,6 +255,10 @@ func (a *discordAuthController) handleLogout() gin.HandlerFunc {
 // RequireAuth ensures the user is authenticated before allowing the request to proceed.
 func (a *discordAuthController) RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if !a.enabled {
+			c.Next()
+			return
+		}
 		user := currentUserFromSession(c)
 		if user == nil {
 			c.Redirect(http.StatusFound, "/auth/login")

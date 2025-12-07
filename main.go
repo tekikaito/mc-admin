@@ -5,6 +5,7 @@ import (
 	"log"
 	"mc-admin/internal/api"
 	ashcon_client "mc-admin/internal/clients"
+	"mc-admin/internal/config"
 	"mc-admin/internal/rcon"
 	"net/http"
 	"os"
@@ -12,94 +13,39 @@ import (
 	"strings"
 	"syscall"
 	"time"
-
-	"github.com/joho/godotenv"
 )
 
-func getEnv(s string) *string {
-	value := os.Getenv(s)
-	if value == "" {
-		return nil
-	}
-	return &value
-}
-
-func loadDotEnvFile() {
-	if stat, err := os.Stat(".env"); err != nil || stat.IsDir() {
-		log.Println(".env file not found, skipping load")
-		return
-	}
-
-	// Load environment variables from .env file
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
-}
-
-func setupMinecraftRcon() *rcon.MinecraftRconClient {
-	rconPassword := getEnv("RCON_PASSWORD")
-	if rconPassword == nil {
-		log.Fatal("RCON_PASSWORD environment variable is not set")
-	}
-	rconHost := getEnv("RCON_HOST")
-	if rconHost == nil {
-		rconHost = new(string)
-		*rconHost = "localhost"
-	}
-	rconPort := getEnv("RCON_PORT")
-	if rconPort == nil {
-		rconPort = new(string)
-		*rconPort = "25575"
-	}
-	mcRcon := rcon.NewMinecraftRconClient(*rconHost, *rconPort, *rconPassword)
-	return mcRcon
-}
-
-func buildAuthConfig() api.AuthConfig {
-	allowedUsersEnv := os.Getenv("DISCORD_ALLOWED_USER_IDS")
-	var allowedUsers []string
-	if allowedUsersEnv != "" {
-		candidates := strings.Split(allowedUsersEnv, ",")
-		for _, candidate := range candidates {
-			trimmed := strings.TrimSpace(candidate)
-			if trimmed != "" {
-				allowedUsers = append(allowedUsers, trimmed)
-			}
-		}
-	}
-
-	return api.AuthConfig{
-		ClientID:       os.Getenv("DISCORD_CLIENT_ID"),
-		ClientSecret:   os.Getenv("DISCORD_CLIENT_SECRET"),
-		RedirectURI:    os.Getenv("DISCORD_REDIRECT_URI"),
-		SessionSecret:  os.Getenv("SESSION_SECRET"),
-		AllowedUserIDs: allowedUsers,
-	}
-}
-
 func main() {
-	loadDotEnvFile()
-	ashconClient := ashcon_client.NewMojangUserNameChecker()
-	rconClient := setupMinecraftRcon()
+	config.LoadDotEnvFile(config.NewValidator([]config.EnvVarDefinition{
+		{Name: "RCON_HOST", Required: false},
+		{Name: "RCON_PORT", Required: false},
+		{Name: "RCON_PASSWORD", Required: true},
+		{Name: "ENABLE_MINECRAFT_USERNAME_CHECK", Required: false},
+		{Name: "DISCORD_CLIENT_ID", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH", ValidationFunc: config.IsInteger},
+		{Name: "DISCORD_CLIENT_SECRET", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH", ValidationFunc: config.IsNotEmpty},
+		{Name: "DISCORD_REDIRECT_URI", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH", ValidationFunc: config.IsNotEmpty},
+		{Name: "SESSION_SECRET", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH", ValidationFunc: config.IsNotEmpty},
+	}))
+
+	var ashconClient ashcon_client.MojangUserNameChecker
+	enableUsernameCheck := strings.ToLower(os.Getenv("ENABLE_MINECRAFT_USERNAME_CHECK")) == "true"
+	if enableUsernameCheck {
+		ashconClient = ashcon_client.NewMojangUserNameChecker()
+	}
+	rconClient := rcon.BuildMinecraftRconClientFromEnv()
 	defer rconClient.Close() // Ensure RCON connection is closed on exit
 
 	r, err := api.InitializeWebServer(api.WebServerOptions{
 		MinecraftRconClient: rconClient,
 		AshconClient:        ashconClient,
-		AuthConfig:          buildAuthConfig(),
+		AuthConfig:          api.BuildAuthConfigFromEnv(),
 	})
 	if err != nil {
 		log.Fatalf("failed to initialize web server: %v", err)
 	}
 
 	// Create HTTP server with custom settings for graceful shutdown
-	srv := &http.Server{
-		Addr:    ":8080",
-		Handler: r,
-	}
-
-	// Channel to listen for interrupt signals
+	srv := &http.Server{Addr: ":8080", Handler: r}
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 

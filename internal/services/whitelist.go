@@ -9,14 +9,23 @@ import (
 )
 
 type WhitelistService struct {
-	rconClient    rcon.CommandExecutor
-	mojangChecker ashcon_client.MojangUserNameChecker
+	rconClient         rcon.CommandExecutor
+	mojangCheckEnabled bool
+	mojangChecker      ashcon_client.MojangUserNameChecker
 }
 
 func NewWhitelistService(rconClient rcon.CommandExecutor, mojangChecker ashcon_client.MojangUserNameChecker) *WhitelistService {
+	if mojangChecker != nil {
+		return &WhitelistService{
+			rconClient:         rconClient,
+			mojangCheckEnabled: true,
+			mojangChecker:      mojangChecker,
+		}
+	}
 	return &WhitelistService{
-		rconClient:    rconClient,
-		mojangChecker: mojangChecker,
+		rconClient:         rconClient,
+		mojangChecker:      mojangChecker,
+		mojangCheckEnabled: false,
 	}
 }
 
@@ -73,10 +82,13 @@ func (s *WhitelistService) AddNameToWhitelist(name string) error {
 		}
 	}
 
-	exists, err := s.mojangChecker.CheckMojangUsernameExists(trimmedName)
-	fmt.Printf("exists: %v, err: %v\n", exists, err)
-	if err != nil {
-		return fmt.Errorf("failed to verify if name exists: %w", err)
+	exists := true
+	if s.mojangCheckEnabled {
+		exists, err := s.mojangChecker.CheckMojangUsernameExists(trimmedName)
+		fmt.Printf("exists: %v, err: %v\n", exists, err)
+		if err != nil {
+			return fmt.Errorf("failed to verify if name exists: %w", err)
+		}
 	}
 	if !exists {
 		return fmt.Errorf("name '%s' does not exist", trimmedName)
