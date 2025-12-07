@@ -5,6 +5,7 @@ import (
 	"log"
 	"mc-admin/internal/api"
 	ashcon_client "mc-admin/internal/clients"
+	"mc-admin/internal/config"
 	"mc-admin/internal/rcon"
 	"net/http"
 	"os"
@@ -70,6 +71,7 @@ func buildAuthConfig() api.AuthConfig {
 	}
 
 	return api.AuthConfig{
+		Enabled:        strings.ToLower(os.Getenv("ENABLE_DISCORD_OAUTH")) == "true",
 		ClientID:       os.Getenv("DISCORD_CLIENT_ID"),
 		ClientSecret:   os.Getenv("DISCORD_CLIENT_SECRET"),
 		RedirectURI:    os.Getenv("DISCORD_REDIRECT_URI"),
@@ -80,6 +82,19 @@ func buildAuthConfig() api.AuthConfig {
 
 func main() {
 	loadDotEnvFile()
+
+	// Validate environment variables
+	validator := config.NewValidator([]config.EnvVarDefinition{
+		{Name: "RCON_PASSWORD", Required: true},
+		{Name: "DISCORD_CLIENT_ID", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH"},
+		{Name: "DISCORD_CLIENT_SECRET", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH"},
+		{Name: "DISCORD_REDIRECT_URI", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH"},
+		{Name: "SESSION_SECRET", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH"},
+	})
+	if err := validator.Validate(); err != nil {
+		log.Fatalf("Environment validation failed: %v", err)
+	}
+
 	ashconClient := ashcon_client.NewMojangUserNameChecker()
 	rconClient := setupMinecraftRcon()
 	defer rconClient.Close() // Ensure RCON connection is closed on exit

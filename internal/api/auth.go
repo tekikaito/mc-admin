@@ -28,6 +28,7 @@ const (
 
 // AuthConfig describes the Discord OAuth configuration required by the server.
 type AuthConfig struct {
+	Enabled        bool
 	ClientID       string
 	ClientSecret   string
 	RedirectURI    string
@@ -43,6 +44,7 @@ type AuthenticatedUser struct {
 }
 
 type discordAuthController struct {
+	enabled        bool
 	oauthConfig    *oauth2.Config
 	allowedUserIDs map[string]struct{}
 }
@@ -56,6 +58,10 @@ var discordOAuthEndpoint = oauth2.Endpoint{
 func ConfigureDiscordAuth(r *gin.Engine, cfg AuthConfig) (*discordAuthController, error) {
 	if err := validateAuthConfig(cfg); err != nil {
 		return nil, err
+	}
+
+	if !cfg.Enabled {
+		return &discordAuthController{enabled: false}, nil
 	}
 
 	store := cookie.NewStore([]byte(cfg.SessionSecret))
@@ -77,6 +83,7 @@ func ConfigureDiscordAuth(r *gin.Engine, cfg AuthConfig) (*discordAuthController
 	}
 
 	controller := &discordAuthController{
+		enabled: true,
 		oauthConfig: &oauth2.Config{
 			ClientID:     cfg.ClientID,
 			ClientSecret: cfg.ClientSecret,
@@ -92,6 +99,9 @@ func ConfigureDiscordAuth(r *gin.Engine, cfg AuthConfig) (*discordAuthController
 }
 
 func validateAuthConfig(cfg AuthConfig) error {
+	if !cfg.Enabled {
+		return nil
+	}
 	switch {
 	case strings.TrimSpace(cfg.ClientID) == "":
 		return errors.New("missing DISCORD_CLIENT_ID")
@@ -106,6 +116,9 @@ func validateAuthConfig(cfg AuthConfig) error {
 }
 
 func (a *discordAuthController) registerRoutes(r *gin.Engine) {
+	if !a.enabled {
+		return
+	}
 	authGroup := r.Group("/auth")
 	authGroup.GET("/login", a.renderLoginPage())
 	authGroup.GET("/discord/start", a.startDiscordFlow())
@@ -205,6 +218,10 @@ func (a *discordAuthController) handleLogout() gin.HandlerFunc {
 // RequireAuth ensures the user is authenticated before allowing the request to proceed.
 func (a *discordAuthController) RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if !a.enabled {
+			c.Next()
+			return
+		}
 		user := currentUserFromSession(c)
 		if user == nil {
 			c.Redirect(http.StatusFound, "/auth/login")
