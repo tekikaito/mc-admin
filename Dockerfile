@@ -18,6 +18,7 @@ RUN addgroup -S app && adduser -S app -G app
 
 COPY --from=builder --chown=app:app /app/mc-admin-ui /usr/local/bin/mc-admin-ui
 COPY --from=builder --chown=app:app /app/templates ./templates
+COPY --from=builder --chown=app:app /app/static ./static
 
 ENV GIN_MODE=release
 
