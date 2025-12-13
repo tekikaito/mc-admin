@@ -1,0 +1,18 @@
+<div class="mc-box" style="padding: 1rem; border-width: 2px">
+  {{if .HasError}}
+  <p class="text-sm font-semibold text-error">Command failed</p>
+  {{else}}
+  <p class="text-sm font-semibold text-success">Command executed</p>
+  {{end}}
+  <p class="text-xs text-muted">{{.Command}}</p>
+  {{if .Message}}
+  <pre
+    class="console-output"
+    style="height: auto; max-height: 300px; margin-top: 0.5rem"
+  >
+{{.Message}}
+  </pre>
+  {{else if .HasError}}
+  <p class="text-xs text-muted">No details returned.</p>
+  {{end}}
+</div>

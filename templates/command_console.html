@@ -1,0 +1,34 @@
+<div class="flex flex-col gap-4" id="command-console">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-xs uppercase tracking-wide text-muted">Console</p>
+      <h2 class="mt-2">Raw RCON Command</h2>
+      <p class="text-sm mt-2 text-muted">
+        Execute any console command directly on the server. Use with caution.
+      </p>
+    </div>
+  </div>
+  <form
+    class="flex flex-col gap-3"
+    hx-post="/commands/execute"
+    hx-target="#command-result"
+    hx-swap="innerHTML"
+  >
+    <label class="block text-xs uppercase tracking-wide text-muted"
+      >Command</label
+    >
+    <div class="flex flex-col gap-3 md:flex-row">
+      <input
+        type="text"
+        name="command"
+        class="mc-input"
+        placeholder="say Welcome to the server!"
+        required
+      />
+      <button type="submit" class="mc-btn">Run command</button>
+    </div>
+  </form>
+  <div id="command-result" class="text-sm text-muted">
+    <p>No command executed yet.</p>
+  </div>
+</div>

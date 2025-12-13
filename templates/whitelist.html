@@ -1,0 +1,95 @@
+<div class="flex flex-col gap-4">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-xs uppercase tracking-wide text-muted">Whitelist</p>
+      <h2 class="mt-2">Whitelisted Players</h2>
+    </div>
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        class="flex items-center gap-2 text-sm"
+        style="
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 4px 8px;
+          border-radius: 4px;
+        "
+        hx-post="/whitelist/toggle"
+        hx-target="#subpage-panel"
+        hx-swap="innerHTML"
+        title="Click to {{if .Enabled}}disable{{else}}enable{{end}} whitelist"
+      >
+        {{if .Enabled}}
+        <span
+          style="
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: #22c55e;
+            border: 2px solid #16a34a;
+          "
+        ></span>
+        <span class="text-muted">Enabled</span>
+        {{else}}
+        <span
+          style="
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: #ef4444;
+            border: 2px solid #dc2626;
+          "
+        ></span>
+        <span class="text-muted">Disabled</span>
+        {{end}}
+      </button>
+      <span class="text-sm text-muted">{{.Count}} total</span>
+    </div>
+  </div>
+  <form
+    class="flex flex-col gap-2"
+    hx-post="/whitelist/player"
+    hx-target="#subpage-panel"
+    hx-swap="innerHTML"
+    hx-on::after-request="this.reset()"
+  >
+    <label
+      for="whitelist-player"
+      class="text-xs uppercase tracking-wide text-muted"
+      >Add player</label
+    >
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <input
+        id="whitelist-player"
+        name="playerName"
+        type="text"
+        required
+        class="mc-input"
+        placeholder="Player name"
+      />
+      <button type="submit" class="mc-btn">Add</button>
+    </div>
+  </form>
+  {{if .Players}}
+  <ul class="mc-box" style="padding: 0; border-width: 2px">
+    {{range .Players}}
+    <li class="player-list-item flex items-center justify-between">
+      <span class="font-medium">{{.}}</span>
+      <button
+        type="button"
+        class="mc-btn mc-btn-danger"
+        style="font-size: 0.8rem; padding: 4px 8px"
+        hx-delete="/whitelist/player/{{urlquery .}}"
+        hx-target="#subpage-panel"
+        hx-swap="innerHTML"
+      >
+        Remove
+      </button>
+    </li>
+    {{end}}
+  </ul>
+  {{else}}
+  <p class="text-sm text-muted">No players whitelisted.</p>
+  {{end}}
+</div>

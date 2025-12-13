@@ -1,0 +1,39 @@
+<div class="flex flex-col gap-4">
+  <div
+    class="flex items-center justify-between text-sm uppercase tracking-wide text-muted"
+  >
+    <span>Players Online</span>
+    <span class="text-lg font-semibold text-success"
+      >{{.OnlineCount}} / {{.MaxCount}}</span
+    >
+  </div>
+  {{if .Players}}
+  <ul class="mc-box" style="padding: 0; border-width: 2px">
+    {{range .Players}}
+    <li class="player-list-item flex items-center justify-between gap-4">
+      <span class="font-medium truncate">{{.}}</span>
+      <button
+        type="button"
+        class="mc-btn mc-btn-danger"
+        style="font-size: 0.8rem; padding: 4px 8px"
+        hx-get="/players/{{urlquery .}}/kick"
+        hx-target="#modal-root"
+        hx-swap="innerHTML"
+      >
+        Kick
+      </button>
+    </li>
+    {{end}}
+  </ul>
+  {{else}}
+  <div
+    class="mc-box text-center"
+    style="border-style: dashed; background: rgba(0, 0, 0, 0.2)"
+  >
+    <p class="text-muted">No players online.</p>
+    <p class="text-xs mt-1 text-muted">
+      Invite your friends to join the server!
+    </p>
+  </div>
+  {{end}}
+</div>

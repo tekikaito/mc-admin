@@ -1,0 +1,13 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    environment:
+      EULA: "TRUE"
+      RCON_PASSWORD: ${RCON_PASSWORD}
+      VERSION: ${SERVER_VERSION}
+    ports:
+      - "25565:25565"
+      - "25575:25575" # RCON port
+    volumes:
+      - ./test-data:/data
+    restart: unless-stopped

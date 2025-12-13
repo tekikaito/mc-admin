@@ -1,0 +1,384 @@
+@import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+@import url("background.css");
+
+:root {
+  --mc-bg-color: #2e211b;
+  --mc-panel-bg: #c6c6c6;
+  --mc-panel-border-light: #ffffff;
+  --mc-panel-border-dark: #555555;
+  --mc-text-color: #202020;
+
+  --mc-btn-bg: #777777;
+  --mc-btn-border-light: #c6c6c6;
+  --mc-btn-border-dark: #444444;
+  --mc-btn-text: #ffffff;
+  --mc-btn-text-shadow: 2px 2px #000000;
+
+  --mc-input-bg: #000000;
+  --mc-input-border: #a0a0a0;
+  --mc-input-text: #ffffff;
+
+  --mc-color-success: #008000; /* Darker green for better contrast on light bg */
+  --mc-color-error: #cc0000;
+  --mc-color-muted: #555555;
+}
+
+body {
+  font-family: "VT323", monospace;
+  background-color: var(--mc-bg-color);
+  color: #ffffff;
+  font-size: 1.6rem;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Minecraft GUI Box */
+.mc-box {
+  background-color: var(--mc-panel-bg);
+  border: 4px solid;
+  border-color: var(--mc-panel-border-light) var(--mc-panel-border-dark)
+    var(--mc-panel-border-dark) var(--mc-panel-border-light);
+  color: var(--mc-text-color);
+  padding: 1.5rem;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  image-rendering: pixelated;
+}
+
+/* Minecraft Button */
+.mc-btn {
+  background-color: var(--mc-btn-bg);
+  border: 2px solid;
+  border-color: var(--mc-btn-border-light) var(--mc-btn-border-dark)
+    var(--mc-btn-border-dark) var(--mc-btn-border-light);
+  color: var(--mc-btn-text);
+  text-shadow: var(--mc-btn-text-shadow);
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 1.6rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: none;
+  line-height: 1;
+}
+
+.mc-btn:active {
+  border-color: var(--mc-btn-border-dark) var(--mc-btn-border-light)
+    var(--mc-btn-border-light) var(--mc-btn-border-dark);
+  background-color: #555555;
+  transform: translateY(2px);
+}
+
+.mc-btn:hover {
+  background-color: #888888;
+}
+
+.mc-btn-danger {
+  background-color: #aa0000;
+  --mc-btn-bg: #aa0000;
+  --mc-btn-border-light: #ff5555;
+  --mc-btn-border-dark: #550000;
+}
+.mc-btn-danger:hover {
+  background-color: #cc0000;
+}
+
+/* Minecraft Input */
+.mc-input {
+  background-color: var(--mc-input-bg);
+  border: 2px solid var(--mc-input-border);
+  color: var(--mc-input-text);
+  padding: 10px;
+  font-family: inherit;
+  font-size: 1.6rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mc-input:focus {
+  outline: none;
+  border-color: #ffffff;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+  text-shadow: 2px 2px #000000;
+  color: #ffffff;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.mc-box h1,
+.mc-box h2,
+.mc-box h3 {
+  color: #202020;
+  text-shadow: none;
+}
+
+.text-success {
+  color: var(--mc-color-success) !important;
+}
+.text-error {
+  color: var(--mc-color-error) !important;
+}
+.text-muted {
+  color: var(--mc-color-muted) !important;
+}
+
+a {
+  color: #0000aa;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+  color: #0000ff;
+} /* Layout Helpers */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.grid-layout {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 250px 1fr;
+}
+
+@media (max-width: 768px) {
+  .grid-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-end {
+  justify-content: flex-end;
+}
+.text-center {
+  text-align: center;
+}
+.gap-2 {
+  gap: 0.5rem;
+}
+.gap-4 {
+  gap: 1rem;
+}
+.mt-2 {
+  margin-top: 0.5rem;
+}
+.mt-4 {
+  margin-top: 1rem;
+}
+.mb-4 {
+  margin-bottom: 1rem;
+}
+.w-full {
+  width: 100%;
+}
+.text-sm {
+  font-size: 1.4rem;
+}
+.text-xs {
+  font-size: 1.2rem;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+.tracking-wide {
+  letter-spacing: 0.1em;
+}
+
+/* Header */
+header {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid #444;
+  padding: 1rem 2rem;
+}
+
+/* Status Indicators */
+.status-dot {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border: 2px solid #000;
+  margin-right: 8px;
+}
+.status-online {
+  background-color: #55ff55;
+}
+.status-offline {
+  background-color: #ff5555;
+}
+
+/* Player List */
+.player-list-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+.player-list-item:last-child {
+  border-bottom: none;
+}
+.player-avatar {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #000;
+  margin-right: 12px;
+}
+
+/* Console */
+.console-output {
+  background-color: #000;
+  color: #ccc;
+  font-family: "VT323", monospace;
+  padding: 1rem;
+  height: 400px;
+  overflow-y: auto;
+  border: 2px solid #888;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+}
+
+/* Utility Classes */
+.text-muted {
+  color: var(--mc-color-muted) !important;
+}
+.text-success {
+  color: var(--mc-color-success) !important;
+}
+.text-error {
+  color: var(--mc-color-error) !important;
+}
+
+/* Toast Notifications */
+#toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  background-color: var(--mc-panel-bg);
+  border: 2px solid;
+  border-color: var(--mc-panel-border-light) var(--mc-panel-border-dark)
+    var(--mc-panel-border-dark) var(--mc-panel-border-light);
+  color: var(--mc-text-color);
+  padding: 10px 15px;
+  min-width: 250px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+  image-rendering: pixelated;
+  font-family: "VT323", monospace;
+  font-size: 1.2rem;
+  animation: slideIn 0.3s ease-out forwards;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toast.success {
+  border-left: 5px solid var(--mc-color-success);
+}
+
+.toast.error {
+  border-left: 5px solid var(--mc-color-error);
+}
+
+.toast.fadeOut {
+  animation: fadeOut 0.3s ease-in forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Dropdown Menu */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: var(--mc-panel-bg);
+  min-width: 160px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+  border: 2px solid;
+  border-color: var(--mc-panel-border-light) var(--mc-panel-border-dark)
+    var(--mc-panel-border-dark) var(--mc-panel-border-light);
+  z-index: 1000;
+}
+
+.dropdown-content button,
+.dropdown-content a {
+  color: var(--mc-text-color);
+  padding: 8px 12px;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.dropdown-content button:hover,
+.dropdown-content a:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dropdown.show .dropdown-content {
+  display: block;
+}
