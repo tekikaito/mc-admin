@@ -1,6 +1,8 @@
 # mc-admin
 
-A web-based administration panel for Minecraft servers that provides real-time player monitoring, whitelist management, and RCON command execution through a clean, modern interface.
+A web-based administration panel for Minecraft servers. Its created to make server management easier and more accessible, providing real-time insights and control over server operations. Its designed to look like a native Minecraft interface, ensuring a familiar experience for server administrators.
+
+![mc-admin-screenshot](./docs/images/admin-ui-overview.png)
 
 ## Features
 
@@ -32,73 +34,31 @@ All HTML is rendered server-side with templates located in `templates/`, and HTM
 
 ## Quick Start
 
-### 1. Clone the repository
+1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:tekikaito/mc-admin.git
 cd mc-admin
 ```
 
-### 2. Install dependencies
+2. Create a `.env` file based on the provided `.env.example`:
 
 ```bash
-go mod download
+cp .env.example .env
 ```
 
-### 3. Configure environment variables
+3. Fill in the required environment variables in `.env`:
 
-Create a `.env` file in the project root:
+- `RCON_PASSWORD`: Your Minecraft server's RCON password
+- `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `DISCORD_REDIRECT_URI`: Your Discord OAuth credentials (if using Discord authentication)
 
-```bash
-# Required: RCON Configuration
-RCON_PASSWORD=your-rcon-password
-
-# Optional: RCON Connection (defaults shown)
-RCON_HOST=localhost
-RCON_PORT=25575
-
-# Required: Discord OAuth
-DISCORD_CLIENT_ID=your-client-id
-DISCORD_CLIENT_SECRET=your-client-secret
-DISCORD_REDIRECT_URI=http://localhost:8080/auth/discord/callback
-SESSION_SECRET=random-long-string-for-session-encryption
-
-# Optional: Discord user allowlist (comma-separated Discord user IDs)
-DISCORD_ALLOWED_USER_IDS=123456789,987654321
-
-# Optional: Server Display Information
-SERVER_NAME=My Minecraft Server
-SERVER_HOST=play.example.com
-GAME_PORT=25565
-SERVER_VERSION=1.20.1
-SERVER_DESCRIPTION=Welcome to our community server!
-```
-
-### 4. Run the application
-
-**Option A: Local Development**
+4. Run the application:
 
 ```bash
 go run main.go
 ```
 
-**Option B: With Kubernetes Port-Forwarding**
-
-If your Minecraft server is running in Kubernetes:
-
-```bash
-# Set optional environment variables for Kubernetes
-export K8S_NAMESPACE=minecraft
-export K8S_POD_SELECTOR=app=mc-server
-export LOCAL_PORT=25575
-
-# Run the script (automatically sets up port-forwarding and hot-reload)
-./start-with-k8s.sh
-```
-
-### 5. Access the application
-
-Open your browser to `http://localhost:8080` and authenticate with Discord.
+6. Open your browser and navigate to `http://localhost:8080`
 
 ## Discord OAuth Setup
 
@@ -115,67 +75,61 @@ All routes except `/auth/*` require a valid Discord session. If `DISCORD_ALLOWED
 
 ### Required Variables
 
-| Variable                | Description                                                  |
-| ----------------------- | ------------------------------------------------------------ |
-| `RCON_PASSWORD`         | RCON password for your Minecraft server                      |
-| `DISCORD_CLIENT_ID`     | Discord OAuth application client ID                          |
-| `DISCORD_CLIENT_SECRET` | Discord OAuth application client secret                      |
-| `DISCORD_REDIRECT_URI`  | OAuth callback URL                                           |
-| `SESSION_SECRET`        | Secret key for session encryption (use a long random string) |
+| Variable        | Description                             |
+| --------------- | --------------------------------------- |
+| `RCON_PASSWORD` | RCON password for your Minecraft server |
 
 ### Optional Variables
 
-| Variable                   | Default                          | Description                                                          |
-| -------------------------- | -------------------------------- | -------------------------------------------------------------------- |
-| `RCON_HOST`                | `localhost`                      | Minecraft server hostname or IP                                      |
-| `RCON_PORT`                | `25575`                          | RCON port on the Minecraft server                                    |
-| `DISCORD_ALLOWED_USER_IDS` | (none)                           | Comma-separated list of Discord user IDs allowed to access the panel |
-| `SERVER_NAME`              | `Minecraft Server`               | Display name shown in the UI                                         |
-| `SERVER_HOST`              | `localhost`                      | Public server address shown to users                                 |
-| `GAME_PORT`                | `25565`                          | Minecraft game port shown to users                                   |
-| `SERVER_VERSION`           | `Unknown Version`                | Server version displayed in the UI                                   |
-| `SERVER_DESCRIPTION`       | `Live status for your community` | Server description text                                              |
+| Variable                          | Default                          | Description                                                |
+| --------------------------------- | -------------------------------- | ---------------------------------------------------------- |
+| `RCON_HOST`                       | `localhost`                      | Minecraft server hostname or IP                            |
+| `RCON_PORT`                       | `25575`                          | RCON port on the Minecraft server                          |
+| `SERVER_NAME`                     | `Minecraft Server`               | Display name shown in the UI                               |
+| `SERVER_HOST`                     | `localhost`                      | Public server address displayed in the UI                  |
+| `GAME_PORT`                       | `25565`                          | Minecraft game port displayed in the UI                    |
+| `SERVER_VERSION`                  | `Unknown Version`                | Server version displayed in the UI                         |
+| `SERVER_DESCRIPTION`              | `Live status for your community` | Server description text                                    |
+| `MINECRAFT_DATA_DIR`              | `/data`                          | Directory path for Minecraft server data                   |
+| `MAX_FILE_DISPLAY_SIZE`           | `1048576`                        | Max size (in bytes) for displaying files in the UI         |
+| `DISCORD_OAUTH_ENABLED`           | `false`                          | Enable Discord OAuth authentication                        |
+| `ENABLE_MINECRAFT_USERNAME_CHECK` | `false`                          | Enable Mojang username validation for whitelist management |
 
-### Kubernetes Script Variables
+### Conditional Variables
 
-| Variable           | Default                | Description                                       |
-| ------------------ | ---------------------- | ------------------------------------------------- |
-| `K8S_NAMESPACE`    | `mc-red`               | Kubernetes namespace containing the Minecraft pod |
-| `K8S_POD_SELECTOR` | `app=mc-red-minecraft` | Label selector to find the Minecraft pod          |
-| `LOCAL_PORT`       | `25575`                | Local port for port-forwarding                    |
+Those variablesa are required only if a feature flag is enabled (by setting its value to `true`).
 
-## Docker Deployment
+Feature-Flag: `DISCORD_OAUTH_ENABLED`
 
-Build and run using Docker:
-
-```bash
-# Build the image
-docker build -t mc-admin .
-
-# Run the container
-docker run -p 8080:8080 \
-  -e RCON_PASSWORD=your-password \
-  -e RCON_HOST=your-minecraft-server \
-  -e DISCORD_CLIENT_ID=your-client-id \
-  -e DISCORD_CLIENT_SECRET=your-client-secret \
-  -e DISCORD_REDIRECT_URI=http://localhost:8080/auth/discord/callback \
-  -e SESSION_SECRET=your-session-secret \
-  mc-admin
-```
+| Variable                   | Default                                 | Description                                                          |
+| -------------------------- | --------------------------------------- | -------------------------------------------------------------------- |
+| `SESSION_SECRET`           | -                                       | Secret key for session encryption (use a long random string)         |
+| `DISCORD_CLIENT_ID`        | -                                       | Discord OAuth application client ID                                  |
+| `DISCORD_CLIENT_SECRET`    | -                                       | Discord OAuth application client secret                              |
+| `DISCORD_REDIRECT_URI`     | -                                       | OAuth callback URL                                                   |
+| `DISCORD_ALLOWED_USER_IDS` | (`nil` = every discord user is allowed) | Comma-separated list of Discord user IDs allowed to access the panel |
 
 ## Development
+
+### Local Setup
+
+1. Ensure you have Go installed (version 1.25.4 or later)
+2. Clone the repository and navigate to the project directory
+3. Create and configure a `.env` file as described in the Quick Start section
+4. Run a local Minecraft server with RCON enabled for testing
+
+```bash
+docker compose -f minecraft.docker-compose.yml up -d
+```
+
+5. Start the application:
+
+```bash
+go run main.go
+```
 
 ### Running Tests
 
 ```bash
 go test ./...
-```
-
-### Hot Reload Development
-
-The `start-with-k8s.sh` script includes hot-reload functionality using `reflex`:
-
-```bash
-# Reflex will automatically restart the server when .go or .html files change
-./start-with-k8s.sh
 ```
