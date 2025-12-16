@@ -36,6 +36,7 @@ jobs:
         threshold-file: 0
         threshhold-package: 0
         githubActionOutput: true
+        debug: true
                 
     #- name: Go Unit Test Coverage Report
     #  uses: fgrosse/go-coverage-report@v1.0.0          
