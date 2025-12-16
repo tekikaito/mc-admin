@@ -27,12 +27,13 @@ jobs:
       checks: write
     runs-on: ubuntu-latest
     steps:
+    - name: Get Dependencies
+      run: go mod tidy
+    
     - name: Test
       run: go test -v ./... -coverprofile=coverage.out -covermode=atomic
 
     - name: go-test-coverage
-      # You may pin to the exact commit or the version.
-      # uses: vladopajic/go-test-coverage@25e532f3851a634ecd07a4cad2a2645aee49fa7a
       uses: vladopajic/go-test-coverage@v2.18.1
       with:
         config: ./.testcoverage.yml
