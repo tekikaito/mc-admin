@@ -4,5 +4,5 @@ local-prefix: "mc-admin"
 githubActionOutput: true
 
 threshold:
-  total: 80
+  total: 14
   package: 0
