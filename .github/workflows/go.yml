@@ -36,6 +36,7 @@ jobs:
         config: ./.testcoverage.yml
         git-token: ${{ secrets.GITHUB_TOKEN }}
         git-branch: ${{ github.head_ref || github.ref_name }}
+        debug: true
                 
     #- name: Go Unit Test Coverage Report
     #  uses: fgrosse/go-coverage-report@v1.0.0          
