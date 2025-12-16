@@ -1,0 +1,8 @@
+profile: coverage.out
+local-prefix: "mc-admin"
+
+githubActionOutput: true
+
+threshold:
+  total: 14
+  package: 0
