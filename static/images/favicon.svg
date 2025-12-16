@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Minecraft-style grass block favicon -->
+  <!-- Grass top layer -->
+  <rect x="0" y="0" width="32" height="8" fill="#67c52a"/>
+  <rect x="0" y="0" width="4" height="4" fill="#56a323"/>
+  <rect x="8" y="0" width="4" height="4" fill="#56a323"/>
+  <rect x="20" y="0" width="4" height="4" fill="#56a323"/>
+  <rect x="28" y="4" width="4" height="4" fill="#56a323"/>
+  <rect x="4" y="4" width="4" height="4" fill="#7dd43a"/>
+  <rect x="16" y="4" width="4" height="4" fill="#7dd43a"/>
+  
+  <!-- Dirt layer -->
+  <rect x="0" y="8" width="32" height="24" fill="#8b5a2b"/>
+  <rect x="0" y="8" width="4" height="4" fill="#6b4423"/>
+  <rect x="8" y="8" width="4" height="4" fill="#9b6a3b"/>
+  <rect x="16" y="8" width="4" height="4" fill="#6b4423"/>
+  <rect x="24" y="8" width="4" height="4" fill="#9b6a3b"/>
+  
+  <rect x="4" y="12" width="4" height="4" fill="#9b6a3b"/>
+  <rect x="12" y="12" width="4" height="4" fill="#6b4423"/>
+  <rect x="20" y="12" width="4" height="4" fill="#9b6a3b"/>
+  <rect x="28" y="12" width="4" height="4" fill="#6b4423"/>
+  
+  <rect x="0" y="16" width="4" height="4" fill="#9b6a3b"/>
+  <rect x="8" y="16" width="4" height="4" fill="#6b4423"/>
+  <rect x="16" y="16" width="4" height="4" fill="#9b6a3b"/>
+  <rect x="24" y="16" width="4" height="4" fill="#6b4423"/>
+  
+  <rect x="4" y="20" width="4" height="4" fill="#6b4423"/>
+  <rect x="12" y="20" width="4" height="4" fill="#9b6a3b"/>
+  <rect x="20" y="20" width="4" height="4" fill="#6b4423"/>
+  <rect x="28" y="20" width="4" height="4" fill="#9b6a3b"/>
+  
+  <rect x="0" y="24" width="4" height="4" fill="#6b4423"/>
+  <rect x="8" y="24" width="4" height="4" fill="#9b6a3b"/>
+  <rect x="16" y="24" width="4" height="4" fill="#6b4423"/>
+  <rect x="24" y="24" width="4" height="4" fill="#9b6a3b"/>
+  
+  <rect x="4" y="28" width="4" height="4" fill="#9b6a3b"/>
+  <rect x="12" y="28" width="4" height="4" fill="#6b4423"/>
+  <rect x="20" y="28" width="4" height="4" fill="#9b6a3b"/>
+  <rect x="28" y="28" width="4" height="4" fill="#6b4423"/>
+</svg>
