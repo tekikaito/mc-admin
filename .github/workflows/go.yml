@@ -28,13 +28,7 @@ jobs:
       # uses: vladopajic/go-test-coverage@25e532f3851a634ecd07a4cad2a2645aee49fa7a
       uses: vladopajic/go-test-coverage@v2.18.1
       with:
-        profile: coverage.out
-        # Minimum overall project coverage percentage required. Overrides value from configuration.
-        threshold-total: 5
-        threshold-file: 0
-        threshhold-package: 0
-        githubActionOutput: true
-        debug: true
+        config: ./.testcoverage.yml
                 
     #- name: Go Unit Test Coverage Report
     #  uses: fgrosse/go-coverage-report@v1.0.0          
