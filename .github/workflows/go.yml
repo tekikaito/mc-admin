@@ -22,4 +22,17 @@ jobs:
       run: go build -v ./...
 
     - name: Test
-      run: go test -v ./...
+      run: go test -v ./... -coverprofile=coverage.out -covermode=atomic
+
+    - name: go-test-coverage
+      # You may pin to the exact commit or the version.
+      # uses: vladopajic/go-test-coverage@25e532f3851a634ecd07a4cad2a2645aee49fa7a
+      uses: vladopajic/go-test-coverage@v2.18.1
+      with:
+        # Sets relative path to source files.
+        source-dir: /src
+        # Minimum overall project coverage percentage required. Overrides value from configuration.
+        threshold-total: 5
+                
+    - name: Go Unit Test Coverage Report
+      uses: fgrosse/go-coverage-report@v1.0.0          
