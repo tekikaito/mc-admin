@@ -29,8 +29,6 @@ jobs:
       uses: vladopajic/go-test-coverage@v2.18.1
       with:
         profile: coverage.out
-        # Sets relative path to source files.
-        source-dir: /src
         # Minimum overall project coverage percentage required. Overrides value from configuration.
         threshold-total: 5
         threshold-file: 0
