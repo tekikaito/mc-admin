@@ -34,13 +34,13 @@ jobs:
         name: code-coverage
         path: coverage.out
 
-    - name: Go Coverage Report
-      uses: fgrosse/go-coverage-report@v1.0.2
-      with:
-        coverage-artifact-name: "code-coverage"
-        coverage-file-name: "coverage.out"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #- name: Go Coverage Report
+    #  uses: fgrosse/go-coverage-report@v1.0.2
+    #  with:
+    #    coverage-artifact-name: "code-coverage"
+    #    coverage-file-name: "coverage.out"
+    #  env:
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: go-test-coverage
       uses: vladopajic/go-test-coverage@v2.18.1
