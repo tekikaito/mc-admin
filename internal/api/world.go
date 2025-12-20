@@ -7,19 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func handleGetWorld() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if c.GetHeader("HX-Request") == "true" {
-			c.HTML(http.StatusOK, "world.html", gin.H{})
-			return
-		}
-
-		data := getCommonPageData(c)
-		data["ActiveModule"] = "world"
-		c.HTML(http.StatusOK, "index.html", data)
-	}
-}
-
 func handleGetWorldStats(worldService *services.WorldService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		stats, err := worldService.GetWorldStats()

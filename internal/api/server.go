@@ -61,6 +61,7 @@ func getCommonPageData(c *gin.Context) gin.H {
 		"ServerDescription": serverDescription,
 		"User":              user,
 		"FilesEnabled":      minecraftDataDir != "",
+		"ActiveModule":      "world",
 	}
 }
 
@@ -88,7 +89,6 @@ func initializeWebServerRoutes(r *gin.Engine, parts WebServerParts) {
 	protected.POST("/whitelist/toggle", handleToggleWhitelist(parts.WhitelistService))
 	protected.POST("/whitelist/player", handleAddNameToWhitelist(parts.WhitelistService))
 	protected.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(parts.WhitelistService))
-	protected.GET("/world", handleGetWorld())
 	protected.GET("/world/stats", handleGetWorldStats(parts.WorldService))
 	protected.GET("/players/:name/kick", handleGetKickPlayerDialog())
 	protected.POST("/players/:name/kick", handleKickPlayer(parts.ServerService))
