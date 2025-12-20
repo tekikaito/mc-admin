@@ -44,6 +44,7 @@ func handleSetTime(worldService *services.WorldService) gin.HandlerFunc {
 
 		_, err := worldService.SetTime(timeValue)
 		if err != nil {
+			c.Header("HX-Trigger", `{"showToast": {"message": "Failed to set time: `+err.Error()+`", "type": "error"}}`)
 			c.String(http.StatusInternalServerError, "Error setting time: %v", err)
 			return
 		}
@@ -55,6 +56,7 @@ func handleSetTime(worldService *services.WorldService) gin.HandlerFunc {
 			return
 		}
 
+		c.Header("HX-Trigger", `{"showToast": {"message": "Time set to `+timeValue+`", "type": "success"}}`)
 		c.HTML(http.StatusOK, "world_stats.html", gin.H{
 			"Stats": stats,
 		})
