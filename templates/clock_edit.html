@@ -138,7 +138,15 @@
     </div>
     <!-- Phase label -->
     <div class="clock-phase-label" id="clock-phase-label">{{.Phase}}</div>
-    <div class="clock-ticks" id="tick-display">{{.Ticks}}</div>
+    <input
+      type="number"
+      class="clock-ticks-input"
+      id="tick-input"
+      value="{{.Ticks}}"
+      min="0"
+      max="24000"
+      step="100"
+    />
   </div>
 
   <!-- Preset Buttons -->
@@ -215,7 +223,7 @@
     const TICKS_PER_DAY = 24000;
     const clock = document.getElementById("mc-clock");
     const clockDisc = document.getElementById("clock-disc");
-    const tickDisplay = document.getElementById("tick-display");
+    const tickInput = document.getElementById("tick-input");
     const timeValueInput = document.getElementById("time-value");
     const phaseLabel = document.getElementById("clock-phase-label");
     const presetBtns = document.querySelectorAll(".time-preset-btn");
@@ -256,10 +264,12 @@
       clockDisc.setAttribute("transform", `rotate(${rotation}, 32, 32)`);
     }
 
-    function setTicks(ticks) {
+    function setTicks(ticks, updateInput = true) {
       ticks = Math.max(0, Math.min(TICKS_PER_DAY, Math.round(ticks)));
       currentTicks = ticks;
-      tickDisplay.textContent = ticks;
+      if (updateInput) {
+        tickInput.value = ticks;
+      }
       timeValueInput.value = ticks;
       phaseLabel.textContent = getPhaseLabel(ticks);
       updateClockDisc(ticks);
@@ -307,6 +317,17 @@
         const ticks = parseInt(this.dataset.ticks);
         setTicks(ticks);
       });
+    });
+
+    // Handle manual tick input
+    tickInput.addEventListener("input", function () {
+      const ticks = parseInt(this.value) || 0;
+      setTicks(ticks, false);
+    });
+
+    tickInput.addEventListener("blur", function () {
+      // Normalize value on blur
+      setTicks(currentTicks);
     });
 
     // Initialize with current rotation
