@@ -59,6 +59,34 @@
           </button>
           <button
             type="button"
+            data-nav="world"
+            class="mc-btn w-full flex items-center gap-3 justify-start"
+            hx-get="/world"
+            hx-target="#subpage-panel"
+            hx-swap="innerHTML"
+            hx-push-url="true"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" x2="22" y1="12" y2="12" />
+              <path
+                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+              />
+            </svg>
+            World
+          </button>
+          <button
+            type="button"
             data-nav="whitelist"
             class="mc-btn w-full flex items-center gap-3 justify-start"
             hx-get="/whitelist"
@@ -160,28 +188,9 @@
         </section>
 
         <section>
-          <div
-            id="player-list"
-            hx-get="/server-info"
-            hx-trigger="load, every 10s"
-            hx-swap="innerHTML"
-            class="mc-box"
-          >
-            <header
-              class="mb-4"
-              style="background: none; border: none; padding: 0"
-            >
-              <p class="text-xs uppercase tracking-wide text-muted">
-                Live Players
-              </p>
-              <h2 class="mt-2">Online Right Now</h2>
-            </header>
-            <p class="text-sm">Loading player list...</p>
-          </div>
-        </section>
-        <section>
           <div id="subpage-panel" class="mc-box flex flex-col">
             {{if eq .ActiveModule "whitelist"}} {{template "whitelist.html" .}}
+            {{else if eq .ActiveModule "world"}} {{template "world.html" .}}
             {{else if eq .ActiveModule "rcon"}} {{template
             "command_console.html" .}} {{else if eq .ActiveModule "files"}}
             {{template "files.html" .}} {{else}} {{end}}

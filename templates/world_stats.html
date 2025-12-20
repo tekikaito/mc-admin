@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-4">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <!-- Day -->
+    <div
+      class="mc-box flex flex-col items-center justify-center text-center p-4"
+    >
+      <p class="text-xs uppercase tracking-wide text-muted">Day</p>
+      <p class="text-2xl font-semibold mt-2">{{.Stats.Day}}</p>
+    </div>
+
+    <!-- Time of Day -->
+    <div
+      class="mc-box flex flex-col items-center justify-center text-center p-4"
+    >
+      <p class="text-xs uppercase tracking-wide text-muted">Time of Day</p>
+      <p class="text-2xl font-semibold mt-2 capitalize">{{.Stats.DayPhase}}</p>
+    </div>
+
+    <!-- Difficulty -->
+    <div
+      class="mc-box flex flex-col items-center justify-center text-center p-4"
+    >
+      <p class="text-xs uppercase tracking-wide text-muted">Difficulty</p>
+      <p class="text-2xl font-semibold mt-2 capitalize">
+        {{.Stats.Difficulty}}
+      </p>
+    </div>
+  </div>
+</div>
