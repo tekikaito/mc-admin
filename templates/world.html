@@ -12,6 +12,228 @@
       <p class="text-sm">Loading world stats...</p>
     </div>
   </section>
+
+  <!-- Time Control Section -->
+  <section>
+    <header class="mb-4" style="background: none; border: none; padding: 0">
+      <p class="text-xs uppercase tracking-wide text-muted">Time Control</p>
+      <h2 class="mt-2">Set World Time</h2>
+    </header>
+    <div class="mc-box">
+      <div
+        class="clock-container"
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+        "
+      >
+        <!-- Minecraft Clock Item -->
+        <div
+          class="mc-clock-wrapper"
+          style="display: flex; flex-direction: column; align-items: center"
+        >
+          <div
+            class="mc-clock"
+            id="mc-clock"
+            style="width: 128px; height: 128px"
+          >
+            <svg viewBox="0 0 64 64" class="clock-svg" width="128" height="128">
+              <!-- Definitions -->
+              <defs>
+                <clipPath id="innerCircle">
+                  <circle cx="32" cy="32" r="22" />
+                </clipPath>
+              </defs>
+
+              <!-- Rotating disc group -->
+              <g id="clock-disc" clip-path="url(#innerCircle)">
+                <!-- Day half (top in default) -->
+                <rect x="0" y="0" width="64" height="32" fill="#4A90D9" />
+                <!-- Lighter blue gradient at horizon -->
+                <rect x="0" y="26" width="64" height="6" fill="#6BB3E8" />
+
+                <!-- Sun -->
+                <circle cx="32" cy="16" r="8" fill="#FFE135" />
+                <circle cx="32" cy="16" r="6" fill="#FFEC70" />
+                <circle cx="30" cy="14" r="2" fill="#FFFFA0" />
+
+                <!-- Night half (bottom in default) -->
+                <rect x="0" y="32" width="64" height="32" fill="#0C1445" />
+                <!-- Slightly lighter at horizon -->
+                <rect x="0" y="32" width="64" height="6" fill="#1A2866" />
+
+                <!-- Moon -->
+                <circle cx="32" cy="48" r="7" fill="#E8E8E8" />
+                <circle cx="32" cy="48" r="5" fill="#F4F4F4" />
+                <!-- Moon craters -->
+                <circle cx="30" cy="46" r="1.5" fill="#C8C8C8" />
+                <circle cx="34" cy="49" r="1" fill="#D0D0D0" />
+                <circle cx="31" cy="51" r="0.8" fill="#D4D4D4" />
+
+                <!-- Stars -->
+                <rect x="20" y="38" width="2" height="2" fill="#FFFFFF" />
+                <rect x="44" y="42" width="2" height="2" fill="#FFFFFF" />
+                <rect x="24" y="54" width="2" height="2" fill="#FFFFFF" />
+                <rect x="40" y="56" width="2" height="2" fill="#FFFFFF" />
+                <rect x="14" y="48" width="2" height="2" fill="#EEEEEE" />
+                <rect x="50" y="50" width="2" height="2" fill="#EEEEEE" />
+              </g>
+
+              <!-- Golden frame (outer ring) - pixelated style -->
+              <!-- Outer dark gold -->
+              <circle
+                cx="32"
+                cy="32"
+                r="30"
+                fill="none"
+                stroke="#B8860B"
+                stroke-width="4"
+              />
+              <!-- Main gold body -->
+              <circle
+                cx="32"
+                cy="32"
+                r="28"
+                fill="none"
+                stroke="#DAA520"
+                stroke-width="4"
+              />
+              <!-- Inner highlight -->
+              <circle
+                cx="32"
+                cy="32"
+                r="24"
+                fill="none"
+                stroke="#C9922D"
+                stroke-width="2"
+              />
+              <!-- Outer edge -->
+              <circle
+                cx="32"
+                cy="32"
+                r="31"
+                fill="none"
+                stroke="#8B6914"
+                stroke-width="1"
+              />
+
+              <!-- Top highlight pixels -->
+              <rect x="26" y="2" width="4" height="2" fill="#FFE55C" />
+              <rect x="34" y="2" width="4" height="2" fill="#FFE55C" />
+              <rect x="18" y="6" width="2" height="2" fill="#FFE55C" />
+              <rect x="44" y="6" width="2" height="2" fill="#FFE55C" />
+
+              <!-- Bottom shadow pixels -->
+              <rect x="26" y="60" width="4" height="2" fill="#8B6914" />
+              <rect x="34" y="60" width="4" height="2" fill="#8B6914" />
+              <rect x="18" y="56" width="2" height="2" fill="#8B6914" />
+              <rect x="44" y="56" width="2" height="2" fill="#8B6914" />
+
+              <!-- Inner circle border -->
+              <circle
+                cx="32"
+                cy="32"
+                r="22"
+                fill="none"
+                stroke="#5C4410"
+                stroke-width="2"
+              />
+
+              <!-- Golden cover on bottom half -->
+              <defs>
+                <clipPath id="bottomHalf">
+                  <rect x="0" y="32" width="64" height="32" />
+                </clipPath>
+              </defs>
+              <g clip-path="url(#bottomHalf)">
+                <!-- Main gold cover -->
+                <circle cx="32" cy="32" r="21" fill="#DAA520" />
+                <!-- Inner shading -->
+                <circle cx="32" cy="32" r="18" fill="#C9922D" />
+                <circle cx="32" cy="32" r="15" fill="#B8860B" />
+                <!-- Bottom shadow -->
+                <ellipse cx="32" cy="45" rx="12" ry="6" fill="#8B6914" />
+              </g>
+              <!-- Cover border at the horizontal line -->
+              <line
+                x1="10"
+                y1="32"
+                x2="54"
+                y2="32"
+                stroke="#5C4410"
+                stroke-width="2"
+              />
+
+              <!-- Pointer/spike at top pointing down -->
+              <polygon
+                points="32,12 28,4 36,4"
+                fill="#DAA520"
+                stroke="#8B6914"
+                stroke-width="1"
+              />
+              <!-- Pointer highlight -->
+              <polygon points="32,11 29,5 32,6" fill="#FFE55C" />
+            </svg>
+          </div>
+          <!-- Phase label -->
+          <div class="clock-phase-label" id="clock-phase-label">Day</div>
+          <div class="clock-ticks" id="tick-display">1000</div>
+        </div>
+
+        <!-- Preset Buttons -->
+        <div class="time-presets">
+          <button
+            type="button"
+            class="mc-btn time-preset-btn"
+            data-ticks="1000"
+            data-label="day"
+          >
+            ☀️ Day
+          </button>
+          <button
+            type="button"
+            class="mc-btn time-preset-btn"
+            data-ticks="6000"
+            data-label="noon"
+          >
+            🌤️ Noon
+          </button>
+          <button
+            type="button"
+            class="mc-btn time-preset-btn"
+            data-ticks="13000"
+            data-label="night"
+          >
+            🌙 Night
+          </button>
+          <button
+            type="button"
+            class="mc-btn time-preset-btn"
+            data-ticks="18000"
+            data-label="midnight"
+          >
+            🌑 Midnight
+          </button>
+        </div>
+
+        <!-- Set Time Button -->
+        <form
+          id="set-time-form"
+          hx-post="/world/time"
+          hx-target="#world-stats"
+          hx-swap="innerHTML"
+        >
+          <input type="hidden" name="time" id="time-value" value="1000" />
+          <button type="submit" class="mc-btn w-full" style="margin-top: 1rem">
+            Apply Time to World
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <section>
     <div
       id="player-list"
@@ -27,3 +249,129 @@
     </div>
   </section>
 </div>
+
+<script>
+  (function () {
+    const TICKS_PER_DAY = 24000;
+    const clock = document.getElementById("mc-clock");
+    const clockDisc = document.getElementById("clock-disc");
+    const tickDisplay = document.getElementById("tick-display");
+    const timeValueInput = document.getElementById("time-value");
+    const phaseLabel = document.getElementById("clock-phase-label");
+    const presetBtns = document.querySelectorAll(".time-preset-btn");
+
+    let currentTicks = 1000;
+    let isDragging = false;
+
+    // Minecraft time phases
+    const phases = [
+      { start: 0, end: 1000, label: "Sunrise" },
+      { start: 1000, end: 6000, label: "Morning" },
+      { start: 6000, end: 12000, label: "Noon" },
+      { start: 12000, end: 13000, label: "Sunset" },
+      { start: 13000, end: 18000, label: "Night" },
+      { start: 18000, end: 24000, label: "Midnight" },
+    ];
+
+    function getPhaseLabel(ticks) {
+      for (const phase of phases) {
+        if (ticks >= phase.start && ticks < phase.end) {
+          return phase.label;
+        }
+      }
+      return "Midnight";
+    }
+
+    // Convert ticks to rotation angle
+    // In Minecraft: 0 = sunrise, 6000 = noon (sun at top), 12000 = sunset, 18000 = midnight (moon at top)
+    function ticksToRotation(ticks) {
+      // 6000 ticks = sun at top (0 degrees)
+      // So we need to offset: at 6000 ticks, rotation should be 0
+      // rotation = (ticks - 6000) / 24000 * 360
+      return ((ticks - 6000) / TICKS_PER_DAY) * 360;
+    }
+
+    // Convert angle to ticks
+    function angleToTicks(angle) {
+      // Reverse: ticks = angle / 360 * 24000 + 6000
+      let ticks = (angle / 360) * TICKS_PER_DAY + 6000;
+      // Normalize to 0-24000
+      ticks = ((ticks % TICKS_PER_DAY) + TICKS_PER_DAY) % TICKS_PER_DAY;
+      return Math.round(ticks);
+    }
+
+    // Update clock disc rotation using SVG transform
+    function updateClockDisc(ticks) {
+      const rotation = ticksToRotation(ticks);
+      clockDisc.setAttribute("transform", `rotate(${rotation}, 32, 32)`);
+    }
+
+    // Update all displays
+    function setTicks(ticks) {
+      ticks = Math.max(0, Math.min(TICKS_PER_DAY, Math.round(ticks)));
+      currentTicks = ticks;
+      tickDisplay.textContent = ticks;
+      timeValueInput.value = ticks;
+      phaseLabel.textContent = getPhaseLabel(ticks);
+      updateClockDisc(ticks);
+    }
+
+    // Get angle from mouse/touch position relative to clock center
+    function getAngleFromEvent(e) {
+      const rect = clock.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      const deltaX = clientX - centerX;
+      const deltaY = clientY - centerY;
+
+      // Calculate angle from top (0 degrees = up, clockwise positive)
+      let angle = Math.atan2(deltaX, -deltaY) * (180 / Math.PI);
+      return angle;
+    }
+
+    // Mouse/touch event handlers for clock dragging
+    function startDrag(e) {
+      isDragging = true;
+      clock.classList.add("dragging");
+      handleDrag(e);
+      e.preventDefault();
+    }
+
+    function handleDrag(e) {
+      if (!isDragging) return;
+      const angle = getAngleFromEvent(e);
+      const ticks = angleToTicks(angle);
+      setTicks(ticks);
+    }
+
+    function stopDrag() {
+      isDragging = false;
+      clock.classList.remove("dragging");
+    }
+
+    // Clock interaction events
+    clock.addEventListener("mousedown", startDrag);
+    clock.addEventListener("touchstart", startDrag, { passive: false });
+
+    document.addEventListener("mousemove", handleDrag);
+    document.addEventListener("touchmove", handleDrag, { passive: false });
+
+    document.addEventListener("mouseup", stopDrag);
+    document.addEventListener("touchend", stopDrag);
+
+    // Preset buttons
+    presetBtns.forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const ticks = parseInt(this.dataset.ticks);
+        setTicks(ticks);
+      });
+    });
+
+    // Initialize
+    setTicks(1000);
+  })();
+</script>

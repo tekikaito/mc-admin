@@ -45,6 +45,12 @@ func (s *WorldService) GetWorldStats() (WorldStats, error) {
 
 }
 
+// SetTime sets the world time
+// time can be: day, night, noon, midnight, or a specific tick value
+func (s *WorldService) SetTime(time string) (string, error) {
+	return s.gametimeService.SetTime(time)
+}
+
 // SetWeather sets the weather in the world
 // weather can be: clear, rain, thunder
 // duration is optional and specifies the duration in seconds

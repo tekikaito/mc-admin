@@ -382,3 +382,95 @@ header {
 .dropdown.show .dropdown-content {
   display: block;
 }
+
+/* Minecraft Clock Component */
+.clock-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mc-clock-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0 auto;
+}
+
+.mc-clock {
+  width: 128px !important;
+  height: 128px !important;
+  max-width: 128px;
+  max-height: 128px;
+  margin: 0 auto;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.mc-clock:active,
+.mc-clock.dragging {
+  cursor: grabbing;
+}
+
+.clock-svg {
+  width: 128px !important;
+  height: 128px !important;
+  max-width: 128px;
+  max-height: 128px;
+  display: block;
+}
+
+/* Phase label */
+.clock-phase-label {
+  font-size: 1.6rem;
+  color: var(--mc-text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Tick display */
+.clock-ticks {
+  font-size: 1.4rem;
+  color: var(--mc-text-color);
+  background: #000;
+  color: #0f0;
+  padding: 0.5rem 1rem;
+  border: 2px solid #555;
+  font-family: monospace;
+}
+
+/* Time preset buttons */
+.time-presets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 280px;
+}
+
+.time-preset-btn {
+  font-size: 1.2rem;
+  padding: 0.5rem 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .time-presets {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mc-clock {
+    max-width: 280px;
+  }
+}
