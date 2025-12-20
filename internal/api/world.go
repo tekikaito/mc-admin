@@ -22,6 +22,43 @@ func handleGetWorldStats(worldService *services.WorldService) gin.HandlerFunc {
 	}
 }
 
+// getClockData returns the current clock data for templates
+func getClockData(worldService *services.WorldService) (gin.H, error) {
+	ticks, err := worldService.GetDaytime()
+	if err != nil {
+		return nil, err
+	}
+	phase := worldService.GetPhaseFromTicks(ticks)
+	rotation := ((float64(ticks) - 6000) / 24000) * 360
+	return gin.H{
+		"Ticks":    ticks,
+		"Phase":    phase,
+		"Rotation": rotation,
+	}, nil
+}
+
+func handleGetClock(worldService *services.WorldService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		data, err := getClockData(worldService)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error getting time: %v", err)
+			return
+		}
+		c.HTML(http.StatusOK, "clock_view.html", data)
+	}
+}
+
+func handleGetClockEdit(worldService *services.WorldService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		data, err := getClockData(worldService)
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error getting time: %v", err)
+			return
+		}
+		c.HTML(http.StatusOK, "clock_edit.html", data)
+	}
+}
+
 func handleSetTime(worldService *services.WorldService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		timeValue := c.PostForm("time")
@@ -49,16 +86,14 @@ func handleSetTime(worldService *services.WorldService) gin.HandlerFunc {
 			return
 		}
 
-		// Return updated world stats
-		stats, err := worldService.GetWorldStats()
+		// Return the clock view with updated data
+		data, err := getClockData(worldService)
 		if err != nil {
-			c.String(http.StatusInternalServerError, "Error getting world stats: %v", err)
+			c.String(http.StatusInternalServerError, "Error getting time: %v", err)
 			return
 		}
 
 		c.Header("HX-Trigger", `{"showToast": {"message": "Time set to `+timeValue+`", "type": "success"}}`)
-		c.HTML(http.StatusOK, "world_stats.html", gin.H{
-			"Stats": stats,
-		})
+		c.HTML(http.StatusOK, "clock_view.html", data)
 	}
 }

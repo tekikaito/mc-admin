@@ -51,6 +51,20 @@ func (s *WorldService) SetTime(time string) (string, error) {
 	return s.gametimeService.SetTime(time)
 }
 
+// GetDaytime returns the current daytime in ticks (0-24000)
+func (s *WorldService) GetDaytime() (int, error) {
+	ticks, err := s.gametimeService.GetDayTime()
+	if err != nil {
+		return 0, err
+	}
+	return int(ticks), nil
+}
+
+// GetPhaseFromTicks returns the phase label for a given tick value
+func (s *WorldService) GetPhaseFromTicks(ticks int) string {
+	return Gameticks(ticks).DayPhaseString()
+}
+
 // SetWeather sets the weather in the world
 // weather can be: clear, rain, thunder
 // duration is optional and specifies the duration in seconds

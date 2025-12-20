@@ -90,6 +90,8 @@ func initializeWebServerRoutes(r *gin.Engine, parts WebServerParts) {
 	protected.POST("/whitelist/player", handleAddNameToWhitelist(parts.WhitelistService))
 	protected.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(parts.WhitelistService))
 	protected.GET("/world/stats", handleGetWorldStats(parts.WorldService))
+	protected.GET("/world/clock", handleGetClock(parts.WorldService))
+	protected.GET("/world/clock/edit", handleGetClockEdit(parts.WorldService))
 	protected.POST("/world/time", handleSetTime(parts.WorldService))
 	protected.GET("/players/:name/kick", handleGetKickPlayerDialog())
 	protected.POST("/players/:name/kick", handleKickPlayer(parts.ServerService))
