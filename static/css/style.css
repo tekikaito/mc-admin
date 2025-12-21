@@ -443,7 +443,6 @@ header {
 /* Tick display */
 .clock-ticks {
   font-size: 1.4rem;
-  color: var(--mc-text-color);
   background: #555;
   color: #0f0;
   padding: 0.5rem 1rem;
