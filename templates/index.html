@@ -142,7 +142,6 @@
         </nav>
       </aside>
       <main class="flex flex-col gap-4">
-        <!-- <section> -->
         <div id="subpage-panel" class="mc-box flex flex-col">
           {{if eq .ActiveModule "whitelist"}} {{template "whitelist.html" .}}
           {{else if eq .ActiveModule "world"}} {{template "world.html" .}}
@@ -150,7 +149,6 @@
           .}} {{else if eq .ActiveModule "files"}} {{template "files.html" .}}
           {{else}} {{end}}
         </div>
-        <!-- </section> -->
       </main>
     </div>
 

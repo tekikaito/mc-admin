@@ -77,6 +77,10 @@ func (s *GametimeService) GetDayTime() (Gameticks, error) {
 
 	trimmedTime := daytimeResult[len(timeQueryCommandResponsePrefix):]
 	actual, err := strconv.Atoi(trimmedTime)
+	if err != nil {
+		return 0, fmt.Errorf("Failed to parse daytime ticks: %w", err)
+	}
+
 	return Gameticks(actual), err
 }
 
