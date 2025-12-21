@@ -3,6 +3,7 @@ package api
 import (
 	"html"
 	"mc-admin/internal/services"
+	"mc-admin/internal/utils"
 	"net/http"
 	"path/filepath"
 
@@ -104,7 +105,7 @@ func handleDeleteFile(fileService *services.FileService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		path := c.Query("path")
 		if err := fileService.Delete(path); err != nil {
-			c.Header("HX-Trigger", `{"showToast": {"message": "Failed to delete file: `+err.Error()+`", "type": "error"}}`)
+			c.Header("HX-Trigger", utils.BuildToastTrigger("Failed to delete file: "+err.Error(), "error"))
 			c.String(http.StatusInternalServerError, "Error: "+err.Error())
 			return
 		}
@@ -118,7 +119,7 @@ func handleDeleteFile(fileService *services.FileService) gin.HandlerFunc {
 		}
 
 		filename := filepath.Base(path)
-		c.Header("HX-Trigger", `{"showToast": {"message": "File '`+filename+`' deleted successfully", "type": "success"}}`)
+		c.Header("HX-Trigger", utils.BuildToastTrigger("File '"+filename+"' deleted successfully", "success"))
 		data := getCommonPageData(c)
 		data["Files"] = files
 		data["CurrentPath"] = parentDir
