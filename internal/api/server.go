@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"text/template"
 
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,17 @@ func initializeWebServer() *gin.Engine {
 		},
 		"dir": func(path string) string {
 			return filepath.Dir(path)
+		},
+		// assetVersion returns a cache-busting version for a /static/* web path.
+		// Falls back to "0" if the file can't be stat'ed.
+		"assetVersion": func(webPath string) string {
+			rel := strings.TrimPrefix(webPath, "/")
+			rel = strings.TrimPrefix(rel, "static/")
+			fi, err := os.Stat(filepath.Join("static", rel))
+			if err != nil {
+				return "0"
+			}
+			return strconv.FormatInt(fi.ModTime().Unix(), 10)
 		},
 	})
 	r.Static("/static", "./static")

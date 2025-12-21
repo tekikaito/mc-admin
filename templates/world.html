@@ -1,27 +1,53 @@
 <div class="flex flex-col gap-4">
-  <section>
-    <header class="mb-2" style="background: none; border: none; padding: 0">
-      <p class="text-xs uppercase tracking-wide text-muted">World Info</p>
-    </header>
-    <div
-      id="world-stats"
-      hx-get="/world/stats"
-      hx-trigger="load, every 30s"
-      hx-swap="innerHTML"
+  <section
+    class="mc-box grid-layout"
+    style="grid-template-columns: repeat(3, 1fr); gap: 1rem"
+  >
+    <header
+      class="mb-2 col-span-3"
+      style="background: none; border: none; padding: 0"
     >
-      <p class="text-sm">Loading world stats...</p>
+      <p class="text-sm uppercase tracking-wide text-muted">Server Info</p>
+    </header>
+    <div class="col-span-3">
+      <hr />
+    </div>
+    <div>
+      <p class="text-xs uppercase tracking-wide text-muted">Address</p>
+      <p class="mt-2">{{.ServerHost}}</p>
+    </div>
+    <div>
+      <p class="text-xs uppercase tracking-wide text-muted">Game Port</p>
+      <p class="mt-2">{{.ServerPort}}</p>
+    </div>
+    <div>
+      <p class="text-xs uppercase tracking-wide text-muted">Version</p>
+      <p class="mt-2">{{.ServerVersion}}</p>
     </div>
   </section>
 
-  <!-- Time Control Section -->
-  <section>
+  <section
+    class="mc-box grid-layout"
+    style="grid-template-columns: repeat(2, 1fr); gap: 1rem"
+  >
     <header
       class="mb-2 mt-4"
       style="background: none; border: none; padding: 0"
     >
-      <p class="text-xs uppercase tracking-wide text-muted">Time Control</p>
+      <p class="text-sm uppercase tracking-wide text-muted">World Info</p>
     </header>
-    <div class="mc-box">
+    <div class="col-span-3">
+      <hr />
+    </div>
+    <div class="flex flex-col gap-4 col-span-2">
+      <div
+        id="world-stats"
+        hx-get="/world/stats"
+        hx-trigger="load, every 30s"
+        hx-swap="innerHTML"
+      >
+        <p class="text-sm">Loading world stats...</p>
+      </div>
       <!-- Clock loaded via HTMX -->
       <div
         id="time-clock"
@@ -44,7 +70,7 @@
       hx-swap="innerHTML"
     >
       <header class="mb-2" style="background: none; border: none; padding: 0">
-        <p class="text-xs uppercase tracking-wide text-muted">Live Players</p>
+        <p class="text-sm uppercase tracking-wide text-muted">Live Players</p>
       </header>
       <p class="text-sm">Loading player list...</p>
     </div>

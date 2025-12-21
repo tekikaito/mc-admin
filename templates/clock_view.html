@@ -141,9 +141,11 @@
     </div>
     <!-- Phase label and ticks in a row -->
     <div
-      style="display: flex; align-items: stretch; gap: 1rem; margin-top: 0.5rem"
+      style="display: flex; align-items: stretch; gap: 0rem; margin-top: 0.5rem"
     >
-      <div class="clock-phase-label" style="align-self: center">{{.Phase}}</div>
+      <div class="clock-phase-label mr-3" style="align-self: center">
+        {{.Phase}}
+      </div>
       <div class="clock-ticks">{{.Ticks}}</div>
       <button
         type="button"

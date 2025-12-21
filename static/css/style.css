@@ -444,10 +444,11 @@ header {
 .clock-ticks {
   font-size: 1.4rem;
   color: var(--mc-text-color);
-  background: #000;
+  background: #555;
   color: #0f0;
   padding: 0.5rem 1rem;
-  border: 2px solid #555;
+  margin-top: 2px;
+  border: 2px solid #333;
   font-family: monospace;
 }
 

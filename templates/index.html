@@ -6,7 +6,7 @@
     <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg" />
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/static/css/style.css?v=2" />
+    <link rel="stylesheet" href="/static/css/style.css?v={{assetVersion "/static/css/style.css"}}" />
     <title>Minecraft Admin Tool</title>
   </head>
   <body>
@@ -141,33 +141,15 @@
         </nav>
       </aside>
       <main class="flex flex-col gap-4">
-        <section
-          class="mc-box grid-layout"
-          style="grid-template-columns: repeat(3, 1fr); gap: 1rem"
-        >
-          <div>
-            <p class="text-xs uppercase tracking-wide text-muted">Address</p>
-            <p class="mt-2">{{.ServerHost}}</p>
-          </div>
-          <div>
-            <p class="text-xs uppercase tracking-wide text-muted">Game Port</p>
-            <p class="mt-2">{{.ServerPort}}</p>
-          </div>
-          <div>
-            <p class="text-xs uppercase tracking-wide text-muted">Version</p>
-            <p class="mt-2">{{.ServerVersion}}</p>
-          </div>
-        </section>
-
-        <section>
-          <div id="subpage-panel" class="mc-box flex flex-col">
-            {{if eq .ActiveModule "whitelist"}} {{template "whitelist.html" .}}
-            {{else if eq .ActiveModule "world"}} {{template "world.html" .}}
-            {{else if eq .ActiveModule "rcon"}} {{template
-            "command_console.html" .}} {{else if eq .ActiveModule "files"}}
-            {{template "files.html" .}} {{else}} {{end}}
-          </div>
-        </section>
+        <!-- <section> -->
+        <div id="subpage-panel" class="mc-box flex flex-col">
+          {{if eq .ActiveModule "whitelist"}} {{template "whitelist.html" .}}
+          {{else if eq .ActiveModule "world"}} {{template "world.html" .}}
+          {{else if eq .ActiveModule "rcon"}} {{template "command_console.html"
+          .}} {{else if eq .ActiveModule "files"}} {{template "files.html" .}}
+          {{else}} {{end}}
+        </div>
+        <!-- </section> -->
       </main>
     </div>
 
