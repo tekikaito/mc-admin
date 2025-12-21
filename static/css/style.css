@@ -490,6 +490,76 @@ header {
   padding: 0.5rem 0.75rem;
 }
 
+/* Day Counter Component */
+.mc-day-counter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mc-day-counter svg {
+  display: block;
+}
+
+.mc-day-number {
+  position: absolute;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #0f0;
+  text-shadow: 1px 1px 0 #000;
+  font-family: monospace;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 15%);
+}
+
+/* Phase Indicator Component */
+.mc-phase-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mc-phase-icon {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  border: 2px solid #555;
+  border-radius: 4px;
+}
+
+.mc-phase-label {
+  font-size: 1.4rem;
+  text-transform: capitalize;
+  color: var(--mc-text-color);
+  letter-spacing: 0.05em;
+}
+
+/* Difficulty Indicator Component */
+.mc-difficulty-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mc-difficulty-icon {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  border: 2px solid #555;
+  border-radius: 4px;
+}
+
+.mc-difficulty-label {
+  font-size: 1.4rem;
+  text-transform: capitalize;
+  color: var(--mc-text-color);
+  letter-spacing: 0.05em;
+}
+
 @media (max-width: 480px) {
   .time-presets {
     grid-template-columns: repeat(2, 1fr);

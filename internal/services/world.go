@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"mc-admin/internal/rcon"
+	"strings"
 )
 
 // WorldService handles common Minecraft world commands
@@ -39,7 +40,7 @@ func (s *WorldService) GetWorldStats() (WorldStats, error) {
 	stats := WorldStats{
 		Day:        day,
 		DayPhase:   dayPhase,
-		Difficulty: difficultyResult,
+		Difficulty: strings.ToLower(difficultyResult),
 	}
 	return stats, nil
 
