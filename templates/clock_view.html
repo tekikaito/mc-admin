@@ -139,20 +139,22 @@
         <polygon points="32,11 29,5 32,6" fill="#FFE55C" />
       </svg>
     </div>
-    <!-- Phase label -->
-    <div class="clock-phase-label">{{.Phase}}</div>
-    <div class="clock-ticks">{{.Ticks}}</div>
+    <!-- Phase label and ticks in a row -->
+    <div
+      style="display: flex; align-items: stretch; gap: 1rem; margin-top: 0.5rem"
+    >
+      <div class="clock-phase-label" style="align-self: center">{{.Phase}}</div>
+      <div class="clock-ticks">{{.Ticks}}</div>
+      <button
+        type="button"
+        class="mc-btn"
+        style="padding: 0.5rem 1rem; box-sizing: border-box"
+        hx-get="/world/clock/edit"
+        hx-target="#time-clock"
+        hx-swap="outerHTML"
+      >
+        ✏️ Edit
+      </button>
+    </div>
   </div>
-
-  <!-- Edit Button -->
-  <button
-    type="button"
-    class="mc-btn"
-    style="margin-top: 1rem"
-    hx-get="/world/clock/edit"
-    hx-target="#time-clock"
-    hx-swap="outerHTML"
-  >
-    ✏️ Change Time
-  </button>
 </div>
