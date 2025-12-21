@@ -30,10 +30,7 @@
     class="mc-box grid-layout"
     style="grid-template-columns: repeat(2, 1fr); gap: 1rem"
   >
-    <header
-      class="mb-2 mt-4"
-      style="background: none; border: none; padding: 0"
-    >
+    <header class="mb-2" style="background: none; border: none; padding: 0">
       <p class="text-sm uppercase tracking-wide text-muted">World Info</p>
     </header>
     <div class="col-span-3">
@@ -62,17 +59,27 @@
     </div>
   </section>
 
-  <section>
+  <section
+    class="mc-box grid-layout"
+    style="grid-template-columns: repeat(2, 1fr); gap: 1rem"
+  >
     <div
-      id="player-list"
-      hx-get="/server-info"
-      hx-trigger="load, every 10s"
-      hx-swap="innerHTML"
+      class="flex items-center justify-between text-sm uppercase text-muted mb-2"
     >
-      <header class="mb-2" style="background: none; border: none; padding: 0">
-        <p class="text-sm uppercase tracking-wide text-muted">Live Players</p>
-      </header>
-      <p class="text-sm">Loading player list...</p>
+      <span>Players Online</span>
+    </div>
+    <div class="col-span-3">
+      <hr />
+    </div>
+    <div class="flex flex-col gap-4 col-span-2">
+      <div
+        id="player-list"
+        hx-get="/server-info"
+        hx-trigger="load, every 10s"
+        hx-swap="innerHTML"
+      >
+        <p class="text-sm">Loading player list...</p>
+      </div>
     </div>
   </section>
 </div>
