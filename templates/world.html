@@ -17,7 +17,6 @@
   <section>
     <header class="mb-4" style="background: none; border: none; padding: 0">
       <p class="text-xs uppercase tracking-wide text-muted">Time Control</p>
-      <h2 class="mt-2">World Time</h2>
     </header>
     <div class="mc-box">
       <!-- Clock loaded via HTMX -->
@@ -25,7 +24,7 @@
         id="time-clock"
         hx-get="/world/clock"
         hx-trigger="load"
-        hx-swap="outerHTML"
+        hx-swap="innerHTML"
       >
         <p class="text-sm" style="text-align: center; padding: 2rem">
           Loading clock...
