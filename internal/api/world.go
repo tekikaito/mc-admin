@@ -11,8 +11,8 @@ import (
 
 // buildToastTrigger creates a properly escaped HX-Trigger header for toast notifications
 func buildToastTrigger(message string, toastType string) string {
-	trigger := map[string]interface{}{
-		"showToast": map[string]string{
+	trigger := map[string]map[string]string{
+		"showToast": {
 			"message": message,
 			"type":    toastType,
 		},
