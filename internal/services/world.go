@@ -90,7 +90,12 @@ func (s *WorldService) GetDifficulty() (string, error) {
 		return "", err
 	}
 
-	actualDifficulty := difficultyResp[len("The difficulty is "):]
+	const difficultyPrefix = "The difficulty is "
+	if len(difficultyResp) < len(difficultyPrefix) || !strings.HasPrefix(difficultyResp, difficultyPrefix) {
+		return "", fmt.Errorf("unexpected difficulty response: %q", difficultyResp)
+	}
+
+	actualDifficulty := difficultyResp[len(difficultyPrefix):]
 	return actualDifficulty, nil
 }
 
