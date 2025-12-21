@@ -1,0 +1,85 @@
+<div class="flex flex-col gap-4">
+  <section
+    class="mc-box grid-layout"
+    style="grid-template-columns: repeat(3, 1fr); gap: 1rem"
+  >
+    <header
+      class="mb-2 col-span-3"
+      style="background: none; border: none; padding: 0"
+    >
+      <p class="text-sm uppercase tracking-wide text-muted">Server Info</p>
+    </header>
+    <div class="col-span-3">
+      <hr />
+    </div>
+    <div>
+      <p class="text-xs uppercase tracking-wide text-muted">Address</p>
+      <p class="mt-2">{{.ServerHost}}</p>
+    </div>
+    <div>
+      <p class="text-xs uppercase tracking-wide text-muted">Game Port</p>
+      <p class="mt-2">{{.ServerPort}}</p>
+    </div>
+    <div>
+      <p class="text-xs uppercase tracking-wide text-muted">Version</p>
+      <p class="mt-2">{{.ServerVersion}}</p>
+    </div>
+  </section>
+
+  <section
+    class="mc-box grid-layout"
+    style="grid-template-columns: repeat(2, 1fr); gap: 1rem"
+  >
+    <header class="mb-2" style="background: none; border: none; padding: 0">
+      <p class="text-sm uppercase tracking-wide text-muted">World Info</p>
+    </header>
+    <div class="col-span-2">
+      <hr />
+    </div>
+    <div class="flex flex-col gap-4 col-span-2">
+      <div
+        id="world-stats"
+        hx-get="/world/stats"
+        hx-trigger="load, every 30s"
+        hx-swap="innerHTML"
+      >
+        <p class="text-sm">Loading world stats...</p>
+      </div>
+      <!-- Clock loaded via HTMX -->
+      <div
+        id="time-clock"
+        hx-get="/world/clock"
+        hx-trigger="load"
+        hx-swap="innerHTML"
+      >
+        <p class="text-sm" style="text-align: center; padding: 2rem">
+          Loading clock...
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="mc-box grid-layout"
+    style="grid-template-columns: repeat(2, 1fr); gap: 1rem"
+  >
+    <div
+      class="flex items-center justify-between text-sm uppercase text-muted mb-2"
+    >
+      <span>Players Online</span>
+    </div>
+    <div class="col-span-3">
+      <hr />
+    </div>
+    <div class="flex flex-col gap-4 col-span-2">
+      <div
+        id="player-list"
+        hx-get="/server-info"
+        hx-trigger="load, every 10s"
+        hx-swap="innerHTML"
+      >
+        <p class="text-sm">Loading player list...</p>
+      </div>
+    </div>
+  </section>
+</div>

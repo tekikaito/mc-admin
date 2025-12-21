@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"text/template"
 
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,17 @@ func initializeWebServer() *gin.Engine {
 		},
 		"dir": func(path string) string {
 			return filepath.Dir(path)
+		},
+		// assetVersion returns a cache-busting version for a /static/* web path.
+		// Falls back to "0" if the file can't be stat'ed.
+		"assetVersion": func(webPath string) string {
+			rel := strings.TrimPrefix(webPath, "/")
+			rel = strings.TrimPrefix(rel, "static/")
+			fi, err := os.Stat(filepath.Join("static", rel))
+			if err != nil {
+				return "0"
+			}
+			return strconv.FormatInt(fi.ModTime().Unix(), 10)
 		},
 	})
 	r.Static("/static", "./static")
@@ -61,6 +73,7 @@ func getCommonPageData(c *gin.Context) gin.H {
 		"ServerDescription": serverDescription,
 		"User":              user,
 		"FilesEnabled":      minecraftDataDir != "",
+		"ActiveModule":      "world",
 	}
 }
 
@@ -70,26 +83,38 @@ func getIndexPageHandler() gin.HandlerFunc {
 	}
 }
 
-func initializeWebServerRoutes(r *gin.Engine, authController *discordAuthController, serverService *services.ServerService, whitelistService *services.WhitelistService, commandService *services.CommandService, fileService *services.FileService) {
-	protected := r.Group("/")
-	protected.Use(authController.RequireAuth())
-	protected.GET("/", getIndexPageHandler())
-	protected.GET("/server-info", handleGetServerInfo(serverService))
-	protected.GET("/whitelist", handleGetWhitelist(whitelistService))
-	protected.POST("/whitelist/toggle", handleToggleWhitelist(whitelistService))
-	protected.POST("/whitelist/player", handleAddNameToWhitelist(whitelistService))
-	protected.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(whitelistService))
-	protected.GET("/players/:name/kick", handleGetKickPlayerDialog())
-	protected.POST("/players/:name/kick", handleKickPlayer(serverService))
-	protected.GET("/rcon", handleGetCommandConsole(commandService))
-	protected.POST("/commands/execute", handleExecuteRawCommand(commandService))
+type WebServerParts struct {
+	AuthController   *discordAuthController
+	ServerService    *services.ServerService
+	WhitelistService *services.WhitelistService
+	CommandService   *services.CommandService
+	FileService      *services.FileService
+	WorldService     *services.WorldService
+}
 
-	protected.GET("/files", handleGetFiles(fileService))
-	protected.GET("/files/content", handleGetFileContent(fileService))
-	protected.GET("/files/download", handleDownloadFile(fileService))
-	protected.POST("/files/create", handleCreateFile(fileService))
-	protected.POST("/files/upload", handleUploadFile(fileService))
-	protected.DELETE("/files/delete", handleDeleteFile(fileService))
+func initializeWebServerRoutes(r *gin.Engine, parts WebServerParts) {
+	protected := r.Group("/")
+	protected.Use(parts.AuthController.RequireAuth())
+	protected.GET("/", getIndexPageHandler())
+	protected.GET("/server-info", handleGetServerInfo(parts.ServerService))
+	protected.GET("/whitelist", handleGetWhitelist(parts.WhitelistService))
+	protected.POST("/whitelist/toggle", handleToggleWhitelist(parts.WhitelistService))
+	protected.POST("/whitelist/player", handleAddNameToWhitelist(parts.WhitelistService))
+	protected.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(parts.WhitelistService))
+	protected.GET("/world/stats", handleGetWorldStats(parts.WorldService))
+	protected.GET("/world/clock", handleGetClock(parts.WorldService))
+	protected.GET("/world/clock/edit", handleGetClockEdit(parts.WorldService))
+	protected.POST("/world/time", handleSetTime(parts.WorldService))
+	protected.GET("/players/:name/kick", handleGetKickPlayerDialog())
+	protected.POST("/players/:name/kick", handleKickPlayer(parts.ServerService))
+	protected.GET("/rcon", handleGetCommandConsole())
+	protected.POST("/commands/execute", handleExecuteRawCommand(parts.CommandService))
+	protected.GET("/files", handleGetFiles(parts.FileService))
+	protected.GET("/files/content", handleGetFileContent(parts.FileService))
+	protected.GET("/files/download", handleDownloadFile(parts.FileService))
+	protected.POST("/files/create", handleCreateFile(parts.FileService))
+	protected.POST("/files/upload", handleUploadFile(parts.FileService))
+	protected.DELETE("/files/delete", handleDeleteFile(parts.FileService))
 }
 
 type WebServerOptions struct {
@@ -120,6 +145,17 @@ func InitializeWebServer(options WebServerOptions) (*gin.Engine, error) {
 
 	whitelistService := services.NewWhitelistService(options.MinecraftRconClient, options.AshconClient, &fileClient)
 	fileService := services.NewFileService(&fileClient)
-	initializeWebServerRoutes(r, authController, serverService, whitelistService, commandService, fileService)
+	worldService := services.NewWorldService(options.MinecraftRconClient)
+
+	parts := WebServerParts{
+		AuthController:   authController,
+		ServerService:    serverService,
+		WhitelistService: whitelistService,
+		CommandService:   commandService,
+		FileService:      fileService,
+		WorldService:     worldService,
+	}
+
+	initializeWebServerRoutes(r, parts)
 	return r, nil
 }

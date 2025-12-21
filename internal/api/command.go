@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func handleGetCommandConsole(commandService *services.CommandService) gin.HandlerFunc {
+func handleGetCommandConsole() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if c.GetHeader("HX-Request") == "true" {
 			c.HTML(http.StatusOK, "command_console.html", gin.H{})

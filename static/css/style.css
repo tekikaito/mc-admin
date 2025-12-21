@@ -382,3 +382,186 @@ header {
 .dropdown.show .dropdown-content {
   display: block;
 }
+
+/* Minecraft Clock Component */
+.clock-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mc-clock-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0 auto;
+}
+
+.mc-clock {
+  width: 128px !important;
+  height: 128px !important;
+  max-width: 128px;
+  max-height: 128px;
+  margin: 0 auto;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.mc-clock:active,
+.mc-clock.dragging {
+  cursor: grabbing;
+}
+
+.clock-svg {
+  width: 128px !important;
+  height: 128px !important;
+  max-width: 128px;
+  max-height: 128px;
+  display: block;
+}
+
+/* Phase label */
+.clock-phase-label {
+  font-size: 1.6rem;
+  color: var(--mc-text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Tick display */
+.clock-ticks {
+  font-size: 1.4rem;
+  background: #555;
+  color: #0f0;
+  padding: 0.5rem 1rem;
+  margin-top: 2px;
+  border: 2px solid #333;
+  font-family: monospace;
+}
+
+/* Editable tick input */
+.clock-ticks-input {
+  font-size: 1.4rem;
+  background: #000;
+  color: #0f0;
+  padding: 0.5rem 1rem;
+  border: 2px solid #555;
+  font-family: monospace;
+  text-align: center;
+  width: 120px;
+  -moz-appearance: textfield;
+}
+
+.clock-ticks-input::-webkit-outer-spin-button,
+.clock-ticks-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.clock-ticks-input:focus {
+  outline: none;
+  border-color: #0f0;
+  box-shadow: 0 0 4px #0f0;
+}
+
+/* Time preset buttons */
+.time-presets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 280px;
+}
+
+.time-preset-btn {
+  font-size: 1.2rem;
+  padding: 0.5rem 0.75rem;
+}
+
+/* Day Counter Component */
+.mc-day-counter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mc-day-counter svg {
+  display: block;
+}
+
+.mc-day-number {
+  position: absolute;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #0f0;
+  text-shadow: 1px 1px 0 #000;
+  font-family: monospace;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 15%);
+}
+
+/* Phase Indicator Component */
+.mc-phase-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mc-phase-icon {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  border: 2px solid #555;
+  border-radius: 4px;
+}
+
+.mc-phase-label {
+  font-size: 1.4rem;
+  text-transform: capitalize;
+  color: var(--mc-text-color);
+  letter-spacing: 0.05em;
+}
+
+/* Difficulty Indicator Component */
+.mc-difficulty-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mc-difficulty-icon {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  border: 2px solid #555;
+  border-radius: 4px;
+}
+
+.mc-difficulty-label {
+  font-size: 1.4rem;
+  text-transform: capitalize;
+  color: var(--mc-text-color);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 480px) {
+  .mc-clock {
+    max-width: 280px;
+  }
+}

@@ -1,5 +1,7 @@
 # mc-admin
 
+![mc-admin-test-cover](./.badges/main/coverage.svg)
+
 A web-based administration panel for Minecraft servers. Its created to make server management easier and more accessible, providing real-time insights and control over server operations. Its designed to look like a native Minecraft interface, ensuring a familiar experience for server administrators.
 
 ![mc-admin-screenshot](./docs/images/admin-ui-overview.png)
