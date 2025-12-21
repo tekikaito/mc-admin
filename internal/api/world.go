@@ -1,12 +1,29 @@
 package api
 
 import (
+	"encoding/json"
 	"mc-admin/internal/services"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
+
+// buildToastTrigger creates a properly escaped HX-Trigger header for toast notifications
+func buildToastTrigger(message string, toastType string) string {
+	trigger := map[string]interface{}{
+		"showToast": map[string]string{
+			"message": message,
+			"type":    toastType,
+		},
+	}
+	jsonBytes, err := json.Marshal(trigger)
+	if err != nil {
+		// Fallback to a safe default if marshaling fails
+		return `{"showToast": {"message": "An error occurred", "type": "error"}}`
+	}
+	return string(jsonBytes)
+}
 
 func handleGetWorldStats(worldService *services.WorldService) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -81,7 +98,7 @@ func handleSetTime(worldService *services.WorldService) gin.HandlerFunc {
 
 		_, err := worldService.SetTime(timeValue)
 		if err != nil {
-			c.Header("HX-Trigger", `{"showToast": {"message": "Failed to set time: `+err.Error()+`", "type": "error"}}`)
+			c.Header("HX-Trigger", buildToastTrigger("Failed to set time: "+err.Error(), "error"))
 			c.String(http.StatusInternalServerError, "Error setting time: %v", err)
 			return
 		}
@@ -93,7 +110,7 @@ func handleSetTime(worldService *services.WorldService) gin.HandlerFunc {
 			return
 		}
 
-		c.Header("HX-Trigger", `{"showToast": {"message": "Time set to `+timeValue+`", "type": "success"}}`)
+		c.Header("HX-Trigger", buildToastTrigger("Time set to "+timeValue, "success"))
 		c.HTML(http.StatusOK, "clock_view.html", data)
 	}
 }
