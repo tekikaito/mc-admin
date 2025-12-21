@@ -561,10 +561,6 @@ header {
 }
 
 @media (max-width: 480px) {
-  .time-presets {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .mc-clock {
     max-width: 280px;
   }
