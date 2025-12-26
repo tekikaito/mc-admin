@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: go-test-coverage
-        uses: vladopajic/go-test-coverage@v2.18.2
+        uses: vladopajic/go-test-coverage@v2.17.0
         with:
           config: ./.testcoverage.yml
           git-token: ${{ secrets.GITHUB_TOKEN }}
