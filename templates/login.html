@@ -4,33 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/static/css/style.css?v={{assetVersion
-    "/static/css/style.css"}}" />
+    <link rel="stylesheet" href="/static/css/style.css?v={{assetVersion "/static/css/style.css"}}" />
     <title>Sign in | Minecraft Admin Tool</title>
   </head>
   <body class="flex items-center justify-center" style="min-height: 100vh">
-    <div
-      class="mc-box flex flex-col gap-4"
-      style="max-width: 400px; width: 100%"
-    >
-      <header
-        class="text-center"
-        style="background: none; border: none; padding: 0"
-      >
-        <p class="text-xs uppercase tracking-wide text-muted">Authentication</p>
-        <h1 class="mt-2">Sign in to continue</h1>
-        <p class="text-sm text-muted">
-          Access to the admin console requires a verified Discord account.
-        </p>
-      </header>
-      <div class="flex justify-center">
+    <div class="mc-panel text-center" style="max-width: 400px; width: 100%">
+      <p class="label">Authentication</p>
+      <h1 class="mt-2">Sign in to continue</h1>
+      <p class="text-sm text-muted mt-4">
+        Access to the admin console requires a verified Discord account.
+      </p>
+      <div class="mt-6">
         <a
           href="/auth/discord/start"
-          class="mc-btn"
+          class="mc-btn mc-btn--lg"
           style="
             background-color: #5865f2;
-            --mc-btn-bg: #5865f2;
             --mc-btn-border-light: #8ea1ff;
             --mc-btn-border-dark: #3c45a5;
           "
@@ -39,7 +28,7 @@
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            style="width: 20px; height: 20px; margin-right: 8px"
+            style="width: 20px; height: 20px"
           >
             <path
               d="M20.317 4.369a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.211.375-.444.864-.608 1.249a18.27 18.27 0 0 0-5.5 0 12.64 12.64 0 0 0-.619-1.25.077.077 0 0 0-.079-.037 19.736 19.736 0 0 0-4.885 1.515.07.07 0 0 0-.032.027C2.58 9.041 1.688 13.58 2.093 18.057a.082.082 0 0 0 .031.057 20.023 20.023 0 0 0 5.993 3.037.078.078 0 0 0 .084-.027c.461-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.041-.105 12.547 12.547 0 0 1-1.795-.85.077.077 0 0 1-.008-.128c.121-.091.242-.185.357-.28a.074.074 0 0 1 .077-.01c3.769 1.711 7.821 1.711 11.549 0a.074.074 0 0 1 .078.009c.115.095.236.19.358.281a.077.077 0 0 1-.006.127 11.8 11.8 0 0 1-1.796.851.075.075 0 0 0-.04.106c.36.698.772 1.364 1.224 1.994a.076.076 0 0 0 .084.028 19.982 19.982 0 0 0 6.002-3.038.077.077 0 0 0 .031-.056c.5-5.177-.838-9.673-3.548-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.183 0-2.157-1.09-2.157-2.432 0-1.342.955-2.432 2.157-2.432 1.21 0 2.176 1.1 2.157 2.432 0 1.342-.955 2.432-2.157 2.432zm7.975 0c-1.183 0-2.157-1.09-2.157-2.432 0-1.342.954-2.432 2.157-2.432 1.21 0 2.176 1.1 2.157 2.432 0 1.342-.947 2.432-2.157 2.432z"

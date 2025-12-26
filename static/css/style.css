@@ -1,319 +1,781 @@
 @import url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
 @import url("background.css");
 
+/* ==========================================================================
+   Design Tokens
+   ========================================================================== */
+
 :root {
-  --mc-bg-color: #2e211b;
+  /* Color Palette - Minecraft inspired */
+  --mc-bg: #2e211b;
+  --mc-bg-dark: #1a1210;
+
+  /* Panel colors */
   --mc-panel-bg: #c6c6c6;
+  --mc-panel-bg-dark: #8b8b8b;
   --mc-panel-border-light: #ffffff;
   --mc-panel-border-dark: #555555;
-  --mc-text-color: #202020;
+  --mc-panel-text: #3f3f3f;
 
-  --mc-btn-bg: #777777;
-  --mc-btn-border-light: #c6c6c6;
-  --mc-btn-border-dark: #444444;
-  --mc-btn-text: #ffffff;
-  --mc-btn-text-shadow: 2px 2px #000000;
+  /* Accent colors */
+  --mc-accent: #5c7a29;
+  --mc-accent-light: #8fbc3f;
 
-  --mc-input-bg: #000000;
-  --mc-input-border: #a0a0a0;
-  --mc-input-text: #ffffff;
+  /* Button colors */
+  --mc-btn-bg: #8b8b8b;
+  --mc-btn-bg-hover: #a0a0a0;
+  --mc-btn-bg-active: #6b6b6b;
+  --mc-btn-border-light: #cfcfcf;
+  --mc-btn-border-dark: #565656;
 
-  --mc-color-success: #008000; /* Darker green for better contrast on light bg */
-  --mc-color-error: #cc0000;
-  --mc-color-muted: #555555;
+  /* Input colors */
+  --mc-input-bg: #1a1a1a;
+  --mc-input-border: #6b6b6b;
+  --mc-input-focus: #a0a0a0;
+
+  /* Semantic colors */
+  --mc-success: #5c7a29;
+  --mc-success-light: #8fbc3f;
+  --mc-error: #b02e26;
+  --mc-error-light: #f26d63;
+  --mc-warning: #c7a32a;
+  --mc-muted: #7a7a7a;
+
+  /* Typography - pixel-perfect sizes for VT323 */
+  --font-xs: 16px;
+  --font-sm: 20px;
+  --font-base: 24px;
+  --font-lg: 28px;
+  --font-xl: 32px;
+  --font-2xl: 40px;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Border widths */
+  --border-thin: 2px;
+  --border-thick: 4px;
+
+  /* Shadows */
+  --shadow-sm: 2px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 4px 4px 0 rgba(0, 0, 0, 0.4);
+  --shadow-lg: 6px 6px 0 rgba(0, 0, 0, 0.4);
+
+  /* Layout */
+  --sidebar-width: 260px;
+  --content-max-width: 1200px;
+  --header-height: 60px;
+}
+
+/* ==========================================================================
+   Base Styles
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
 }
 
 body {
   font-family: "VT323", monospace;
-  background-color: var(--mc-bg-color);
+  background-color: var(--mc-bg);
   color: #ffffff;
-  font-size: 1.6rem;
+  font-size: var(--font-base);
+  line-height: 1.4;
   margin: 0;
   padding: 0;
   min-height: 100vh;
 }
 
-/* Minecraft GUI Box */
-.mc-box {
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+  margin: 0 0 var(--space-4) 0;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: var(--font-2xl);
+  letter-spacing: 1px;
+}
+
+h2 {
+  font-size: var(--font-xl);
+}
+
+h3 {
+  font-size: var(--font-lg);
+}
+
+/* Text in light panels */
+.mc-panel h1,
+.mc-panel h2,
+.mc-panel h3,
+.mc-panel h4 {
+  color: var(--mc-panel-text);
+  text-shadow: none;
+}
+
+/* Dark text shadow for headers on dark backgrounds */
+.text-shadow {
+  text-shadow: 2px 2px 0 #000000;
+}
+
+/* Text colors */
+.text-muted { color: var(--mc-muted) !important; }
+.text-success { color: var(--mc-success-light) !important; }
+.text-error { color: var(--mc-error-light) !important; }
+.text-warning { color: var(--mc-warning) !important; }
+
+/* Text sizes */
+.text-xs { font-size: var(--font-xs); }
+.text-sm { font-size: var(--font-sm); }
+.text-base { font-size: var(--font-base); }
+.text-lg { font-size: var(--font-lg); }
+.text-xl { font-size: var(--font-xl); }
+
+/* Text utilities */
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+.tracking-wide { letter-spacing: 0.1em; }
+.tracking-wider { letter-spacing: 0.15em; }
+.font-bold { font-weight: bold; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Links */
+a {
+  color: #5b8dd9;
+  text-decoration: none;
+  transition: color 0.1s;
+}
+
+a:hover {
+  color: #7ba8f0;
+  text-decoration: underline;
+}
+
+/* Label text - for form labels and section headers */
+.label {
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mc-muted);
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+
+.container {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+.app-layout {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: var(--sidebar-width) 1fr;
+}
+
+@media (max-width: 900px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Flexbox utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; }
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-end { justify-content: flex-end; }
+
+/* Gap utilities */
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-5 { gap: var(--space-5); }
+.gap-6 { gap: var(--space-6); }
+.gap-8 { gap: var(--space-8); }
+
+/* Spacing utilities */
+.m-0 { margin: 0; }
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-3 { margin-bottom: var(--space-3); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-6 { margin-bottom: var(--space-6); }
+.ml-2 { margin-left: var(--space-2); }
+.mr-2 { margin-right: var(--space-2); }
+
+.p-0 { padding: 0; }
+.p-2 { padding: var(--space-2); }
+.p-3 { padding: var(--space-3); }
+.p-4 { padding: var(--space-4); }
+.p-6 { padding: var(--space-6); }
+
+.w-full { width: 100%; }
+
+/* Grid utilities */
+.grid { display: grid; }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.col-span-2 { grid-column: span 2; }
+.col-span-3 { grid-column: span 3; }
+.col-span-full { grid-column: 1 / -1; }
+
+@media (max-width: 600px) {
+  .sm\:grid-cols-1 { grid-template-columns: 1fr; }
+  .sm\:flex-col { flex-direction: column; }
+}
+
+/* ==========================================================================
+   Components - Panels
+   ========================================================================== */
+
+/* Base panel with Minecraft border effect */
+.mc-panel {
   background-color: var(--mc-panel-bg);
-  border: 4px solid;
+  border: var(--border-thick) solid;
   border-color: var(--mc-panel-border-light) var(--mc-panel-border-dark)
     var(--mc-panel-border-dark) var(--mc-panel-border-light);
-  color: var(--mc-text-color);
-  padding: 1.5rem;
-  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  color: var(--mc-panel-text);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-lg);
   image-rendering: pixelated;
 }
 
-/* Minecraft Button */
+/* Alias for backwards compatibility */
+.mc-box {
+  background-color: var(--mc-panel-bg);
+  border: var(--border-thick) solid;
+  border-color: var(--mc-panel-border-light) var(--mc-panel-border-dark)
+    var(--mc-panel-border-dark) var(--mc-panel-border-light);
+  color: var(--mc-panel-text);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-lg);
+  image-rendering: pixelated;
+}
+
+/* Darker panel variant */
+.mc-panel--dark {
+  background-color: var(--mc-panel-bg-dark);
+}
+
+/* Inset panel (for nested content) */
+.mc-panel--inset {
+  background-color: rgba(0, 0, 0, 0.15);
+  border: var(--border-thin) solid;
+  border-color: var(--mc-panel-border-dark) var(--mc-panel-border-light)
+    var(--mc-panel-border-light) var(--mc-panel-border-dark);
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.2);
+  padding: var(--space-4);
+}
+
+/* Compact panel */
+.mc-panel--compact {
+  padding: var(--space-4);
+}
+
+/* No shadow variant */
+.mc-panel--flat {
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   Components - Section
+   ========================================================================== */
+
+.section {
+  margin-bottom: var(--space-6);
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+  border-bottom: var(--border-thin) solid rgba(0, 0, 0, 0.15);
+}
+
+.section-title {
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--mc-muted);
+  margin: 0;
+}
+
+.section-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ==========================================================================
+   Components - Cards (for info display)
+   ========================================================================== */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-4);
+}
+
+.info-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.info-card__label {
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mc-muted);
+}
+
+.info-card__value {
+  font-size: var(--font-lg);
+  color: var(--mc-panel-text);
+}
+
+/* ==========================================================================
+   Components - Buttons
+   ========================================================================== */
+
 .mc-btn {
   background-color: var(--mc-btn-bg);
-  border: 2px solid;
+  border: var(--border-thin) solid;
   border-color: var(--mc-btn-border-light) var(--mc-btn-border-dark)
     var(--mc-btn-border-dark) var(--mc-btn-border-light);
-  color: var(--mc-btn-text);
-  text-shadow: var(--mc-btn-text-shadow);
-  padding: 8px 16px;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #000000;
+  padding: var(--space-2) var(--space-4);
   font-family: inherit;
-  font-size: 1.6rem;
+  font-size: var(--font-sm);
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: var(--space-2);
   transition: none;
   line-height: 1;
+  white-space: nowrap;
+}
+
+.mc-btn:hover {
+  background-color: var(--mc-btn-bg-hover);
 }
 
 .mc-btn:active {
   border-color: var(--mc-btn-border-dark) var(--mc-btn-border-light)
     var(--mc-btn-border-light) var(--mc-btn-border-dark);
-  background-color: #555555;
-  transform: translateY(2px);
+  background-color: var(--mc-btn-bg-active);
+  transform: translateY(1px);
 }
 
-.mc-btn:hover {
-  background-color: #888888;
+.mc-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.mc-btn-danger {
-  background-color: #aa0000;
-  --mc-btn-bg: #aa0000;
-  --mc-btn-border-light: #ff5555;
-  --mc-btn-border-dark: #550000;
-}
-.mc-btn-danger:hover {
-  background-color: #cc0000;
+/* Button sizes */
+.mc-btn--sm {
+  font-size: var(--font-xs);
+  padding: var(--space-1) var(--space-3);
 }
 
-/* Minecraft Input */
+.mc-btn--lg {
+  font-size: var(--font-base);
+  padding: var(--space-3) var(--space-6);
+}
+
+/* Button variants */
+.mc-btn-danger,
+.mc-btn--danger {
+  background-color: var(--mc-error);
+  --mc-btn-border-light: #ff6b6b;
+  --mc-btn-border-dark: #7a1a14;
+}
+
+.mc-btn-danger:hover,
+.mc-btn--danger:hover {
+  background-color: #c7352c;
+}
+
+.mc-btn--success {
+  background-color: var(--mc-success);
+  --mc-btn-border-light: #8fbc3f;
+  --mc-btn-border-dark: #3d5118;
+}
+
+.mc-btn--success:hover {
+  background-color: #6b8f30;
+}
+
+/* Ghost button (text only) */
+.mc-btn--ghost {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: var(--mc-panel-text);
+  text-shadow: none;
+}
+
+.mc-btn--ghost:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.mc-btn--ghost:active {
+  transform: none;
+  border: none;
+}
+
+/* ==========================================================================
+   Components - Inputs
+   ========================================================================== */
+
 .mc-input {
   background-color: var(--mc-input-bg);
-  border: 2px solid var(--mc-input-border);
-  color: var(--mc-input-text);
-  padding: 10px;
+  border: var(--border-thin) solid var(--mc-input-border);
+  color: #ffffff;
+  padding: var(--space-3);
   font-family: inherit;
-  font-size: 1.6rem;
+  font-size: var(--font-sm);
   width: 100%;
-  box-sizing: border-box;
 }
 
 .mc-input:focus {
   outline: none;
-  border-color: #ffffff;
+  border-color: var(--mc-input-focus);
 }
 
-/* Typography */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: normal;
-  text-shadow: 2px 2px #000000;
-  color: #ffffff;
-  margin-top: 0;
-  margin-bottom: 1rem;
+.mc-input::placeholder {
+  color: #666666;
 }
 
-.mc-box h1,
-.mc-box h2,
-.mc-box h3 {
-  color: #202020;
-  text-shadow: none;
+/* Input group (label + input) */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
-.text-success {
-  color: var(--mc-color-success) !important;
-}
-.text-error {
-  color: var(--mc-color-error) !important;
-}
-.text-muted {
-  color: var(--mc-color-muted) !important;
+.input-group label {
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mc-muted);
 }
 
-a {
-  color: #0000aa;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-  color: #0000ff;
-} /* Layout Helpers */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Inline form (input + button) */
+.form-inline {
+  display: flex;
+  gap: var(--space-3);
 }
 
-.grid-layout {
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: 250px 1fr;
+.form-inline .mc-input {
+  flex: 1;
 }
 
-@media (max-width: 768px) {
-  .grid-layout {
-    grid-template-columns: 1fr;
+@media (max-width: 500px) {
+  .form-inline {
+    flex-direction: column;
   }
 }
 
-.flex {
+/* ==========================================================================
+   Components - Lists
+   ========================================================================== */
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list-item {
   display: flex;
-}
-.flex-col {
-  flex-direction: column;
-}
-.items-center {
   align-items: center;
-}
-.justify-center {
-  justify-content: center;
-}
-.justify-between {
   justify-content: space-between;
-}
-.justify-end {
-  justify-content: flex-end;
-}
-.text-center {
-  text-align: center;
-}
-.gap-2 {
-  gap: 0.5rem;
-}
-.gap-4 {
-  gap: 1rem;
-}
-.mt-2 {
-  margin-top: 0.5rem;
-}
-.mt-4 {
-  margin-top: 1rem;
-}
-.mb-4 {
-  margin-bottom: 1rem;
-}
-.w-full {
-  width: 100%;
-}
-.text-sm {
-  font-size: 1.4rem;
-}
-.text-xs {
-  font-size: 1.2rem;
-}
-.uppercase {
-  text-transform: uppercase;
-}
-.tracking-wide {
-  letter-spacing: 0.1em;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-thin) solid rgba(0, 0, 0, 0.1);
 }
 
-/* Header */
-header {
-  background-color: rgba(0, 0, 0, 0.5);
-  border-bottom: 2px solid #444;
-  padding: 1rem 2rem;
+.list-item:last-child {
+  border-bottom: none;
 }
 
-/* Status Indicators */
-.status-dot {
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  border: 2px solid #000;
-  margin-right: 8px;
-}
-.status-online {
-  background-color: #55ff55;
-}
-.status-offline {
-  background-color: #ff5555;
+.list-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* Player List */
+/* Player list specific */
+.player-list {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: var(--border-thin) solid;
+  border-color: var(--mc-panel-border-dark) var(--mc-panel-border-light)
+    var(--mc-panel-border-light) var(--mc-panel-border-dark);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
 .player-list-item {
   display: flex;
   align-items: center;
-  padding: 8px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-thin) solid rgba(0, 0, 0, 0.1);
+  gap: var(--space-3);
 }
+
 .player-list-item:last-child {
   border-bottom: none;
 }
+
 .player-avatar {
   width: 32px;
   height: 32px;
-  border: 2px solid #000;
-  margin-right: 12px;
+  border: var(--border-thin) solid #000000;
+  image-rendering: pixelated;
 }
 
-/* Console */
+/* ==========================================================================
+   Components - Status Indicators
+   ========================================================================== */
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-sm);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border: var(--border-thin) solid #000000;
+}
+
+.status-dot--online,
+.status-online {
+  background-color: var(--mc-success-light);
+}
+
+.status-dot--offline,
+.status-offline {
+  background-color: var(--mc-error-light);
+}
+
+/* Player count badge */
+.player-count {
+  font-size: var(--font-lg);
+  color: var(--mc-success-light);
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   Components - Header
+   ========================================================================== */
+
+header {
+  background-color: rgba(0, 0, 0, 0.6);
+  border-bottom: var(--border-thin) solid #444444;
+  padding: var(--space-4) var(--space-6);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.user-info__avatar {
+  width: 36px;
+  height: 36px;
+  border: var(--border-thin) solid #000000;
+  image-rendering: pixelated;
+}
+
+.user-info__name {
+  font-size: var(--font-sm);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   Components - Sidebar / Navigation
+   ========================================================================== */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.sidebar-header {
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-thin) solid rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-header__label {
+  font-size: var(--font-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--mc-muted);
+  margin-bottom: var(--space-2);
+}
+
+.sidebar-header__title {
+  font-size: var(--font-xl);
+  color: var(--mc-panel-text);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.sidebar-header__desc {
+  font-size: var(--font-sm);
+  color: var(--mc-muted);
+  margin-top: var(--space-2);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.nav-btn {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.nav-btn svg {
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Components - Console
+   ========================================================================== */
+
 .console-output {
-  background-color: #000;
-  color: #ccc;
+  background-color: #0a0a0a;
+  color: #cccccc;
   font-family: "VT323", monospace;
-  padding: 1rem;
+  font-size: var(--font-sm);
+  padding: var(--space-4);
   height: 400px;
   overflow-y: auto;
-  border: 2px solid #888;
-  margin-bottom: 1rem;
+  border: var(--border-thin) solid #555555;
   white-space: pre-wrap;
+  line-height: 1.5;
 }
 
-/* Utility Classes */
-.text-muted {
-  color: var(--mc-color-muted) !important;
-}
-.text-success {
-  color: var(--mc-color-success) !important;
-}
-.text-error {
-  color: var(--mc-color-error) !important;
-}
+/* ==========================================================================
+   Components - Toast Notifications
+   ========================================================================== */
 
-/* Toast Notifications */
 #toast-container {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: var(--space-6);
+  right: var(--space-6);
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-3);
 }
 
 .toast {
   background-color: var(--mc-panel-bg);
-  border: 2px solid;
+  border: var(--border-thin) solid;
   border-color: var(--mc-panel-border-light) var(--mc-panel-border-dark)
     var(--mc-panel-border-dark) var(--mc-panel-border-light);
-  color: var(--mc-text-color);
-  padding: 10px 15px;
+  color: var(--mc-panel-text);
+  padding: var(--space-3) var(--space-4);
   min-width: 250px;
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
-  image-rendering: pixelated;
-  font-family: "VT323", monospace;
-  font-size: 1.2rem;
-  animation: slideIn 0.3s ease-out forwards;
+  box-shadow: var(--shadow-md);
+  font-size: var(--font-sm);
+  animation: slideIn 0.25s ease-out forwards;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-3);
 }
 
 .toast.success {
-  border-left: 5px solid var(--mc-color-success);
+  border-left: 4px solid var(--mc-success);
 }
 
 .toast.error {
-  border-left: 5px solid var(--mc-color-error);
+  border-left: 4px solid var(--mc-error);
 }
 
 .toast.fadeOut {
-  animation: fadeOut 0.3s ease-in forwards;
+  animation: fadeOut 0.25s ease-in forwards;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  font-size: var(--font-sm);
+  padding: var(--space-1);
+  opacity: 0.6;
+}
+
+.toast-close:hover {
+  opacity: 1;
 }
 
 @keyframes slideIn {
@@ -338,7 +800,10 @@ header {
   }
 }
 
-/* Dropdown Menu */
+/* ==========================================================================
+   Components - Dropdown Menu
+   ========================================================================== */
+
 .dropdown {
   position: relative;
   display: inline-block;
@@ -349,10 +814,11 @@ header {
   position: absolute;
   right: 0;
   top: 100%;
+  margin-top: var(--space-1);
   background-color: var(--mc-panel-bg);
   min-width: 160px;
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
-  border: 2px solid;
+  box-shadow: var(--shadow-md);
+  border: var(--border-thin) solid;
   border-color: var(--mc-panel-border-light) var(--mc-panel-border-dark)
     var(--mc-panel-border-dark) var(--mc-panel-border-light);
   z-index: 1000;
@@ -360,8 +826,8 @@ header {
 
 .dropdown-content button,
 .dropdown-content a {
-  color: var(--mc-text-color);
-  padding: 8px 12px;
+  color: var(--mc-panel-text);
+  padding: var(--space-2) var(--space-3);
   text-decoration: none;
   display: block;
   width: 100%;
@@ -369,9 +835,8 @@ header {
   background: none;
   border: none;
   font-family: inherit;
-  font-size: inherit;
+  font-size: var(--font-sm);
   cursor: pointer;
-  box-sizing: border-box;
 }
 
 .dropdown-content button:hover,
@@ -383,16 +848,57 @@ header {
   display: block;
 }
 
-/* Minecraft Clock Component */
+/* ==========================================================================
+   Components - Divider
+   ========================================================================== */
+
+hr {
+  border: none;
+  border-top: var(--border-thin) solid rgba(0, 0, 0, 0.15);
+  margin: var(--space-4) 0;
+}
+
+.divider {
+  border: none;
+  border-top: var(--border-thin) solid rgba(0, 0, 0, 0.15);
+  margin: var(--space-4) 0;
+}
+
+/* ==========================================================================
+   Components - Empty State
+   ========================================================================== */
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  background-color: rgba(0, 0, 0, 0.1);
+  border: var(--border-thin) dashed var(--mc-muted);
+}
+
+.empty-state__title {
+  font-size: var(--font-base);
+  color: var(--mc-muted);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.empty-state__desc {
+  font-size: var(--font-sm);
+  color: var(--mc-muted);
+  margin: 0;
+}
+
+/* ==========================================================================
+   Components - Clock
+   ========================================================================== */
+
 .clock-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-  padding: 1rem;
+  gap: var(--space-6);
+  padding: var(--space-4);
   width: 100%;
-  margin: 0 auto;
   text-align: center;
 }
 
@@ -400,9 +906,7 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  margin: 0 auto;
+  gap: var(--space-3);
 }
 
 .mc-clock {
@@ -410,7 +914,6 @@ header {
   height: 128px !important;
   max-width: 128px;
   max-height: 128px;
-  margin: 0 auto;
   cursor: grab;
   user-select: none;
   touch-action: none;
@@ -432,33 +935,29 @@ header {
   display: block;
 }
 
-/* Phase label */
 .clock-phase-label {
-  font-size: 1.6rem;
-  color: var(--mc-text-color);
+  font-size: var(--font-base);
+  color: var(--mc-panel-text);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
-/* Tick display */
 .clock-ticks {
-  font-size: 1.4rem;
-  background: #555;
-  color: #0f0;
-  padding: 0.5rem 1rem;
-  margin-top: 2px;
-  border: 2px solid #333;
-  font-family: monospace;
+  font-size: var(--font-sm);
+  background: #333333;
+  color: #00ff00;
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-thin) solid #222222;
+  font-family: "VT323", monospace;
 }
 
-/* Editable tick input */
 .clock-ticks-input {
-  font-size: 1.4rem;
-  background: #000;
-  color: #0f0;
-  padding: 0.5rem 1rem;
-  border: 2px solid #555;
-  font-family: monospace;
+  font-size: var(--font-sm);
+  background: #000000;
+  color: #00ff00;
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-thin) solid #333333;
+  font-family: "VT323", monospace;
   text-align: center;
   width: 120px;
   -moz-appearance: textfield;
@@ -472,25 +971,26 @@ header {
 
 .clock-ticks-input:focus {
   outline: none;
-  border-color: #0f0;
-  box-shadow: 0 0 4px #0f0;
+  border-color: #00ff00;
 }
 
-/* Time preset buttons */
 .time-presets {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
+  gap: var(--space-2);
   width: 100%;
   max-width: 280px;
 }
 
 .time-preset-btn {
-  font-size: 1.2rem;
-  padding: 0.5rem 0.75rem;
+  font-size: var(--font-xs);
+  padding: var(--space-2) var(--space-3);
 }
 
-/* Day Counter Component */
+/* ==========================================================================
+   Components - Day Counter
+   ========================================================================== */
+
 .mc-day-counter {
   position: relative;
   display: flex;
@@ -504,64 +1004,121 @@ header {
 
 .mc-day-number {
   position: absolute;
-  font-size: 1.4rem;
+  font-size: var(--font-sm);
   font-weight: bold;
-  color: #0f0;
-  text-shadow: 1px 1px 0 #000;
-  font-family: monospace;
+  color: #00ff00;
+  text-shadow: 1px 1px 0 #000000;
+  font-family: "VT323", monospace;
   top: 50%;
   left: 50%;
   transform: translate(-50%, 15%);
 }
 
-/* Phase Indicator Component */
-.mc-phase-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
+/* ==========================================================================
+   Components - Phase & Difficulty Indicators
+   ========================================================================== */
 
-.mc-phase-icon {
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
-  border: 2px solid #555;
-  border-radius: 4px;
-}
-
-.mc-phase-label {
-  font-size: 1.4rem;
-  text-transform: capitalize;
-  color: var(--mc-text-color);
-  letter-spacing: 0.05em;
-}
-
-/* Difficulty Indicator Component */
+.mc-phase-indicator,
 .mc-difficulty-indicator {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
+.mc-phase-icon,
 .mc-difficulty-icon {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
-  border: 2px solid #555;
-  border-radius: 4px;
+  border: var(--border-thin) solid #555555;
+  border-radius: 2px;
 }
 
+.mc-phase-label,
 .mc-difficulty-label {
-  font-size: 1.4rem;
+  font-size: var(--font-sm);
   text-transform: capitalize;
-  color: var(--mc-text-color);
+  color: var(--mc-panel-text);
   letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   Modal
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-4);
+}
+
+.modal {
+  background-color: var(--mc-panel-bg);
+  border: var(--border-thick) solid;
+  border-color: var(--mc-panel-border-light) var(--mc-panel-border-dark)
+    var(--mc-panel-border-dark) var(--mc-panel-border-light);
+  padding: var(--space-6);
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  margin-bottom: var(--space-4);
+}
+
+.modal-title {
+  font-size: var(--font-lg);
+  color: var(--mc-panel-text);
+  margin: 0;
+}
+
+.modal-body {
+  margin-bottom: var(--space-6);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  :root {
+    --font-xs: 14px;
+    --font-sm: 18px;
+    --font-base: 22px;
+    --font-lg: 26px;
+    --font-xl: 30px;
+    --font-2xl: 36px;
+  }
+
+  .container {
+    padding: var(--space-4);
+  }
+
+  .mc-panel,
+  .mc-box {
+    padding: var(--space-4);
+  }
 }
 
 @media (max-width: 480px) {
   .mc-clock {
     max-width: 280px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
   }
 }

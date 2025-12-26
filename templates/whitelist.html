@@ -1,65 +1,41 @@
-<div class="flex flex-col gap-4">
-  <div class="flex items-center justify-between">
+<div class="flex flex-col gap-6">
+  <!-- Header -->
+  <div class="section-header">
     <div>
-      <p class="text-xs uppercase tracking-wide text-muted">Whitelist</p>
-      <h2 class="mt-2">Whitelisted Players</h2>
+      <h2 class="section-title">Whitelist</h2>
+      <h3 class="mt-2 m-0">Whitelisted Players</h3>
     </div>
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-4">
       <button
         type="button"
-        class="flex items-center gap-2 text-sm"
-        style="
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 4px 8px;
-          border-radius: 4px;
-        "
+        class="mc-btn--ghost status-indicator"
         hx-post="/whitelist/toggle"
         hx-target="#subpage-panel"
         hx-swap="innerHTML"
         title="Click to {{if .Enabled}}disable{{else}}enable{{end}} whitelist"
       >
         {{if .Enabled}}
-        <span
-          style="
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background-color: #22c55e;
-            border: 2px solid #16a34a;
-          "
-        ></span>
+        <span class="status-dot status-dot--online"></span>
         <span class="text-muted">Enabled</span>
         {{else}}
-        <span
-          style="
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background-color: #ef4444;
-            border: 2px solid #dc2626;
-          "
-        ></span>
+        <span class="status-dot status-dot--offline"></span>
         <span class="text-muted">Disabled</span>
         {{end}}
       </button>
       <span class="text-sm text-muted">{{.Count}} total</span>
     </div>
   </div>
+
+  <!-- Add Player Form -->
   <form
-    class="flex flex-col gap-2"
+    class="input-group"
     hx-post="/whitelist/player"
     hx-target="#subpage-panel"
     hx-swap="innerHTML"
     hx-on::after-request="this.reset()"
   >
-    <label
-      for="whitelist-player"
-      class="text-xs uppercase tracking-wide text-muted"
-      >Add player</label
-    >
-    <div class="flex flex-col gap-3 sm:flex-row">
+    <label for="whitelist-player">Add player</label>
+    <div class="form-inline">
       <input
         id="whitelist-player"
         name="playerName"
@@ -71,15 +47,16 @@
       <button type="submit" class="mc-btn">Add</button>
     </div>
   </form>
+
+  <!-- Player List -->
   {{if .Players}}
-  <ul class="mc-box" style="padding: 0; border-width: 2px">
+  <ul class="player-list">
     {{range .Players}}
-    <li class="player-list-item flex items-center justify-between">
-      <span class="font-medium">{{.}}</span>
+    <li class="player-list-item justify-between">
+      <span>{{.}}</span>
       <button
         type="button"
-        class="mc-btn mc-btn-danger"
-        style="font-size: 0.8rem; padding: 4px 8px"
+        class="mc-btn mc-btn--danger mc-btn--sm"
         hx-delete="/whitelist/player/{{urlquery .}}"
         hx-target="#subpage-panel"
         hx-swap="innerHTML"
@@ -90,6 +67,9 @@
     {{end}}
   </ul>
   {{else}}
-  <p class="text-sm text-muted">No players whitelisted.</p>
+  <div class="empty-state">
+    <p class="empty-state__title">No players whitelisted</p>
+    <p class="empty-state__desc">Add players using the form above</p>
+  </div>
   {{end}}
 </div>

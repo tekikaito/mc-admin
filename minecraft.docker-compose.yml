@@ -27,7 +27,7 @@ services:
     tty: true
     stdin_open: true
     volumes:
-      - ./test-minecraft-data:/data
+      - ./test-data:/data
 
   modded-minecraft:
     image: itzg/minecraft-server:latest
