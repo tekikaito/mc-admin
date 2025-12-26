@@ -896,9 +896,11 @@ hr {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-6);
+  gap: var(--space-4);
   padding: var(--space-4);
   width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -907,13 +909,13 @@ hr {
   flex-direction: column;
   align-items: center;
   gap: var(--space-3);
+  width: 100%;
 }
 
 .mc-clock {
-  width: 128px !important;
-  height: 128px !important;
-  max-width: 128px;
-  max-height: 128px;
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: 1;
   cursor: grab;
   user-select: none;
   touch-action: none;
@@ -928,10 +930,8 @@ hr {
 }
 
 .clock-svg {
-  width: 128px !important;
-  height: 128px !important;
-  max-width: 128px;
-  max-height: 128px;
+  width: 100%;
+  height: 100%;
   display: block;
 }
 
@@ -976,15 +976,20 @@ hr {
 
 .time-presets {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--space-2);
   width: 100%;
-  max-width: 280px;
 }
 
 .time-preset-btn {
   font-size: var(--font-xs);
   padding: var(--space-2) var(--space-3);
+}
+
+@media (max-width: 400px) {
+  .time-presets {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ==========================================================================

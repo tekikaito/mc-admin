@@ -1,8 +1,8 @@
-<div class="info-grid" style="grid-template-columns: repeat(2, 1fr);">
+<div class="flex justify-center gap-8">
   <!-- Day Counter -->
-  <div class="flex flex-col items-center justify-center text-center p-4">
+  <div class="flex flex-col items-center text-center">
     <span class="label">Day</span>
-    <div class="mc-day-counter mt-3">
+    <div class="mc-day-counter mt-2">
       <svg viewBox="0 0 48 48" width="64" height="64">
         <rect x="8" y="6" width="32" height="36" fill="#D4A574" rx="2" />
         <rect x="10" y="8" width="28" height="32" fill="#F5E6D3" />
@@ -18,9 +18,9 @@
   </div>
 
   <!-- Difficulty Indicator -->
-  <div class="flex flex-col items-center justify-center text-center p-4">
+  <div class="flex flex-col items-center text-center">
     <span class="label">Difficulty</span>
-    <div class="mc-difficulty-indicator mt-3">
+    <div class="mc-difficulty-indicator mt-2">
       {{if eq .Stats.Difficulty "peaceful"}}
       <svg viewBox="0 0 48 48" width="64" height="64" class="mc-difficulty-icon">
         <rect x="4" y="4" width="40" height="40" fill="#2d5a27" rx="4" />
