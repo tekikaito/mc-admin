@@ -2,7 +2,7 @@ package services
 
 import (
 	"io"
-	"mc-admin/internal/files"
+	"mc-admin/internal/clients/files"
 )
 
 // FileInfo is an alias for files.FileInfo for backward compatibility

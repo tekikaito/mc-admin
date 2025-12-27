@@ -1,85 +1,62 @@
-<div class="flex flex-col gap-4">
-  <section
-    class="mc-box grid-layout"
-    style="grid-template-columns: repeat(3, 1fr); gap: 1rem"
-  >
-    <header
-      class="mb-2 col-span-3"
-      style="background: none; border: none; padding: 0"
-    >
-      <p class="text-sm uppercase tracking-wide text-muted">Server Info</p>
-    </header>
-    <div class="col-span-3">
-      <hr />
+<div class="flex flex-col gap-6">
+  <!-- Server Info Section -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Server Info</h2>
     </div>
-    <div>
-      <p class="text-xs uppercase tracking-wide text-muted">Address</p>
-      <p class="mt-2">{{.ServerHost}}</p>
-    </div>
-    <div>
-      <p class="text-xs uppercase tracking-wide text-muted">Game Port</p>
-      <p class="mt-2">{{.ServerPort}}</p>
-    </div>
-    <div>
-      <p class="text-xs uppercase tracking-wide text-muted">Version</p>
-      <p class="mt-2">{{.ServerVersion}}</p>
+    <div class="info-grid">
+      <div class="info-card">
+        <span class="info-card__label">Address</span>
+        <span class="info-card__value">{{.ServerHost}}</span>
+      </div>
+      <div class="info-card">
+        <span class="info-card__label">Game Port</span>
+        <span class="info-card__value">{{.ServerPort}}</span>
+      </div>
+      <div class="info-card">
+        <span class="info-card__label">Version</span>
+        <span class="info-card__value">{{.ServerVersion}}</span>
+      </div>
     </div>
   </section>
 
-  <section
-    class="mc-box grid-layout"
-    style="grid-template-columns: repeat(2, 1fr); gap: 1rem"
-  >
-    <header class="mb-2" style="background: none; border: none; padding: 0">
-      <p class="text-sm uppercase tracking-wide text-muted">World Info</p>
-    </header>
-    <div class="col-span-2">
-      <hr />
+  <!-- World Info Section -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">World Info</h2>
     </div>
-    <div class="flex flex-col gap-4 col-span-2">
+    <div class="section-content">
       <div
         id="world-stats"
         hx-get="/world/stats"
         hx-trigger="load, every 30s"
         hx-swap="innerHTML"
       >
-        <p class="text-sm">Loading world stats...</p>
+        <p class="text-sm text-muted">Loading world stats...</p>
       </div>
-      <!-- Clock loaded via HTMX -->
       <div
         id="time-clock"
         hx-get="/world/clock"
         hx-trigger="load"
         hx-swap="innerHTML"
       >
-        <p class="text-sm" style="text-align: center; padding: 2rem">
-          Loading clock...
-        </p>
+        <p class="text-sm text-muted text-center p-6">Loading clock...</p>
       </div>
     </div>
   </section>
 
-  <section
-    class="mc-box grid-layout"
-    style="grid-template-columns: repeat(2, 1fr); gap: 1rem"
-  >
+  <!-- Players Online Section -->
+  <section class="section">
+    <div class="section-header">
+      <h2 class="section-title">Players Online</h2>
+    </div>
     <div
-      class="flex items-center justify-between text-sm uppercase text-muted mb-2"
+      id="player-list"
+      hx-get="/server-info"
+      hx-trigger="load, every 10s"
+      hx-swap="innerHTML"
     >
-      <span>Players Online</span>
-    </div>
-    <div class="col-span-3">
-      <hr />
-    </div>
-    <div class="flex flex-col gap-4 col-span-2">
-      <div
-        id="player-list"
-        hx-get="/server-info"
-        hx-trigger="load, every 10s"
-        hx-swap="innerHTML"
-      >
-        <p class="text-sm">Loading player list...</p>
-      </div>
+      <p class="text-sm text-muted">Loading player list...</p>
     </div>
   </section>
 </div>

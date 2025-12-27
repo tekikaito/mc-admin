@@ -7,7 +7,60 @@ services:
       VERSION: ${SERVER_VERSION}
     ports:
       - "25565:25565"
-      - "25575:25575" # RCON port
+      - "25575:25575"
     volumes:
       - ./test-data:/data
     restart: unless-stopped
+
+  mc-admin:
+    build: .
+    container_name: mc-admin
+    ports:
+      - "8080:8080"
+    environment:
+      RCON_HOST: "minecraft"
+      RCON_PORT: "25575"
+      RCON_PASSWORD: ${RCON_PASSWORD}
+    depends_on:
+      - minecraft
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./test-data:/data
+
+  # FIXME: fix for modded server testing
+  modded-minecraft:
+    image: itzg/minecraft-server:latest
+    container_name: modded-minecraft-server
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "FORGE"
+      VERSION: "1.20.1"
+      MEMORY: "4G"
+      MODRINTH_PROJECTS: "ballistix,voltaic"
+      REMOVE_OLD_MODS: "TRUE"
+      RCON_PASSWORD: rcon-password-for-modded-server
+    volumes:
+      - ./test-minecraft-data:/data
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+
+  # FIXME: fix for modded server testing
+  mc-admin-for-modded:
+    build: .
+    container_name: mc-admin-for-modded
+    ports:
+      - "8080:8080"
+    depends_on:
+      - modded-minecraft
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    env_file:
+      - .env.modded
+    volumes:
+      - ./test-minecraft-data:/data

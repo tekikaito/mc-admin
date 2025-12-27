@@ -2,8 +2,8 @@ package services
 
 import (
 	"fmt"
-	ashcon_client "mc-admin/internal/clients"
-	"mc-admin/internal/rcon"
+	"mc-admin/internal/clients/ashcon"
+	"mc-admin/internal/clients/rcon"
 	"mc-admin/internal/utils"
 	"strings"
 )
@@ -14,7 +14,7 @@ type WhitelistFileSystemAccessor interface {
 
 type WhitelistService struct {
 	rconClient           rcon.CommandExecutor
-	mojangClient         ashcon_client.MojangUserNameChecker
+	mojangClient         ashcon.MojangUserNameChecker
 	minecraftFilesClient WhitelistFileSystemAccessor
 	mojangCheckEnabled   bool
 }
@@ -24,7 +24,7 @@ type WhitelistInfo struct {
 	Enabled     bool     `json:"enabled"`
 }
 
-func NewWhitelistService(rconClient rcon.CommandExecutor, mojangClient ashcon_client.MojangUserNameChecker, minecraftFilesClient WhitelistFileSystemAccessor) *WhitelistService {
+func NewWhitelistService(rconClient rcon.CommandExecutor, mojangClient ashcon.MojangUserNameChecker, minecraftFilesClient WhitelistFileSystemAccessor) *WhitelistService {
 	if mojangClient != nil {
 		return &WhitelistService{
 			rconClient:           rconClient,

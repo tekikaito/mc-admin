@@ -3,7 +3,6 @@ package api
 import (
 	"mc-admin/internal/services"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,13 +23,12 @@ func handleGetCommandConsole() gin.HandlerFunc {
 func handleExecuteRawCommand(commandService *services.CommandService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		rawCommand := c.PostForm("command")
-		trimmed := strings.TrimSpace(rawCommand)
-		response, err := commandService.ExecuteRawCommand(trimmed)
+		response, err := commandService.ExecuteRawCommand(rawCommand)
 		if err != nil {
 			c.HTML(http.StatusOK, "command_result.html", gin.H{
 				"HasError": true,
 				"Message":  err.Error(),
-				"Command":  trimmed,
+				"Command":  rawCommand,
 			})
 			return
 		}
@@ -38,7 +36,7 @@ func handleExecuteRawCommand(commandService *services.CommandService) gin.Handle
 		c.HTML(http.StatusOK, "command_result.html", gin.H{
 			"HasError": false,
 			"Message":  response,
-			"Command":  trimmed,
+			"Command":  rawCommand,
 		})
 	}
 }

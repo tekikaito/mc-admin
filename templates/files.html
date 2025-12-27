@@ -1,173 +1,141 @@
-<div class="flex justify-between items-center mb-4">
-  <h2>Files</h2>
-  <div class="flex gap-2">
-    <button
-      class="mc-btn"
-      onclick="document.getElementById('create-modal').style.display='flex'"
-    >
-      New
-    </button>
-    <button
-      class="mc-btn"
-      onclick="document.getElementById('file-upload').click()"
-    >
-      Upload
-    </button>
-    <input
-      type="file"
-      id="file-upload"
-      style="display: none"
-      onchange="uploadFile(this)"
-    />
-  </div>
-</div>
-
-<div class="mb-4">
-  <p class="text-muted">Current Path: {{.CurrentPath}}</p>
-  {{if ne .CurrentPath "/"}}
-  <button
-    class="mc-btn text-sm"
-    hx-get="/files?path={{dir .CurrentPath | urlquery}}"
-    hx-target="#subpage-panel"
-  >
-    Up
-  </button>
-  {{end}}
-</div>
-
-{{if .Error}}
-<div class="text-error mb-4">{{.Error}}</div>
-{{end}}
-
-<div class="flex flex-col gap-2">
-  {{range .Files}}
-  <div class="player-list-item justify-between">
-    <div class="flex items-center gap-2">
-      {{if .IsDir}}
-      <span class="text-muted">[DIR]</span>
-      <a
-        href="#"
-        hx-get="/files?path={{joinPath $.CurrentPath .Name | urlquery}}"
-        hx-target="#subpage-panel"
-        class="font-bold"
-        >{{.Name}}</a
+<div class="flex flex-col gap-6">
+  <!-- Header -->
+  <div class="section-header">
+    <h2 class="section-title m-0">Files</h2>
+    <div class="flex gap-2">
+      <button
+        class="mc-btn mc-btn--sm"
+        onclick="document.getElementById('create-modal').style.display='flex'"
       >
-      {{else}}
-      <span class="text-muted">[FILE]</span>
-      <a
-        href="#"
-        hx-get="/files/content?path={{joinPath $.CurrentPath .Name | urlquery}}"
-        hx-target="#file-content-display"
-        hx-swap="innerHTML"
-        onclick="document.getElementById('file-modal').style.display='flex'"
-        class=""
-        >{{.Name}}</a
+        New
+      </button>
+      <button
+        class="mc-btn mc-btn--sm"
+        onclick="document.getElementById('file-upload').click()"
       >
-      {{end}}
+        Upload
+      </button>
+      <input
+        type="file"
+        id="file-upload"
+        style="display: none"
+        onchange="uploadFile(this)"
+      />
     </div>
-    <div class="flex items-center gap-4 text-sm text-muted">
-      <span>{{.Size}} B</span>
-      <span class="hidden md:inline">{{.ModTime}}</span>
-      <div class="dropdown">
-        <button class="mc-btn text-xs" onclick="toggleDropdown(event, this)">
-          Actions
-        </button>
-        <div class="dropdown-content">
-          <button onclick="copyPath('{{joinPath $.CurrentPath .Name}}')">
-            Copy Path
+  </div>
+
+  <!-- Breadcrumb -->
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="text-sm text-muted">Path:</span>
+    <code class="text-sm" style="word-break: break-all;">{{.CurrentPath}}</code>
+    {{if ne .CurrentPath "/"}}
+    <button
+      class="mc-btn mc-btn--sm"
+      hx-get="/files?path={{dir .CurrentPath | urlquery}}"
+      hx-target="#subpage-panel"
+    >
+      Up
+    </button>
+    {{end}}
+  </div>
+
+  {{if .Error}}
+  <div class="mc-panel--inset text-error">{{.Error}}</div>
+  {{end}}
+
+  <!-- File List -->
+  <div class="player-list">
+    {{range .Files}}
+    <div class="file-list-item">
+      <div class="file-list-item__name">
+        {{if .IsDir}}
+        <span class="text-muted text-sm">[DIR]</span>
+        <a
+          href="#"
+          hx-get="/files?path={{joinPath $.CurrentPath .Name | urlquery}}"
+          hx-target="#subpage-panel"
+          class="font-bold"
+        >{{.Name}}</a>
+        {{else}}
+        <span class="text-muted text-sm">[FILE]</span>
+        <a
+          href="#"
+          hx-get="/files/content?path={{joinPath $.CurrentPath .Name | urlquery}}"
+          hx-target="#file-content-display"
+          hx-swap="innerHTML"
+          onclick="document.getElementById('file-modal').style.display='flex'"
+        >{{.Name}}</a>
+        {{end}}
+      </div>
+      <div class="file-list-item__meta text-sm text-muted">
+        <span>{{.Size}} B</span>
+        <div class="dropdown">
+          <button class="mc-btn mc-btn--sm" onclick="toggleDropdown(event, this)">
+            Actions
           </button>
-          {{if not .IsDir}}
-          <a
-            href="/files/download?path={{joinPath $.CurrentPath .Name | urlquery}}"
-            >Download</a
-          >
-          {{end}}
-          <button
-            class="text-error"
-            hx-delete="/files/delete?path={{joinPath $.CurrentPath .Name | urlquery}}"
-            hx-confirm="Are you sure?"
-            hx-target="#subpage-panel"
-            hx-swap="innerHTML"
-          >
-            Delete
-          </button>
+          <div class="dropdown-content">
+            <button onclick="copyPath('{{joinPath $.CurrentPath .Name}}')">
+              Copy Path
+            </button>
+            {{if not .IsDir}}
+            <a href="/files/download?path={{joinPath $.CurrentPath .Name | urlquery}}">
+              Download
+            </a>
+            {{end}}
+            <button
+              class="text-error"
+              hx-delete="/files/delete?path={{joinPath $.CurrentPath .Name | urlquery}}"
+              hx-confirm="Are you sure?"
+              hx-target="#subpage-panel"
+              hx-swap="innerHTML"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
+    {{end}}
   </div>
-  {{end}}
 </div>
 
 <!-- File Content Modal -->
-<div
-  id="file-modal"
-  class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50"
-  style="
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-  "
->
-  <div
-    class="mc-box w-full max-w-4xl max-h-screen overflow-hidden flex flex-col"
-    style="margin: 50px auto; height: 80%"
-  >
+<div id="file-modal" class="modal-overlay" style="display: none;">
+  <div class="modal" style="max-width: 900px; width: 100%; height: 80vh; display: flex; flex-direction: column;">
     <div class="flex justify-between items-center mb-4">
-      <h3>File Content</h3>
+      <h3 class="m-0">File Content</h3>
       <button
-        class="mc-btn"
+        class="mc-btn mc-btn--sm"
         onclick="document.getElementById('file-modal').style.display='none'"
       >
         Close
       </button>
     </div>
-    <pre
-      id="file-content-display"
-      class="console-output flex-1"
-      style="overflow: auto; height: auto; margin-bottom: 0"
-    ></pre>
+    <pre id="file-content-display" class="console-output flex-1" style="height: auto; margin: 0; overflow: auto;"></pre>
   </div>
 </div>
 
 <!-- Create Modal -->
-<div
-  id="create-modal"
-  class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50"
-  style="
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-  "
->
-  <div class="mc-box w-full max-w-md" style="margin: 100px auto">
-    <h3>Create New</h3>
-    <form id="create-form">
-      <div class="mb-4">
-        <label class="block text-muted mb-2">Name</label>
+<div id="create-modal" class="modal-overlay" style="display: none;">
+  <div class="modal" style="width: 100%;">
+    <h3 class="m-0 mb-4">Create New</h3>
+    <form id="create-form" class="flex flex-col gap-4">
+      <div class="input-group">
+        <label for="new-name">Name</label>
         <input type="text" id="new-name" class="mc-input" required />
       </div>
-      <div class="mb-4">
-        <label class="block text-muted mb-2">Type</label>
+      <div class="input-group">
+        <label for="new-type">Type</label>
         <select id="new-type" class="mc-input">
           <option value="file">File</option>
           <option value="dir">Directory</option>
         </select>
       </div>
-      <div class="mb-4" id="content-field">
-        <label class="block text-muted mb-2">Content</label>
+      <div class="input-group" id="content-field">
+        <label for="new-content">Content</label>
         <textarea id="new-content" class="mc-input" rows="5"></textarea>
       </div>
-      <div class="flex justify-end gap-2">
+      <div class="flex justify-end gap-3">
         <button
           type="button"
           class="mc-btn"
@@ -202,14 +170,12 @@
           showToast("Error: " + data.error, "error");
         } else {
           showToast(`File '${file.name}' uploaded successfully`, "success");
-          // Refresh
           htmx.ajax(
             "GET",
             "/files?path=" + encodeURIComponent("{{.CurrentPath}}"),
             "#subpage-panel"
           );
         }
-        // Reset input
         input.value = "";
       })
       .catch((error) => {
@@ -218,7 +184,6 @@
       });
   }
 
-  // Toggle content field based on type
   document.getElementById("new-type").addEventListener("change", function (e) {
     document.getElementById("content-field").style.display =
       e.target.value === "dir" ? "none" : "block";
@@ -232,20 +197,16 @@
 
     let fullPath = name;
     if (currentPath !== "/") {
-      if (currentPath.endsWith("/")) {
-        fullPath = currentPath + name;
-      } else {
-        fullPath = currentPath + "/" + name;
-      }
+      fullPath = currentPath.endsWith("/")
+        ? currentPath + name
+        : currentPath + "/" + name;
     } else {
       fullPath = "/" + name;
     }
 
     fetch("/files/create", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         path: fullPath,
         content: content,
@@ -259,7 +220,6 @@
         } else {
           showToast(`'${name}' created successfully`, "success");
           document.getElementById("create-modal").style.display = "none";
-          // Refresh the file list
           htmx.ajax(
             "GET",
             "/files?path=" + encodeURIComponent("{{.CurrentPath}}"),
@@ -274,7 +234,6 @@
 
   function toggleDropdown(event, btn) {
     event.stopPropagation();
-    // Close all other dropdowns
     document.querySelectorAll(".dropdown").forEach((d) => {
       if (d !== btn.parentElement) d.classList.remove("show");
     });
@@ -283,21 +242,14 @@
 
   function copyPath(path) {
     navigator.clipboard.writeText(path).then(
-      () => {
-        showToast("Path copied to clipboard", "success");
-      },
-      (err) => {
-        showToast("Failed to copy path", "error");
-      }
+      () => showToast("Path copied to clipboard", "success"),
+      () => showToast("Failed to copy path", "error")
     );
   }
 
-  // Close dropdowns when clicking outside
   document.addEventListener("click", function (event) {
     if (!event.target.matches(".dropdown button")) {
-      document
-        .querySelectorAll(".dropdown")
-        .forEach((d) => d.classList.remove("show"));
+      document.querySelectorAll(".dropdown").forEach((d) => d.classList.remove("show"));
     }
   });
 </script>

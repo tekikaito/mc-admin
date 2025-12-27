@@ -1,4 +1,4 @@
-package ashcon_client
+package ashcon
 
 import (
 	"net/http"
