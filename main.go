@@ -4,9 +4,9 @@ import (
 	"context"
 	"log"
 	"mc-admin/internal/api"
-	ashcon_client "mc-admin/internal/clients"
+	"mc-admin/internal/clients/ashcon"
+	"mc-admin/internal/clients/rcon"
 	"mc-admin/internal/config"
-	"mc-admin/internal/rcon"
 	"net/http"
 	"os"
 	"os/signal"
@@ -28,10 +28,10 @@ func main() {
 		{Name: "SESSION_SECRET", Required: true, FeatureFlag: "ENABLE_DISCORD_OAUTH", ValidationFunc: config.IsNotEmpty},
 	}))
 
-	var ashconClient ashcon_client.MojangUserNameChecker
+	var ashconClient ashcon.MojangUserNameChecker
 	enableUsernameCheck := strings.ToLower(os.Getenv("ENABLE_MINECRAFT_USERNAME_CHECK")) == "true"
 	if enableUsernameCheck {
-		ashconClient = ashcon_client.NewMojangUserNameChecker()
+		ashconClient = ashcon.NewMojangUserNameChecker()
 	}
 	rconClient := rcon.BuildMinecraftRconClientFromEnv()
 	defer rconClient.Close() // Ensure RCON connection is closed on exit

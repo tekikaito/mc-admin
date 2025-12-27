@@ -1,9 +1,9 @@
 package api
 
 import (
-	ashcon_client "mc-admin/internal/clients"
-	"mc-admin/internal/files"
-	"mc-admin/internal/rcon"
+	"mc-admin/internal/clients/ashcon"
+	"mc-admin/internal/clients/files"
+	"mc-admin/internal/clients/rcon"
 	"mc-admin/internal/services"
 	"os"
 	"path/filepath"
@@ -119,7 +119,7 @@ func initializeWebServerRoutes(r *gin.Engine, parts WebServerParts) {
 
 type WebServerOptions struct {
 	MinecraftRconClient rcon.CommandExecutor
-	AshconClient        ashcon_client.MojangUserNameChecker
+	AshconClient        ashcon.MojangUserNameChecker
 	AuthConfig          AuthConfig
 }
 
