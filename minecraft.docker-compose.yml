@@ -29,6 +29,7 @@ services:
     volumes:
       - ./test-data:/data
 
+  # FIXME: fix for modded server testing
   modded-minecraft:
     image: itzg/minecraft-server:latest
     container_name: modded-minecraft-server
@@ -48,6 +49,7 @@ services:
     tty: true
     stdin_open: true
 
+  # FIXME: fix for modded server testing
   mc-admin-for-modded:
     build: .
     container_name: mc-admin-for-modded
