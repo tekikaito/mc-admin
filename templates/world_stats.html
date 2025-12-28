@@ -81,7 +81,7 @@
       <span class="mc-difficulty-label">{{.Stats.Difficulty}}</span>
     </div>
     <div class="mt-3">
-      <form hx-post="/world/difficulty" hx-target="#world-stats" hx-swap="innerHTML" class="flex items-center gap-2 justify-center">
+      <form hx-post="/world/difficulty" hx-target="#world-stats" hx-swap="innerHTML" class="difficulty-form">
         <label for="difficulty-select" class="sr-only">Difficulty</label>
         <select id="difficulty-select" name="difficulty" class="mc-select">
           <option value="peaceful" {{if eq .Stats.Difficulty "peaceful"}}selected{{end}}>Peaceful</option>
