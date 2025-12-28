@@ -5,6 +5,7 @@ import (
 	"mc-admin/internal/utils"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -96,5 +97,39 @@ func handleSetTime(worldService *services.WorldService) gin.HandlerFunc {
 
 		c.Header("HX-Trigger", utils.BuildToastTrigger("Time set to "+timeValue, "success"))
 		c.HTML(http.StatusOK, "clock_view.html", data)
+	}
+}
+
+func handleSetDifficulty(worldService *services.WorldService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		difficulty := c.PostForm("difficulty")
+		if difficulty == "" {
+			c.String(http.StatusBadRequest, "Difficulty value is required")
+			return
+		}
+
+		// validate allowed values
+		valid := map[string]bool{"peaceful": true, "easy": true, "normal": true, "hard": true}
+		if !valid[strings.ToLower(difficulty)] {
+			c.String(http.StatusBadRequest, "Invalid difficulty: must be one of peaceful, easy, normal, hard")
+			return
+		}
+
+		_, err := worldService.SetDifficulty(strings.ToLower(difficulty))
+		if err != nil {
+			c.Header("HX-Trigger", utils.BuildToastTrigger("Failed to set difficulty: "+err.Error(), "error"))
+			c.String(http.StatusInternalServerError, "Error setting difficulty: %v", err)
+			return
+		}
+
+		// Return updated world stats partial
+		stats, err := worldService.GetWorldStats()
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error getting world stats: %v", err)
+			return
+		}
+
+		c.Header("HX-Trigger", utils.BuildToastTrigger("Difficulty set to "+strings.ToLower(difficulty), "success"))
+		c.HTML(http.StatusOK, "world_stats.html", gin.H{"Stats": stats})
 	}
 }

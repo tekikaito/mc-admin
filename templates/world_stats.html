@@ -80,5 +80,17 @@
       {{end}}
       <span class="mc-difficulty-label">{{.Stats.Difficulty}}</span>
     </div>
+    <div class="mt-3">
+      <form hx-post="/world/difficulty" hx-target="#world-stats" hx-swap="innerHTML" class="flex items-center gap-2 justify-center">
+        <label for="difficulty-select" class="sr-only">Difficulty</label>
+        <select id="difficulty-select" name="difficulty" class="mc-select">
+          <option value="peaceful" {{if eq .Stats.Difficulty "peaceful"}}selected{{end}}>Peaceful</option>
+          <option value="easy" {{if eq .Stats.Difficulty "easy"}}selected{{end}}>Easy</option>
+          <option value="normal" {{if eq .Stats.Difficulty "normal"}}selected{{end}}>Normal</option>
+          <option value="hard" {{if eq .Stats.Difficulty "hard"}}selected{{end}}>Hard</option>
+        </select>
+        <button type="submit" class="mc-btn">Set</button>
+      </form>
+    </div>
   </div>
 </div>
