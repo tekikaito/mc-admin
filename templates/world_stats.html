@@ -1,11 +1,10 @@
 <!-- Day Counter -->
 <div class="grid grid-cols-2 gap-4">
 
-  <!-- Day Counter -->
+  <!-- Day Counter (CSV label embedded in SVG) -->
   <div class="mc-weather-panel">
-    <span class="label">Day</span>
     <div class="mc-day-counter">
-      <svg viewBox="0 0 48 48" width="160" height="160">
+      <svg viewBox="0 0 48 48" width="120" height="120" role="img" aria-label="Day {{.Stats.Day}}">
         <rect x="8" y="6" width="32" height="36" fill="#D4A574" rx="2" />
         <rect x="10" y="8" width="28" height="32" fill="#F5E6D3" />
         <rect x="6" y="6" width="4" height="36" fill="#8B4513" />
@@ -14,14 +13,15 @@
         <line x1="14" y1="18" x2="34" y2="18" stroke="#D4A574" stroke-width="1" />
         <line x1="14" y1="22" x2="34" y2="22" stroke="#D4A574" stroke-width="1" />
         <rect x="14" y="26" width="20" height="12" fill="#2a2a2a" rx="1" />
+        <text x="24" y="11" font-size="6" fill="#2a2a2a" text-anchor="middle" dominant-baseline="middle" style="font-family: monospace; font-weight:700;">Day</text>
+        <text x="24" y="32" font-size="8.5" fill="#ffffff" text-anchor="middle" dominant-baseline="middle" style="font-family: monospace; font-weight:700;">{{.Stats.Day}}</text>
       </svg>
-      <span class="mc-day-number">{{.Stats.Day}}</span>
     </div>
   </div>
   <!-- Difficulty Indicator -->
   <div class="mc-weather-panel">
     <span class="label">Difficulty</span>
-    <div class="mt-3">
+    <div>
       <form hx-post="/world/difficulty" hx-target="#world-stats" hx-swap="innerHTML"
             class="difficulty-form"
             style="width:100%; display:flex; flex-direction:column; align-items:stretch; gap:var(--space-2);">
