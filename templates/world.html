@@ -35,7 +35,13 @@
         <p class="text-sm text-muted">Loading world stats...</p>
       </div>
       <div class="mt-4 mc-panel--inset p-3">
-        <form hx-post="/world/weather" hx-target="#world-stats" hx-swap="innerHTML" class="difficulty-form" onsubmit="return true;">
+        <form
+          hx-post="/world/weather"
+          hx-target="#world-stats"
+          hx-swap="innerHTML"
+          class="difficulty-form"
+          onsubmit="return true;"
+        >
           <label class="label" for="weather-select">Weather</label>
           <div class="flex gap-2 items-center">
             <select id="weather-select" name="weather" class="mc-select">
@@ -43,7 +49,13 @@
               <option value="rain">Rain</option>
               <option value="thunder">Thunder</option>
             </select>
-            <input type="number" name="duration" class="mc-input" placeholder="Duration (sec) - optional" min="0" />
+            <input
+              type="number"
+              name="duration"
+              class="mc-input"
+              placeholder="Duration (sec) - optional"
+              min="0"
+            />
             <button type="submit" class="mc-btn">Set Weather</button>
           </div>
         </form>
