@@ -5,6 +5,7 @@ import (
 	"mc-admin/internal/utils"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -96,5 +97,82 @@ func handleSetTime(worldService *services.WorldService) gin.HandlerFunc {
 
 		c.Header("HX-Trigger", utils.BuildToastTrigger("Time set to "+timeValue, "success"))
 		c.HTML(http.StatusOK, "clock_view.html", data)
+	}
+}
+
+func handleSetDifficulty(worldService *services.WorldService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		difficulty := c.PostForm("difficulty")
+		if difficulty == "" {
+			c.String(http.StatusBadRequest, "Difficulty value is required")
+			return
+		}
+
+		// validate allowed values
+		valid := map[string]bool{"peaceful": true, "easy": true, "normal": true, "hard": true}
+		if !valid[strings.ToLower(difficulty)] {
+			c.String(http.StatusBadRequest, "Invalid difficulty: must be one of peaceful, easy, normal, hard")
+			return
+		}
+
+		_, err := worldService.SetDifficulty(strings.ToLower(difficulty))
+		if err != nil {
+			c.Header("HX-Trigger", utils.BuildToastTrigger("Failed to set difficulty: "+err.Error(), "error"))
+			c.String(http.StatusInternalServerError, "Error setting difficulty: %v", err)
+			return
+		}
+
+		// Return updated world stats partial
+		stats, err := worldService.GetWorldStats()
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error getting world stats: %v", err)
+			return
+		}
+
+		c.Header("HX-Trigger", utils.BuildToastTrigger("Difficulty set to "+strings.ToLower(difficulty), "success"))
+		c.HTML(http.StatusOK, "world_stats.html", gin.H{"Stats": stats})
+	}
+}
+
+func handleSetWeather(worldService *services.WorldService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		weather := c.PostForm("weather")
+		if weather == "" {
+			c.String(http.StatusBadRequest, "Weather value is required")
+			return
+		}
+
+		valid := map[string]bool{"clear": true, "rain": true, "thunder": true}
+		if !valid[strings.ToLower(weather)] {
+			c.String(http.StatusBadRequest, "Invalid weather: must be one of clear, rain, thunder")
+			return
+		}
+
+		durationStr := c.PostForm("duration")
+		duration := 0
+		if durationStr != "" {
+			d, err := strconv.Atoi(durationStr)
+			if err != nil || d < 0 {
+				c.String(http.StatusBadRequest, "Invalid duration: must be a non-negative integer")
+				return
+			}
+			duration = d
+		}
+
+		_, err := worldService.SetWeather(strings.ToLower(weather), duration)
+		if err != nil {
+			c.Header("HX-Trigger", utils.BuildToastTrigger("Failed to set weather: "+err.Error(), "error"))
+			c.String(http.StatusInternalServerError, "Error setting weather: %v", err)
+			return
+		}
+
+		stats, err := worldService.GetWorldStats()
+		if err != nil {
+			c.String(http.StatusInternalServerError, "Error getting world stats: %v", err)
+			return
+		}
+
+		c.Header("HX-Trigger", utils.BuildToastTrigger("Weather set to "+strings.ToLower(weather), "success"))
+		c.HTML(http.StatusOK, "world_stats.html", gin.H{"Stats": stats})
 	}
 }

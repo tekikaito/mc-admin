@@ -79,7 +79,9 @@
    Base Styles
    ========================================================================== */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -103,7 +105,12 @@ body {
    Typography
    ========================================================================== */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: normal;
   margin: 0 0 var(--space-4) 0;
   line-height: 1.2;
@@ -137,27 +144,61 @@ h3 {
 }
 
 /* Text colors */
-.text-muted { color: var(--mc-muted) !important; }
-.text-success { color: var(--mc-success-light) !important; }
-.text-error { color: var(--mc-error-light) !important; }
-.text-warning { color: var(--mc-warning) !important; }
+.text-muted {
+  color: var(--mc-muted) !important;
+}
+.text-success {
+  color: var(--mc-success-light) !important;
+}
+.text-error {
+  color: var(--mc-error-light) !important;
+}
+.text-warning {
+  color: var(--mc-warning) !important;
+}
 
 /* Text sizes */
-.text-xs { font-size: var(--font-xs); }
-.text-sm { font-size: var(--font-sm); }
-.text-base { font-size: var(--font-base); }
-.text-lg { font-size: var(--font-lg); }
-.text-xl { font-size: var(--font-xl); }
+.text-xs {
+  font-size: var(--font-xs);
+}
+.text-sm {
+  font-size: var(--font-sm);
+}
+.text-base {
+  font-size: var(--font-base);
+}
+.text-lg {
+  font-size: var(--font-lg);
+}
+.text-xl {
+  font-size: var(--font-xl);
+}
 
 /* Text utilities */
-.uppercase { text-transform: uppercase; }
-.lowercase { text-transform: lowercase; }
-.capitalize { text-transform: capitalize; }
-.tracking-wide { letter-spacing: 0.1em; }
-.tracking-wider { letter-spacing: 0.15em; }
-.font-bold { font-weight: bold; }
-.text-center { text-align: center; }
-.text-right { text-align: right; }
+.uppercase {
+  text-transform: uppercase;
+}
+.lowercase {
+  text-transform: lowercase;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+.tracking-wide {
+  letter-spacing: 0.1em;
+}
+.tracking-wider {
+  letter-spacing: 0.15em;
+}
+.font-bold {
+  font-weight: bold;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -209,62 +250,154 @@ a:hover {
 }
 
 /* Flexbox utilities */
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.flex-row { flex-direction: row; }
-.flex-wrap { flex-wrap: wrap; }
-.flex-1 { flex: 1; }
-.items-start { align-items: flex-start; }
-.items-center { align-items: center; }
-.items-end { align-items: flex-end; }
-.justify-start { justify-content: flex-start; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.justify-end { justify-content: flex-end; }
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.flex-row {
+  flex-direction: row;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-1 {
+  flex: 1;
+}
+.items-start {
+  align-items: flex-start;
+}
+.items-center {
+  align-items: center;
+}
+.items-end {
+  align-items: flex-end;
+}
+.justify-start {
+  justify-content: flex-start;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-end {
+  justify-content: flex-end;
+}
 
 /* Gap utilities */
-.gap-1 { gap: var(--space-1); }
-.gap-2 { gap: var(--space-2); }
-.gap-3 { gap: var(--space-3); }
-.gap-4 { gap: var(--space-4); }
-.gap-5 { gap: var(--space-5); }
-.gap-6 { gap: var(--space-6); }
-.gap-8 { gap: var(--space-8); }
+.gap-1 {
+  gap: var(--space-1);
+}
+.gap-2 {
+  gap: var(--space-2);
+}
+.gap-3 {
+  gap: var(--space-3);
+}
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-5 {
+  gap: var(--space-5);
+}
+.gap-6 {
+  gap: var(--space-6);
+}
+.gap-8 {
+  gap: var(--space-8);
+}
 
 /* Spacing utilities */
-.m-0 { margin: 0; }
-.mt-1 { margin-top: var(--space-1); }
-.mt-2 { margin-top: var(--space-2); }
-.mt-3 { margin-top: var(--space-3); }
-.mt-4 { margin-top: var(--space-4); }
-.mt-6 { margin-top: var(--space-6); }
-.mb-1 { margin-bottom: var(--space-1); }
-.mb-2 { margin-bottom: var(--space-2); }
-.mb-3 { margin-bottom: var(--space-3); }
-.mb-4 { margin-bottom: var(--space-4); }
-.mb-6 { margin-bottom: var(--space-6); }
-.ml-2 { margin-left: var(--space-2); }
-.mr-2 { margin-right: var(--space-2); }
+.m-0 {
+  margin: 0;
+}
+.mt-1 {
+  margin-top: var(--space-1);
+}
+.mt-2 {
+  margin-top: var(--space-2);
+}
+.mt-3 {
+  margin-top: var(--space-3);
+}
+.mt-4 {
+  margin-top: var(--space-4);
+}
+.mt-6 {
+  margin-top: var(--space-6);
+}
+.mb-1 {
+  margin-bottom: var(--space-1);
+}
+.mb-2 {
+  margin-bottom: var(--space-2);
+}
+.mb-3 {
+  margin-bottom: var(--space-3);
+}
+.mb-4 {
+  margin-bottom: var(--space-4);
+}
+.mb-6 {
+  margin-bottom: var(--space-6);
+}
+.ml-2 {
+  margin-left: var(--space-2);
+}
+.mr-2 {
+  margin-right: var(--space-2);
+}
 
-.p-0 { padding: 0; }
-.p-2 { padding: var(--space-2); }
-.p-3 { padding: var(--space-3); }
-.p-4 { padding: var(--space-4); }
-.p-6 { padding: var(--space-6); }
+.p-0 {
+  padding: 0;
+}
+.p-2 {
+  padding: var(--space-2);
+}
+.p-3 {
+  padding: var(--space-3);
+}
+.p-4 {
+  padding: var(--space-4);
+}
+.p-6 {
+  padding: var(--space-6);
+}
 
-.w-full { width: 100%; }
+.w-full {
+  width: 100%;
+}
 
 /* Grid utilities */
-.grid { display: grid; }
-.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-.col-span-2 { grid-column: span 2; }
-.col-span-3 { grid-column: span 3; }
-.col-span-full { grid-column: 1 / -1; }
+.grid {
+  display: grid;
+}
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.col-span-2 {
+  grid-column: span 2;
+}
+.col-span-3 {
+  grid-column: span 3;
+}
+.col-span-full {
+  grid-column: 1 / -1;
+}
 
 @media (max-width: 600px) {
-  .sm\:grid-cols-1 { grid-template-columns: 1fr; }
-  .sm\:flex-col { flex-direction: column; }
+  .sm\:grid-cols-1 {
+    grid-template-columns: 1fr;
+  }
+  .sm\:flex-col {
+    flex-direction: column;
+  }
 }
 
 /* ==========================================================================
@@ -476,6 +609,15 @@ a:hover {
   border: none;
 }
 
+/* Selected state for weather icon buttons */
+.mc-btn[data-weather].active,
+.mc-btn[data-weather].active.mc-btn--ghost {
+  background-color: var(--mc-btn-bg);
+  color: #ffffff;
+  border-color: var(--mc-success-light);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.12) inset;
+}
+
 /* ==========================================================================
    Components - Inputs
    ========================================================================== */
@@ -499,6 +641,34 @@ a:hover {
   color: #666666;
 }
 
+/* Select control matching input/button style */
+.mc-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: var(--mc-input-bg);
+  border: var(--border-thin) solid var(--mc-input-border);
+  color: #ffffff;
+  padding: var(--space-2) var(--space-3);
+  font-family: inherit;
+  font-size: var(--font-sm);
+  min-width: 140px;
+  display: inline-block;
+}
+
+.mc-select:focus {
+  outline: none;
+  border-color: var(--mc-input-focus);
+}
+
+/* Difficulty form helper to align select + button */
+.difficulty-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 /* Input group (label + input) */
 .input-group {
   display: flex;
@@ -511,6 +681,125 @@ a:hover {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--mc-muted);
+}
+
+/* Large framed panel used for the world info area to mimic pixelated frame */
+.mc-panel--large {
+  padding: var(--space-6);
+  border-width: var(--border-thick);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Day card styling (big centered counter) */
+.mc-day-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  min-height: 260px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.04),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: var(--border-thin) solid rgba(0, 0, 0, 0.1);
+}
+
+/* .mc-day-number {
+  display: inline-block;
+  margin-top: var(--space-3);
+  background: #0f4610;
+  color: #b6ffb6;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+} */
+
+/* Difficulty panel tweaks to mimic the small right card */
+.mc-difficulty-panel {
+  padding: var(--space-4);
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Weather panel block style */
+.mc-weather-panel {
+  padding: var(--space-4);
+  border: var(--border-thin) solid rgba(0, 0, 0, 0.1);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.03),
+    rgba(255, 255, 255, 0.01)
+  );
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* Weather icons row */
+.weather-icons {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  align-items: center;
+  margin: var(--space-3) 0;
+}
+.weather-icons button {
+  width: 88px;
+  height: 88px;
+  font-size: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+/* Weather controls row */
+.weather-controls {
+  margin-top: var(--space-3);
+}
+.weather-controls-row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+.weather-controls-row .mc-btn {
+  flex: 1 1 0;
+}
+.weather-duration {
+  width: 200px;
+  max-width: 40%;
+  background: #000000;
+  color: #00ff00;
+  border: var(--border-thin) solid #333333;
+  text-align: center;
+}
+
+/* outline success button (green framed) */
+.mc-btn--outline-success {
+  background: transparent;
+  color: var(--mc-panel-text);
+  border: 2px solid var(--mc-success-light);
+  padding: var(--space-2) var(--space-4);
+}
+.mc-btn--outline-success:hover {
+  background: var(--mc-success-light);
+  color: #fff;
+}
+
+/* Make select and inputs feel more blocky for Minecraft aesthetic */
+.mc-select,
+.mc-input {
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+/* Small gray action button used in cards */
+.mc-btn--small {
+  padding: 6px 10px;
+  font-size: var(--font-xs);
 }
 
 /* Inline form (input + button) */
@@ -1071,7 +1360,7 @@ hr {
   color: #00ff00;
   text-shadow: 1px 1px 0 #000000;
   font-family: "VT323", monospace;
-  top: 50%;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, 15%);
 }
