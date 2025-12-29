@@ -102,6 +102,8 @@ func initializeWebServerRoutes(r *gin.Engine, parts WebServerParts) {
 	protected.POST("/whitelist/player", handleAddNameToWhitelist(parts.WhitelistService))
 	protected.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(parts.WhitelistService))
 	protected.GET("/world/stats", handleGetWorldStats(parts.WorldService))
+	protected.GET("/users/stats", handleGetUserStats())             // New endpoint for user stats
+	protected.GET("/users/stats/:uuid", handleGetUserStatsByUUID()) // New endpoint for user stats by UUID
 	protected.GET("/world/clock", handleGetClock(parts.WorldService))
 	protected.GET("/world/clock/edit", handleGetClockEdit(parts.WorldService))
 	protected.POST("/world/time", handleSetTime(parts.WorldService))

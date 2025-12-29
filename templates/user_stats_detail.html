@@ -1,0 +1,74 @@
+<div class="user-stats-detail">
+  <h3>{{if .Player.Name}}{{.Player.Name}}{{else}}{{.Player.UUID}}{{end}}</h3>
+  <p><strong>UUID:</strong> {{.Player.UUID}}</p>
+
+  <div
+    class="stats-grid"
+    style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px"
+  >
+    <div class="card">
+      <strong>Play time</strong>
+      <div>
+        {{with index .Player.Stats "minecraft:custom"}}{{index .
+        "minecraft:play_time"}}{{else}}0{{end}}
+      </div>
+    </div>
+    <div class="card">
+      <strong>Deaths</strong>
+      <div>
+        {{with index .Player.Stats "minecraft:custom"}}{{index .
+        "minecraft:deaths"}}{{else}}0{{end}}
+      </div>
+    </div>
+    <div class="card">
+      <strong>Mob kills</strong>
+      <div>
+        {{with index .Player.Stats "minecraft:custom"}}{{index .
+        "minecraft:mob_kills"}}{{else}}0{{end}}
+      </div>
+    </div>
+    <div class="card">
+      <strong>Jumps</strong>
+      <div>
+        {{with index .Player.Stats "minecraft:custom"}}{{index .
+        "minecraft:jump"}}{{else}}0{{end}}
+      </div>
+    </div>
+  </div>
+
+  <h4 style="margin-top: 12px">Top items used</h4>
+  <ul>
+    {{with index .Player.Stats "minecraft:used"}} {{range $k, $v := .}}
+    <li>{{$k}}: {{$v}}</li>
+    {{end}} {{else}}
+    <li>None</li>
+    {{end}}
+  </ul>
+
+  <h4 style="margin-top: 12px">Top picked up</h4>
+  <ul>
+    {{with index .Player.Stats "minecraft:picked_up"}} {{range $k, $v := .}}
+    <li>{{$k}}: {{$v}}</li>
+    {{end}} {{else}}
+    <li>None</li>
+    {{end}}
+  </ul>
+
+  <h4 style="margin-top: 12px">Killed</h4>
+  <ul>
+    {{with index .Player.Stats "minecraft:killed"}} {{range $k, $v := .}}
+    <li>{{$k}}: {{$v}}</li>
+    {{end}} {{else}}
+    <li>None</li>
+    {{end}}
+  </ul>
+
+  <h4 style="margin-top: 12px">Killed by</h4>
+  <ul>
+    {{with index .Player.Stats "minecraft:killed_by"}} {{range $k, $v := .}}
+    <li>{{$k}}: {{$v}}</li>
+    {{end}} {{else}}
+    <li>None</li>
+    {{end}}
+  </ul>
+</div>
