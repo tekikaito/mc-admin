@@ -106,6 +106,7 @@ func initializeWebServerRoutes(r *gin.Engine, parts WebServerParts) {
 	protected.GET("/world/clock/edit", handleGetClockEdit(parts.WorldService))
 	protected.POST("/world/time", handleSetTime(parts.WorldService))
 	protected.POST("/world/difficulty", handleSetDifficulty(parts.WorldService))
+	protected.POST("/world/weather", handleSetWeather(parts.WorldService))
 	protected.GET("/players/:name/kick", handleGetKickPlayerDialog())
 	protected.POST("/players/:name/kick", handleKickPlayer(parts.ServerService))
 	protected.GET("/rcon", handleGetCommandConsole())
