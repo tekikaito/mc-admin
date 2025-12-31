@@ -1007,6 +1007,56 @@ header {
   gap: var(--space-6);
 }
 
+/* Make the sidebar visually darker than the main app area. The sidebar
+   also uses the mc-panel class in markup so target the combined selector
+   to override the panel background and borders. */
+.mc-panel.sidebar {
+  background-color: var(--mc-bg-dark);
+  color: #e9e9e9;
+  border-color: rgba(0, 0, 0, 0.6) rgba(0, 0, 0, 0.5) rgba(0, 0, 0, 0.5)
+    rgba(0, 0, 0, 0.6);
+  box-shadow: none;
+  padding: var(--space-4);
+}
+
+/* Slightly darker header inside the sidebar */
+.mc-panel.sidebar .sidebar-header {
+  border-bottom-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Navigation buttons inside sidebar */
+.nav .mc-btn {
+  background: transparent;
+  color: #ffffff;
+  border: none;
+  padding: 10px 12px;
+  justify-content: flex-start;
+}
+
+/* Hover state */
+.nav .mc-btn:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Active/selected navigation item */
+.nav .mc-btn.active,
+.nav .mc-btn[aria-current="page"] {
+  background: linear-gradient(
+    180deg,
+    rgba(92, 122, 41, 0.18),
+    rgba(92, 122, 41, 0.08)
+  );
+  color: #fff;
+  border-left: 4px solid var(--mc-accent-light);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25) inset;
+}
+
+/* Make icons stand out a bit for active items */
+.nav .mc-btn.active svg,
+.nav .mc-btn[aria-current="page"] svg {
+  stroke: var(--mc-accent-light);
+}
+
 .sidebar-header {
   padding-bottom: var(--space-4);
   border-bottom: var(--border-thin) solid rgba(0, 0, 0, 0.15);
@@ -1016,20 +1066,23 @@ header {
   font-size: var(--font-xs);
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--mc-muted);
+  color: rgba(255, 255, 255, 0.65);
   margin-bottom: var(--space-2);
 }
 
 .sidebar-header__title {
   font-size: var(--font-xl);
-  color: var(--mc-panel-text);
+  color: rgba(255, 255, 255, 0.96);
   margin: 0;
   line-height: 1.2;
+  font-weight: 500;
+  text-shadow: none;
+  opacity: 1;
 }
 
 .sidebar-header__desc {
   font-size: var(--font-sm);
-  color: var(--mc-muted);
+  color: rgba(255, 255, 255, 0.85);
   margin-top: var(--space-2);
 }
 
