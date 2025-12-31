@@ -37,7 +37,8 @@
           <button
             type="button"
             data-nav="overview"
-            class="mc-btn nav-btn"
+            class="mc-btn nav-btn {{if eq .ActiveModule "world"}}active{{end}}"
+            {{if eq .ActiveModule "world"}}aria-current="page"{{end}}
             onclick="window.location.href='/'"
           >
             <svg
@@ -59,7 +60,8 @@
           <button
             type="button"
             data-nav="whitelist"
-            class="mc-btn nav-btn"
+            class="mc-btn nav-btn {{if eq .ActiveModule "whitelist"}}active{{end}}"
+            {{if eq .ActiveModule "whitelist"}}aria-current="page"{{end}}
             hx-get="/whitelist"
             hx-target="#subpage-panel"
             hx-swap="innerHTML"
@@ -88,7 +90,8 @@
           <button
             type="button"
             data-nav="files"
-            class="mc-btn nav-btn"
+            class="mc-btn nav-btn {{if eq .ActiveModule "files"}}active{{end}}"
+            {{if eq .ActiveModule "files"}}aria-current="page"{{end}}
             hx-get="/files"
             hx-target="#subpage-panel"
             hx-swap="innerHTML"
@@ -115,7 +118,8 @@
           <button
             type="button"
             data-nav="console"
-            class="mc-btn nav-btn"
+            class="mc-btn nav-btn {{if eq .ActiveModule "rcon"}}active{{end}}"
+            {{if eq .ActiveModule "rcon"}}aria-current="page"{{end}}
             hx-get="/rcon"
             hx-target="#subpage-panel"
             hx-swap="innerHTML"
@@ -140,7 +144,8 @@
           <button
             type="button"
             data-nav="user-stats"
-            class="mc-btn nav-btn"
+            class="mc-btn nav-btn {{if eq .ActiveModule "users"}}active{{end}}"
+            {{if eq .ActiveModule "users"}}aria-current="page"{{end}}
             hx-get="/users/stats"
             hx-target="#subpage-panel"
             hx-swap="innerHTML"
@@ -183,6 +188,23 @@
       const navButtons = document.querySelectorAll("[data-nav]");
       const subpagePanel = document.getElementById("subpage-panel");
       const defaultPanelContent = subpagePanel ? subpagePanel.innerHTML : "";
+
+      // Ensure the clicked nav button is visually marked active.
+      function setActiveNav(btn) {
+        navButtons.forEach((b) => {
+          b.classList.remove("active");
+          b.removeAttribute("aria-current");
+        });
+        if (btn) {
+          btn.classList.add("active");
+          btn.setAttribute("aria-current", "page");
+        }
+      }
+
+      navButtons.forEach((button) => {
+        // mark as active on click so HTMX swaps still reflect selection
+        button.addEventListener("click", () => setActiveNav(button));
+      });
 
       const removeModal = () => {
         const modal = document.getElementById("kick-modal");
