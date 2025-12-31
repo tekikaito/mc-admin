@@ -1,0 +1,49 @@
+<div class="user-stats" id="user-stats">
+  <div class="section-header">
+    <h2 class="section-title m-0">User Stats</h2>
+  </div>
+  <div class="section-content">
+    {{if .Stats}}
+    <div class="user-stats__layout">
+      <div class="user-list">
+        <ul>
+          {{range .Stats}}
+          <li>
+            <button
+              class="mc-btn nav-btn user-select"
+              data-uuid="{{.UUID}}"
+              hx-get="/users/stats/{{.UUID}}"
+              hx-target="#user-stats-details"
+              hx-swap="innerHTML"
+            >
+              {{if .Name}}{{.Name}}{{else}}{{.UUID}}{{end}}
+            </button>
+          </li>
+          {{end}}
+        </ul>
+      </div>
+
+      <div class="user-details" id="user-stats-details">
+        <p class="text-sm text-muted">Select a user to view detailed stats.</p>
+      </div>
+    </div>
+
+    {{else}}
+    <p class="text-sm text-muted">No user stats available.</p>
+    {{end}}
+  </div>
+
+  {{if .InitialUUID}}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const uuid = "{{.InitialUUID}}";
+      const btn = document.querySelector('[data-uuid="' + uuid + '"]');
+      if (btn) btn.classList.add("active");
+      if (window.htmx) {
+        htmx.ajax("GET", "/users/stats/" + uuid, "#user-stats-details");
+      }
+    });
+  </script>
+  {{end}}
+</div>
+</div>

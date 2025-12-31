@@ -34,6 +34,20 @@ func initializeWebServer() *gin.Engine {
 			}
 			return strconv.FormatInt(fi.ModTime().Unix(), 10)
 		},
+		// prettyStatKey formats stat keys like "minecraft:play_time" -> "Play time"
+		"prettyStatKey": func(key string) string {
+			// take part after ':' if present
+			if i := strings.Index(key, ":"); i >= 0 && i < len(key)-1 {
+				key = key[i+1:]
+			}
+			// replace underscores with spaces
+			key = strings.ReplaceAll(key, "_", " ")
+			if key == "" {
+				return key
+			}
+			// uppercase first letter
+			return strings.ToUpper(key[:1]) + key[1:]
+		},
 	})
 	r.Static("/static", "./static")
 	r.LoadHTMLGlob("templates/*")
@@ -102,6 +116,8 @@ func initializeWebServerRoutes(r *gin.Engine, parts WebServerParts) {
 	protected.POST("/whitelist/player", handleAddNameToWhitelist(parts.WhitelistService))
 	protected.DELETE("/whitelist/player/:name", handleRemoveNameFromWhitelist(parts.WhitelistService))
 	protected.GET("/world/stats", handleGetWorldStats(parts.WorldService))
+	protected.GET("/users/stats", handleGetUserStats())             // New endpoint for user stats
+	protected.GET("/users/stats/:uuid", handleGetUserStatsByUUID()) // New endpoint for user stats by UUID
 	protected.GET("/world/clock", handleGetClock(parts.WorldService))
 	protected.GET("/world/clock/edit", handleGetClockEdit(parts.WorldService))
 	protected.POST("/world/time", handleSetTime(parts.WorldService))
