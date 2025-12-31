@@ -2,10 +2,7 @@
   <h3>{{if .Player.Name}}{{.Player.Name}}{{else}}{{.Player.UUID}}{{end}}</h3>
   <p><strong>UUID:</strong> {{.Player.UUID}}</p>
 
-  <div
-    class="stats-grid"
-    style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px"
-  >
+  <div class="stats-grid">
     <div class="card">
       <strong>Play time</strong>
       <div>
@@ -36,7 +33,7 @@
     </div>
   </div>
 
-  <h4 style="margin-top: 12px">Top items used</h4>
+  <h4 class="mt-3">Top items used</h4>
   <ul>
     {{with index .Player.Stats "minecraft:used"}} {{range $k, $v := .}}
     <li>{{prettyStatKey $k}}: {{$v}}</li>
@@ -45,7 +42,7 @@
     {{end}}
   </ul>
 
-  <h4 style="margin-top: 12px">Top picked up</h4>
+  <h4 class="mt-3">Top picked up</h4>
   <ul>
     {{with index .Player.Stats "minecraft:picked_up"}} {{range $k, $v := .}}
     <li>{{prettyStatKey $k}}: {{$v}}</li>
@@ -54,7 +51,7 @@
     {{end}}
   </ul>
 
-  <h4 style="margin-top: 12px">Killed</h4>
+  <h4 class="mt-3">Killed</h4>
   <ul>
     {{with index .Player.Stats "minecraft:killed"}} {{range $k, $v := .}}
     <li>{{prettyStatKey $k}}: {{$v}}</li>
@@ -63,7 +60,7 @@
     {{end}}
   </ul>
 
-  <h4 style="margin-top: 12px">Killed by</h4>
+  <h4 class="mt-3">Killed by</h4>
   <ul>
     {{with index .Player.Stats "minecraft:killed_by"}} {{range $k, $v := .}}
     <li>{{prettyStatKey $k}}: {{$v}}</li>

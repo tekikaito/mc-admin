@@ -4,14 +4,11 @@
   </div>
   <div class="section-content">
     {{if .Stats}}
-    <div
-      class="user-stats__layout"
-      style="display: flex; gap: 16px; align-items: flex-start"
-    >
-      <div class="user-list" style="min-width: 220px; max-width: 320px">
-        <ul style="list-style: none; padding: 0; margin: 0">
+    <div class="user-stats__layout">
+      <div class="user-list">
+        <ul>
           {{range .Stats}}
-          <li style="margin-bottom: 8px">
+          <li>
             <button
               class="mc-btn nav-btn user-select"
               data-uuid="{{.UUID}}"
@@ -26,7 +23,7 @@
         </ul>
       </div>
 
-      <div class="user-details" id="user-stats-details" style="flex: 1">
+      <div class="user-details" id="user-stats-details">
         <p class="text-sm text-muted">Select a user to view detailed stats.</p>
       </div>
     </div>

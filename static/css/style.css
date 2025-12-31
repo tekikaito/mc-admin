@@ -1473,3 +1473,122 @@ hr {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   User Stats Page
+   ========================================================================== */
+.user-stats {
+  display: block;
+}
+
+.user-stats__layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.user-list {
+  min-width: 220px;
+  max-width: 320px;
+  background-color: rgba(0, 0, 0, 0.12);
+  border: var(--border-thin) solid rgba(0, 0, 0, 0.12);
+  padding: var(--space-2);
+  border-radius: 4px;
+}
+
+.user-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.user-list li {
+  margin-bottom: 8px;
+}
+
+.user-list .mc-btn.user-select {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 8px 10px;
+  background: transparent;
+  color: #fff;
+  border: var(--border-thin) solid rgba(255, 255, 255, 0.04);
+}
+
+.user-list .mc-btn.user-select:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.user-list .mc-btn.user-select.active,
+.user-list .mc-btn.user-select:active {
+  background: linear-gradient(
+    180deg,
+    rgba(92, 122, 41, 0.18),
+    rgba(92, 122, 41, 0.08)
+  );
+  border-color: var(--mc-success-light);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.25) inset;
+}
+
+.user-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-stats-detail {
+  background-color: var(--mc-panel-bg);
+  color: var(--mc-panel-text);
+  padding: var(--space-4);
+  border: var(--border-thin) solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  box-shadow: var(--shadow-md);
+}
+
+.user-stats-detail h3 {
+  margin: 0 0 var(--space-3) 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.card {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  padding: var(--space-3);
+  border: var(--border-thin) solid rgba(0, 0, 0, 0.06);
+  border-radius: 3px;
+}
+
+.card strong {
+  display: block;
+  font-size: var(--font-xs);
+  color: var(--mc-muted);
+  margin-bottom: var(--space-1);
+}
+
+.user-stats-detail ul {
+  margin: var(--space-2) 0 0 1rem;
+}
+
+@media (max-width: 700px) {
+  .user-stats__layout {
+    flex-direction: column;
+  }
+
+  .user-list {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
