@@ -266,6 +266,11 @@ func TestGametimeService_GetDayTime(t *testing.T) {
 			expected:   23999,
 		},
 		{
+			name:       "end of day",
+			rconOutput: "The time is 23999\n",
+			expected:   23999,
+		},
+		{
 			name:    "rcon error",
 			rconErr: errors.New("connection failed"),
 			wantErr: true,

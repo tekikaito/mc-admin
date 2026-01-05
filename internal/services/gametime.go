@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mc-admin/internal/clients/rcon"
 	"strconv"
+	"strings"
 )
 
 type GametimeService struct {
@@ -76,10 +77,9 @@ func (s *GametimeService) GetDayTime() (Gameticks, error) {
 	}
 
 	trimmedTime := daytimeResult[len(timeQueryCommandResponsePrefix):]
-	trimmedTime = string([]rune(trimmedTime)[:len(trimmedTime)-1])
+	trimmedTime = strings.TrimSpace(trimmedTime)
 
 	actual, err := strconv.Atoi(trimmedTime)
-	trimmedTime = string([]rune(trimmedTime)[:len(trimmedTime)-1])
 	if err != nil {
 		return 0, fmt.Errorf("Failed to parse daytime ticks: %w", err)
 	}
@@ -94,7 +94,7 @@ func (s *GametimeService) GetGameTime() (Gameticks, error) {
 	}
 
 	trimmedTime := gametimeResult[len(timeQueryCommandResponsePrefix):]
-	trimmedTime = string([]rune(trimmedTime)[:len(trimmedTime)-1])
+	trimmedTime = strings.TrimSpace(trimmedTime)
 	actual, err := strconv.Atoi(trimmedTime)
 	return Gameticks(actual), err
 }
@@ -106,7 +106,7 @@ func (s *GametimeService) GetGameDay() (int, error) {
 	}
 
 	trimmedDay := dayResult[len(timeQueryCommandResponsePrefix):]
+	trimmedDay = strings.TrimSpace(trimmedDay)
 	actual, err := strconv.Atoi(trimmedDay)
-	trimmedDay = string([]rune(trimmedDay)[:len(trimmedDay)-1])
 	return actual, err
 }
