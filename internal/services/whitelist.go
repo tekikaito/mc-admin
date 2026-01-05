@@ -66,6 +66,10 @@ func getWhitelistPlayerNames(rconClient rcon.CommandExecutor) ([]string, error) 
 		return []string{}, fmt.Errorf("failed to execute whitelist list command: %w", err)
 	}
 
+	if response == "There are no whitelisted players" {
+		return []string{}, nil
+	}
+
 	// Response format: "There are X whitelisted players: player1, player2, ..."
 	parts := strings.SplitN(response, ":", 2)
 	if len(parts) != 2 {
