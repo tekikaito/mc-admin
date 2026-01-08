@@ -26,6 +26,21 @@ func TestWhitelistService_GetServerPlayerInfo(t *testing.T) {
 			whitelistedNames: []string{},
 		},
 		{
+			name:             "unexpected response format",
+			listOutput:       "There are no whitelisted players",
+			whitelistedNames: []string{},
+		},
+		{
+			name:             "unexpected response format",
+			listOutput:       "There are no whitelisted players\n",
+			whitelistedNames: []string{},
+		},
+		{
+			name:             "unexpected response format",
+			listOutput:       "There are no whitelisted players at all",
+			whitelistedNames: []string{},
+		},
+		{
 			name:    "rcon error",
 			listErr: errors.New("boom"),
 			wantErr: true,
