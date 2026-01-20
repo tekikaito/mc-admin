@@ -48,6 +48,23 @@ func initializeWebServer() *gin.Engine {
 			// uppercase first letter
 			return strings.ToUpper(key[:1]) + key[1:]
 		},
+		// formatPlayTime converts ticks (1/20 second) to human-readable format
+		"formatPlayTime": func(ticks int64) string {
+			seconds := ticks / 20
+			hours := seconds / 3600
+			minutes := (seconds % 3600) / 60
+			secs := seconds % 60
+			if hours > 24 {
+				days := hours / 24
+				hours = hours % 24
+				return strconv.FormatInt(days, 10) + "d " + strconv.FormatInt(hours, 10) + "h " + strconv.FormatInt(minutes, 10) + "m"
+			} else if hours > 0 {
+				return strconv.FormatInt(hours, 10) + "h " + strconv.FormatInt(minutes, 10) + "m " + strconv.FormatInt(secs, 10) + "s"
+			} else if minutes > 0 {
+				return strconv.FormatInt(minutes, 10) + "m " + strconv.FormatInt(secs, 10) + "s"
+			}
+			return strconv.FormatInt(secs, 10) + "s"
+		},
 	})
 	r.Static("/static", "./static")
 	r.LoadHTMLGlob("templates/*")
