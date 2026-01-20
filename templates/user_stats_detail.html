@@ -6,8 +6,7 @@
     <div class="card">
       <strong>Play time</strong>
       <div>
-        {{with index .Player.Stats "minecraft:custom"}}{{index .
-        "minecraft:play_time"}}{{else}}0{{end}}
+        {{with index .Player.Stats "minecraft:custom"}}{{formatPlayTime (index . "minecraft:play_time")}}{{else}}0s{{end}}
       </div>
     </div>
     <div class="card">
