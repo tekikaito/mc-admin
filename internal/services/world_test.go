@@ -202,6 +202,33 @@ func TestWorldService_SetDifficultyAndGetDifficulty(t *testing.T) {
 	}
 }
 
+func TestWorldService_SetDifficultyAndGetDifficultyWithNewline(t *testing.T) {
+	fake := &fakeRconClient{responses: map[string]struct {
+		out string
+		err error
+	}{
+		"difficulty easy": {out: "Set difficulty to easy", err: nil},
+		"difficulty":      {out: "The difficulty is Easy\n", err: nil},
+	}}
+
+	svc := NewWorldService(fake)
+	if _, err := svc.SetDifficulty("easy"); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	got, err := svc.GetDifficulty()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if got != "Easy" {
+		t.Fatalf("GetDifficulty() = %q, want %q", got, "Easy")
+	}
+
+	wantCommands := []string{"difficulty easy", "difficulty"}
+	if !reflect.DeepEqual(fake.received, wantCommands) {
+		t.Fatalf("commands = %v, want %v", fake.received, wantCommands)
+	}
+}
+
 func TestWorldService_SetGameRuleAndGetGameRule(t *testing.T) {
 	fake := &fakeRconClient{responses: map[string]struct {
 		out string

@@ -95,7 +95,7 @@ func (s *WorldService) GetDifficulty() (string, error) {
 		return "", fmt.Errorf("unexpected difficulty response: %q", difficultyResp)
 	}
 
-	actualDifficulty := difficultyResp[len(difficultyPrefix):]
+	actualDifficulty := strings.TrimSpace(difficultyResp[len(difficultyPrefix):])
 	return actualDifficulty, nil
 }
 
